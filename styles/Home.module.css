@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
-
-@media screen and (min-width: 1600px) {
+@media screen and (min-width: 1024px) {
     .header,
 .footer {
     display: block;
@@ -9,6 +8,15 @@
     width: 100%;
     height: 8%;
     background-color: var(--default-green);
+}
+
+.h1 {
+    font-family: "Inter", sans-serif;
+    font-size: 33px;
+    font-weight: bold;
+    padding-top: 7%;
+    margin-left: 8.5vw;
+
 }
 
 .header {
@@ -20,7 +28,7 @@
 }
 
 .container {
-    margin-top: 3%;
+    margin-top: 8%;
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
@@ -47,7 +55,152 @@
 
 .form button {
     margin-top: 10px;
-    margin-left: 17%;
+    margin-left: 18%;
+    width: 170px;
+    height: 50px;
+    padding: 10px;
+    background-color: var(--default-green);
+    color: white;
+    border-radius: 12px;
+    border: none;
+    font-size: 1.4em;
+    cursor: pointer;
+    border: 2px solid rgba(3, 92, 56, 0.5);
+}
+
+.user {
+    margin-top: 10px;
+}
+
+.password {
+    margin-top: 10px;
+}
+
+.form input {
+    margin-top: 12px;
+    width: 95%;
+    height: 50px;
+    border-radius: 12px;
+    border: 1px solid;
+    opacity: 50%;
+    font-size: 1.1em;
+    padding-left: 12px;
+}
+
+.form label {
+    margin-top: 20px;
+    float: left;
+    font-size: 1.4em;
+    opacity: 50%;
+}
+
+.userNameFlash,
+.passwordFlash {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    background-color: rgb(255, 155, 155);
+    color: red;
+    width: 100%;
+    height: 45px !important;
+    border-radius: 5px;
+    font-size: 0.8em;
+}
+
+.keepConn {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.keepConn input {
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
+}
+
+.keepConn label {
+    margin-top: 2%;
+    width: 100%;
+    height: 24px;
+    opacity: 50%;
+    font-size: 20px;
+}
+
+.link {
+    width: 200px;
+    margin-top: 40px;
+    margin-left: 22%;
+    text-decoration: none;
+}
+
+.image {
+    margin-right: 500px;
+    margin-top: 100px;
+}
+}
+
+/* ----------------------------------------- */
+
+@media screen and (min-width: 1280px) {
+    .header,
+.footer {
+    display: block;
+    position: fixed;
+    width: 100%;
+    height: 8%;
+    background-color: var(--default-green);
+}
+
+.h1 {
+    font-family: "Inter", sans-serif;
+    font-size: 38.32px;
+    font-weight: bold;
+    padding-top: 7%;
+    margin-left: 8.5vw;
+
+}
+
+.header {
+    top: 0;
+}
+
+.footer {
+    bottom: 0;
+}
+
+.container {
+    margin-top: 5%;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: row;
+}
+
+.div {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.form {
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    max-width: 30%;
+    padding: 30px;
+    margin-left: 7vw;
+    height: 700px;
+    width: 800px;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+}
+
+.form button {
+    margin-top: 10px;
+    margin-left: 28%;
     width: 300px;
     height: 57px;
     padding: 10px;
@@ -74,7 +227,7 @@
     height: 57px;
     border-radius: 12px;
     border: 1px solid;
-    opacity: 25%;
+    opacity: 40%;
     font-size: 26px;
     padding-left: 12px;
 }
@@ -122,14 +275,21 @@
 }
 
 .link {
+    width: 200px;
     margin-top: 40px;
-    margin-left: 30%;
+    margin-left: 52%;
     text-decoration: none;
 }
 
 .image {
-    margin-right: 500px;
-    margin-top: 100px;
-}
+    position: absolute;
+    left: 50%;
+    bottom: 7.5%;
 }
 
+.logo {
+    position: absolute;
+    left: 55%;
+    top: 7.5%;
+}
+}
