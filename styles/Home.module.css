@@ -1,486 +1,675 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
 
 @media screen and (min-width: 768px) {
+
     .header,
-.footer {
-    display: block;
-    position: fixed;
-    width: 100%;
-    height: 8%;
-    background-color: var(--default-green);
-}
+    .footer {
+        display: block;
+        position: fixed;
+        width: 100%;
+        height: 8%;
+        background-color: var(--default-green);
+    }
 
-.h1 {
-    font-family: "Inter", sans-serif;
-    font-size: 25px;
-    font-weight: bold;
-    padding-top: 0%;
-    margin-left: 5vw;
-    margin-bottom: 0;
-}
+    .h1 {
+        font-family: "Inter", sans-serif;
+        font-size: 25px;
+        font-weight: bold;
+        padding-top: 0%;
+        margin-left: 5vw;
+        margin-bottom: 0;
+    }
 
-.header {
-    top: 0;
-}
+    .header {
+        top: 0;
+    }
 
-.footer {
-    bottom: 0;
-}
+    .footer {
+        bottom: 0;
+    }
 
-.container {
-    margin-top: 8%;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-}
+    .container {
+        margin-top: 8%;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row;
+    }
 
-.div {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-}
+    .div {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        margin-top: 6%;
+    }
 
-.form {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    max-width: 30%;
-    padding: 17px;
-    margin-top: -20px;
-    margin-left: 3vw;
-    height: 700px;
-    width: 800px;
-    font-family: "Inter", sans-serif;
-    font-weight: 500;
-}
+    .form {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        max-width: 30%;
+        padding: 17px;
+        margin-top: -20px;
+        margin-left: 3vw;
+        height: 700px;
+        width: 800px;
+        font-family: "Inter", sans-serif;
+        font-weight: 500;
+    }
 
-.form button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 0px;
-    margin-left: 19%;
-    width: 170px;
-    height: 40px;
-    padding: 10px;
-    background-color: var(--default-green);
-    color: white;
-    border-radius: 12px;
-    border: none;
-    font-size: 1.4em;
-    cursor: pointer;
-    border: 2px solid rgba(3, 92, 56, 0.5);
-}
+    .form button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 0px;
+        margin-left: 19%;
+        width: 170px;
+        height: 40px;
+        padding: 10px;
+        background-color: var(--default-green);
+        color: white;
+        border-radius: 12px;
+        border: none;
+        font-size: 1.4em;
+        cursor: pointer;
+        border: 2px solid rgba(3, 92, 56, 0.5);
+    }
 
-.user {
-    margin-top: 10px;
-}
+    .user {
+        margin-top: 10px;
+    }
 
-.password {
-    margin-top: 10px;
-}
+    .password {
+        margin-top: 10px;
+    }
 
-.form input {
-    margin-top: 7px;
-    width: 100%;
-    height: 35px;
-    border-radius: 12px;
-    border: 1px solid;
-    opacity: 50%;
-    font-size: 1.1em;
-    padding-left: 12px;
-}
+    .form input {
+        margin-top: 7px;
+        width: 100%;
+        height: 35px;
+        border-radius: 12px;
+        border: 1px solid;
+        opacity: 50%;
+        font-size: 1.1em;
+        padding-left: 12px;
+    }
 
-.form label {
-    margin-top: 5px;
-    float: left;
-    font-size: 1.1em;
-    opacity: 50%;
-}
+    .form label {
+        margin-top: 5px;
+        float: left;
+        font-size: 1.1em;
+        opacity: 50%;
+    }
 
-.userNameFlash,
-.passwordFlash {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5px;
-    background-color: rgb(255, 155, 155);
-    color: red;
-    width: 105.5%;
-    height: 35px !important;
-    border-radius: 5px;
-    font-size: 0.7em;
-}
+    .userNameFlash,
+    .passwordFlash {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5px;
+        background-color: rgb(255, 155, 155);
+        color: red;
+        width: 105.5%;
+        height: 35px !important;
+        border-radius: 5px;
+        font-size: 0.7em;
+    }
 
-.keepConn {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 10px;
-    margin-bottom: 13px;
-}
+    .keepConn {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 10px;
+        margin-bottom: 13px;
+    }
 
-.keepConn input {
-    margin-right: 10px;
-    width: 18px;
-    height: 18px;
-}
+    .keepConn input {
+        margin-right: 10px;
+        width: 18px;
+        height: 18px;
+    }
 
-.keepConn label {
-    margin-top: 3%;
-    width: 100%;
-    height: 24px;
-    opacity: 50%;
-    font-size: 15px;
-}
+    .keepConn label {
+        margin-top: 3%;
+        width: 100%;
+        height: 24px;
+        opacity: 50%;
+        font-size: 15px;
+    }
 
-.link {
-    font-size: 13px;
-    width: 200px;
-    margin-top: 20px;
-    margin-left: 28%;
-    text-decoration: none;
-}
+    .link {
+        width: 120px;
+        font-size: 13px;
+        margin-top: 20px;
+        margin-left: 28%;
+        text-decoration: none;
+    }
 
-.image {
-    position: absolute;
-    left: 55%;
-    bottom: 8%;
-    height: auto;
-    width: 325px;
-}
+    .image {
+        position: absolute;
+        left: 45%;
+        bottom: 8%;
+        height: auto;
+        width: 400px;
+    }
 
-.image .img {
-    display: block;
-}
+    .image .img {
+        display: block;
+    }
 
-.logoContainer {
-    position: absolute;
-    left: 63%;
-    top: 15%;
-    width: 270px;
-    height: auto;
-}
+    .logoContainer {
+        position: absolute;
+        left: 55%;
+        top: 11%;
+        width: 270px;
+        height: auto;
+    }
 }
 
 /* --------------- */
 
 @media screen and (min-width: 1024px) {
+
     .header,
-.footer {
-    display: block;
-    position: fixed;
-    width: 100%;
-    height: 8%;
-    background-color: var(--default-green);
-}
+    .footer {
+        display: block;
+        position: fixed;
+        width: 100%;
+        height: 8%;
+        background-color: var(--default-green);
+    }
 
-.h1 {
-    font-family: "Inter", sans-serif;
-    font-size: 28px;
-    font-weight: bold;
-    margin-top: -10px;
-    margin-left: 8.5vw;
-    margin-bottom: 0;
-}
+    .h1 {
+        font-family: "Inter", sans-serif;
+        font-size: 28px;
+        font-weight: bold;
+        margin-top: -10px;
+        margin-left: 8.5vw;
+        margin-bottom: 0;
+    }
 
-.header {
-    top: 0;
-    margin-bottom: 2px; 
-}
+    .header {
+        top: 0;
+        margin-bottom: 2px;
+    }
 
-.footer {
-    bottom: 0;
-}
+    .footer {
+        bottom: 0;
+    }
 
-.container {
-    margin-top: 8%;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-}
+    .container {
+        margin-top: 8%;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row;
+    }
 
-.div {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-}
+    .div {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        margin-top: 3%;
+    }
 
-.form {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    max-width: 30%;
-    padding: 17px;
-    margin-top: -20px;
-    margin-left: 7vw;
-    height: 700px;
-    width: 800px;
-    font-family: "Inter", sans-serif;
-    font-weight: 500;
-}
+    .form {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        max-width: 30%;
+        padding: 17px;
+        margin-top: -20px;
+        margin-left: 7vw;
+        height: 700px;
+        width: 800px;
+        font-family: "Inter", sans-serif;
+        font-weight: 500;
+    }
 
-.form button {
-    margin-top: 0px;
-    margin-left: 16%;
-    width: 170px;
-    height: 50px;
-    padding: 10px;
-    background-color: var(--default-green);
-    color: white;
-    border-radius: 12px;
-    border: none;
-    font-size: 1.4em;
-    cursor: pointer;
-    border: 2px solid rgba(3, 92, 56, 0.5);
-}
+    .form button {
+        margin-top: 0px;
+        margin-left: 16%;
+        width: 170px;
+        height: 50px;
+        padding: 10px;
+        background-color: var(--default-green);
+        color: white;
+        border-radius: 12px;
+        border: none;
+        font-size: 1.4em;
+        cursor: pointer;
+        border: 2px solid rgba(3, 92, 56, 0.5);
+    }
 
-.user {
-    margin-top: 10px;
-}
+    .user {
+        margin-top: 10px;
+    }
 
-.password {
-    margin-top: 10px;
-}
+    .password {
+        margin-top: 10px;
+    }
 
-.form input {
-    margin-top: 7px;
-    width: 100%;
-    height: 45px;
-    border-radius: 12px;
-    border: 1px solid;
-    opacity: 50%;
-    font-size: 1.1em;
-    padding-left: 12px;
-}
+    .form input {
+        margin-top: 7px;
+        width: 100%;
+        height: 45px;
+        border-radius: 12px;
+        border: 1px solid;
+        opacity: 50%;
+        font-size: 1.1em;
+        padding-left: 12px;
+    }
 
-.form label {
-    margin-top: 10px;
-    float: left;
-    font-size: 1.4em;
-    opacity: 50%;
-}
+    .form label {
+        margin-top: 10px;
+        float: left;
+        font-size: 1.4em;
+        opacity: 50%;
+    }
 
-.userNameFlash,
-.passwordFlash {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 10px;
-    background-color: rgb(255, 155, 155);
-    color: red;
-    width: 105.5%;
-    height: 40px !important;
-    border-radius: 5px;
-    font-size: 0.8em;
-}
+    .userNameFlash,
+    .passwordFlash {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        background-color: rgb(255, 155, 155);
+        color: red;
+        width: 105.5%;
+        height: 40px !important;
+        border-radius: 5px;
+        font-size: 0.8em;
+    }
 
-.keepConn {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
+    .keepConn {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
 
-.keepConn input {
-    margin-right: 10px;
-    width: 20px;
-    height: 20px;
-}
+    .keepConn input {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+    }
 
-.keepConn label {
-    margin-top: 2%;
-    width: 100%;
-    height: 24px;
-    opacity: 50%;
-    font-size: 17px;
-}
+    .keepConn label {
+        margin-top: 2%;
+        width: 100%;
+        height: 24px;
+        opacity: 50%;
+        font-size: 17px;
+    }
 
-.link {
-    width: 150px;
-    margin-top: 15px;
-    margin-left: 20%;
-    text-decoration: none;
-}
+    .link {
+        width: 120px;
+        margin-top: 15px;
+        margin-left: 24%;
+        text-decoration: none;
+    }
 
-.image {
-    position: absolute;
-    left: 50%;
-    bottom: 8%;
-    height: auto;
-    width: 450px;
-}
+    .image {
+        position: absolute;
+        left: 45%;
+        bottom: 8%;
+        height: auto;
+        width: 550px;
+    }
 
-.image .img {
-    display: block;
-}
+    .image .img {
+        display: block;
+    }
 
-.logoContainer {
-    position: absolute;
-    left: 65%;
-    top: 20%;
-    width: 300px;
-    height: auto;
-}
+    .logoContainer {
+        position: absolute;
+        left: 57%;
+        top: 15%;
+        width: 400px;
+        height: auto;
+    }
 }
 
 /* ----------------------------------------- */
 
 @media screen and (min-width: 1280px) {
+
     .header,
-.footer {
-    display: block;
-    position: fixed;
-    width: 100%;
-    height: 8%;
-    background-color: var(--default-green);
+    .footer {
+        display: block;
+        position: fixed;
+        width: 100%;
+        height: 8%;
+        background-color: var(--default-green);
+    }
+
+    .h1 {
+        font-family: "Inter", sans-serif;
+        font-size: 37px;
+        font-weight: bold;
+        margin-top: 2%;
+        padding-top: 1px;
+        margin-left: 8.5vw;
+        margin-bottom: 10px;
+    }
+
+    .header {
+        top: 0;
+    }
+
+    .footer {
+        bottom: 0;
+    }
+
+    .container {
+        margin-top: 5%;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: row;
+    }
+
+    .div {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        margin-top: 3%;
+    }
+
+    .form {
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        max-width: 30%;
+        padding: 10px;
+        margin-left: 8vw;
+        height: 700px;
+        width: 800px;
+        font-family: "Inter", sans-serif;
+        font-weight: 500;
+    }
+
+    .form button {
+        margin-top: 0;
+        margin-left: 40%;
+        width: 250px;
+        height: 50px;
+        padding: 10px;
+        background-color: var(--default-green);
+        color: white;
+        border-radius: 12px;
+        border: none;
+        font-size: 26.62px;
+        cursor: pointer;
+        border: 2px solid rgba(3, 92, 56, 0.5);
+    }
+
+    .user {
+        margin-top: 10px;
+    }
+
+    .password {
+        margin-top: 10px;
+    }
+
+    .form input {
+        margin-top: 10px;
+        width: 468px;
+        height: 57px;
+        border-radius: 12px;
+        border: 1px solid;
+        opacity: 40%;
+        font-size: 26px;
+        padding-left: 12px;
+    }
+
+    .form label {
+        margin-top: 5px;
+        float: left;
+        font-size: 23px;
+        opacity: 50%;
+    }
+
+    .userNameFlash,
+    .passwordFlash {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5px;
+        background-color: rgb(255, 155, 155);
+        color: red;
+        width: 482px;
+        height: 40px !important;
+        border-radius: 5px;
+        font-size: 1.1em;
+    }
+
+    .keepConn {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .keepConn input {
+        margin-right: 10px;
+        width: 25px;
+        height: 25px;
+    }
+
+    .keepConn label {
+        margin-top: 2%;
+        width: 100%;
+        height: 24px;
+        opacity: 50%;
+        font-size: 20px;
+    }
+
+    .link {
+        width: 150px;
+        margin-top: 30px;
+        margin-left: 56%;
+        text-decoration: none;
+        font-size: 1em;
+    }
+
+    .image {
+        position: absolute;
+        left: 50%;
+        bottom: 8%;
+        height: auto;
+        width: 600px;
+    }
+
+    .image .img {
+        display: block;
+    }
+
+    .logoContainer {
+        position: absolute;
+        left: 60%;
+        top: 15%;
+        width: 450px;
+        height: auto;
+    }
 }
 
-.h1 {
-    font-family: "Inter", sans-serif;
-    font-size: 37px;
-    font-weight: bold;
-    margin-top: 2%;
-    padding-top: 1px;
-    margin-left: 8.5vw;
-    margin-bottom: 10px;
+/* -------------------- */
+
+@media screen and (max-width: 767px) {
+    .header,
+    .footer {
+        display: block;
+        position: fixed;
+        width: 100%;
+        height: 8%;
+        background-color: var(--default-green);
+    }
+
+    .h1 {
+        font-family: "Inter", sans-serif;
+        font-size: 22px;
+        font-weight: bold;
+        padding-top: 0%;
+        margin-left: 5vw;
+        margin-bottom: 0;
+    }
+
+    .header {
+        top: 0;
+    }
+
+    .footer {
+        bottom: 0;
+    }
+
+    .container {
+        margin-top: 1%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 100vw;
+    }
+
+    .div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        margin-top: 12%;
+        width: 100vw;
+    }
+
+    .form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 800px;
+        max-width: 100vw;
+        margin-top: 10px;
+        height: 700px;
+        font-family: "Inter", sans-serif;
+        font-weight: 500;
+    }
+
+    .form button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 0px;
+        width: 170px;
+        height: 40px;
+        padding: 10px;
+        background-color: var(--default-green);
+        color: white;
+        border-radius: 12px;
+        font-size: 1.4em;
+        cursor: pointer;
+        border: 2px solid rgba(3, 92, 56, 0.5);
+    }
+
+    .user {
+        margin-top: 10px;
+    }
+
+    .password {
+        margin-top: 10px;
+    }
+
+    .form input {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 7px;
+        width: 250px;
+        height: 35px;
+        border-radius: 12px;
+        border: 1px solid;
+        opacity: 50%;
+        font-size: 1.1em;
+    }
+
+    .form label {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        margin-top: 5px;
+        font-size: 1.1em;
+        opacity: 50%;
+    }
+
+    .userNameFlash,
+    .passwordFlash {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 5px;
+        background-color: rgb(255, 155, 155);
+        color: red;
+        width: 250px;
+        height: 35px !important;
+        border-radius: 5px;
+        font-size: 0.7em;
+    }
+
+    .keepConn {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 10px;
+        margin-bottom: 13px;
+    }
+
+    .keepConn input {
+        margin-right: 10px;
+        width: 18px;
+        height: 18px;
+    }
+
+    .keepConn label {
+        margin-top: 3%;
+        width: 100%;
+        height: 24px;
+        opacity: 50%;
+        font-size: 15px;
+    }
+
+    .link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        width: 200px;
+        margin-top: 20px;
+        text-decoration: none;
+    }
+
+    .image {
+        display: none;
+    }
+
+    .image .img {
+        display: none;
+    }
+
+    .logoContainer {
+        display: none;
+        position: absolute;
+        left: 63%;
+        top: 15%;
+        width: 270px;
+        height: auto;
+    }
 }
 
-.header {
-    top: 0;
+.form button:hover {
+    background-color: #035c37;
 }
 
-.footer {
-    bottom: 0;
-}
-
-.container {
-    margin-top: 5%;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: row;
-}
-
-.div {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-}
-
-.form {
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    max-width: 30%;
-    padding: 10px;
-    margin-left: 8vw;
-    height: 700px;
-    width: 800px;
-    font-family: "Inter", sans-serif;
-    font-weight: 500;
-}
-
-.form button {
-    margin-top: 0;
-    margin-left: 40%;
-    width: 250px;
-    height: 50px;
-    padding: 10px;
-    background-color: var(--default-green);
-    color: white;
-    border-radius: 12px;
-    border: none;
-    font-size: 26.62px;
+.form input[type = 'checkbox']:hover {
     cursor: pointer;
-    border: 2px solid rgba(3, 92, 56, 0.5);
 }
 
-.user {
-    margin-top: 10px;
-}
-
-.password {
-    margin-top: 10px;
-}
-
-.form input {
-    margin-top: 10px;
-    width: 468px;
-    height: 57px;
-    border-radius: 12px;
-    border: 1px solid;
-    opacity: 40%;
-    font-size: 26px;
-    padding-left: 12px;
-}
-
-.form label {
-    margin-top: 5px;
-    float: left;
-    font-size: 23px;
-    opacity: 50%;
-}
-
-.userNameFlash,
-.passwordFlash {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 5px;
-    background-color: rgb(255, 155, 155);
-    color: red;
-    width: 482px;
-    height: 40px !important;
-    border-radius: 5px;
-}
-
-.keepConn {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.keepConn input {
-    margin-right: 10px;
-    width: 25px;
-    height: 25px;
-}
-
-.keepConn label {
-    margin-top: 2%;
-    width: 100%;
-    height: 24px;
-    opacity: 50%;
-    font-size: 20px;
-}
-
-.link {
-    width: 200px;
-    margin-top: 30px;
-    margin-left: 56%;
-    text-decoration: none;
-}
-
-.image {
-    position: absolute;
-    left: 50%;
-    bottom: 8%;
-    height: auto;
-    width: 600px;
-}
-
-.image .img {
-    display: block;
-}
-
-.logoContainer {
-    position: absolute;
-    left: 55%;
-    top: 10%;
-    width: 450px;
-    height: auto;
-}
+.form .link:hover {
+    text-decoration: underline;
 }

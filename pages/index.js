@@ -35,7 +35,8 @@ export default function Login() {
                     <form className={styles.form} onSubmit={handleSubmit}>
                         <div className={styles.user}>
                             <label>Nome de usuário</label>
-                            <input type="email" value={data.userName} onChange={(e) => { setData({ ...data, userName: e.target.value }) }}></input>
+                            <input type="email" value={data.userName} onChange={(e) => { setData({ ...data, userName: e.target.value }) }}>
+                            </input>
                         </div>
                         {errors.userNameError && <div className={styles.userNameFlash}>{errors.userNameError}</div>}
                         <div className={styles.password}>
