@@ -54,12 +54,17 @@ export default function Login() {
                 <footer className={styles.footer}></footer>
             </div>
             <div className={styles.image}>
-                <Image src='/michel_card.png' width={700} height={500}></Image>
+                <Image className={styles.img} src='/michel_card.png' 
+                layout='responsive'
+                width={700}
+                height={500}>
+                </Image>
             </div>
-            <div className={styles.logo}>
-                <Image src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg' 
-                width={500} 
-                height={300}>
+            <div className={styles.logoContainer}>
+                <Image className={styles.logo} src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg' 
+                layout='responsive'
+                width={700} 
+                height={500}>
                 </Image>
             </div>
         </>
