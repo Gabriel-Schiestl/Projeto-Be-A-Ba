@@ -49,7 +49,7 @@ export default function Login() {
                             <label>Manter-se conectado</label>
                         </div>
                         <button onClick={handleSubmit}>Login</button>
-                        <Link className={styles.link} href='/forgotPassword'>Esqueceu a senha?</Link>
+                        <Link className={styles.link} href='/recoveryPassword'>Esqueceu a senha?</Link>
                     </form>
                 </div>
                 <footer className={styles.footer}></footer>
