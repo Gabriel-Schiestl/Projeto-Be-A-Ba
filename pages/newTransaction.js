@@ -1,35 +1,69 @@
+import React, { useState } from 'react';
+import Select from 'react-select';
+import Modal from 'react-modal';
+import styles from '../styles/newUser.module.css';
 
+const options = [
+    { value: 'Caixa VC', label: 'Caixa VC' },
+    { value: 'Estabelecimento', label: 'Estabelecimento' },
+];
+
+Modal.setAppElement('body');
 
 export default function NewTransaction() {
+    const [data, setData] = useState({ transactionName: "", tag: "", functions: [] });
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(data);
+        setModalIsOpen(false);
+    };
 
     return (
         <div className={styles.container}>
-            <form>
+            <button onClick={() => setModalIsOpen(true)}>Nova Transação</button>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                contentLabel="Cadastro de Nova Transação"
+                className={styles.modal}
+                overlayClassName={styles.overlay}>
                 <form className={styles.form} onSubmit={handleSubmit}>
+                    <h1>Cadastro de Transação</h1>
                     <div className={styles.transactionName}>
-                        <label>Nome:</label>
-                        <input type="text" value={data.transactionName} onChange={(e) => { setData({ ...data, transactionName: e.target.value }) }}>
-                        </input>
+                        <input
+                            type="text"
+                            value={data.transactionName}
+                            placeholder="Nome da transação"
+                            onChange={(e) => setData({ ...data, transactionName: e.target.value })}
+                        />
                     </div>
                     <div className={styles.tag}>
-                        <label>TAG:</label>
-                        <input type="text" value={data.tag} onChange={(e) => { setData({ ...data, tag: e.target.value }) }}></input>
+                        <input
+                            type="text"
+                            value={data.tag}
+                            placeholder="TAG"
+                            onChange={(e) => setData({ ...data, tag: e.target.value })}
+                        />
                     </div>
-                    <div className={styles.functions}>
-                        <label>Funções:</label>
-                        <input type='checkbox'></input>
-                        <label>Adicionar (ADAT)</label>
-                        <input type='checkbox'></input>
-                        <label>Alterar (ALTR)</label>
-                        <input type='checkbox'></input>
-                        <label>Visualizar (RETR)</label>
-                        <input type='checkbox'></input>
-                        <label>Adicionar restrição (ADIC)</label>
+                    <div className={styles.profiles}>
+                        <Select
+                            className={styles.select}
+                            isMulti
+                            value={options.filter(option => data.functions.includes(option.value))}
+                            onChange={(selectedOptions) => {
+                                const selectedValues = selectedOptions.map(option => option.value);
+                                setData({ ...data, functions: selectedValues });
+                            }}
+                            options={options}
+                            placeholder='Funções'
+                        />
                     </div>
-                    <button onClick={handleSubmit}>Salvar</button>
-                    <button>Cancelar</button>
+                    <button className={styles.registerBtn} type="submit">Cadastrar</button>
+                    <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
                 </form>
-            </form>
+            </Modal>
         </div>
-    )
+    );
 }

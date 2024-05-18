@@ -1,37 +1,82 @@
+import React, { useState } from 'react';
+import Select from 'react-select';
+import Modal from 'react-modal';
+import styles from '../styles/newUser.module.css';
 
+const options = [
+    { value: 'Caixa VC', label: 'Caixa VC' },
+    { value: 'Estabelecimento', label: 'Estabelecimento' },
+];
 
-export default function NewTransaction() {
+Modal.setAppElement('body');
+
+export default function NewModule() {
+    const [data, setData] = useState({ moduleName: "", tag: "", transactions: [], functions: [] });
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(data);
+        setModalIsOpen(false);
+    };
 
     return (
         <div className={styles.container}>
-            <form>
+            <button onClick={() => setModalIsOpen(true)}>Novo Módulo</button>
+            <Modal
+                isOpen={modalIsOpen}
+                onRequestClose={() => setModalIsOpen(false)}
+                contentLabel="Cadastro de Novo Módulo"
+                className={styles.modal}
+                overlayClassName={styles.overlay}>
                 <form className={styles.form} onSubmit={handleSubmit}>
+                    <h1>Cadastro de Módulo</h1>
                     <div className={styles.moduleName}>
-                        <label>Nome:</label>
-                        <input type="text" value={data.moduleName} onChange={(e) => { setData({ ...data, moduleName: e.target.value }) }}>
-                        </input>
+                        <input
+                            type="text"
+                            value={data.moduleName}
+                            placeholder="Nome do módulo"
+                            onChange={(e) => setData({ ...data, moduleName: e.target.value })}
+                        />
                     </div>
                     <div className={styles.tag}>
-                        <label>TAG:</label>
-                        <input type="text" value={data.tag} onChange={(e) => { setData({ ...data, tag: e.target.value }) }}></input>
+                        <input
+                            type="text"
+                            value={data.tag}
+                            placeholder="TAG"
+                            onChange={(e) => setData({ ...data, tag: e.target.value })}
+                        />
                     </div>
-                    <div className={styles.transactions}>
-                        <label>Transações:</label>
-                        <input type='checkbox'></input>
-                        <label>Risk Price (RKPC)</label>
-                        <input type='checkbox'></input>
-                        <label>Produto Fatura (PRFA)</label>
-                        <input type='checkbox'></input>
-                        <label>Desconto em Folha (DEFO)</label>
-                        <input type='checkbox'></input>
-                        <label>Pessoa física (PEFI)</label>
-                        <input type='checkbox'></input>
-                        <label>Pessoa Jurídica (PEJU)</label>
+                    <div className={styles.profiles}>
+                        <Select
+                            className={styles.select}
+                            isMulti
+                            value={options.filter(option => data.transactions.includes(option.value))}
+                            onChange={(selectedOptions) => {
+                                const selectedValues = selectedOptions.map(option => option.value);
+                                setData({ ...data, transactions: selectedValues });
+                            }}
+                            options={options}
+                            placeholder='Transações'
+                        />
                     </div>
-                    <button onClick={handleSubmit}>Salvar</button>
-                    <button>Cancelar</button>
+                    <div className={styles.profiles}>
+                        <Select
+                            className={styles.select}
+                            isMulti
+                            value={options.filter(option => data.functions.includes(option.value))}
+                            onChange={(selectedOptions) => {
+                                const selectedValues = selectedOptions.map(option => option.value);
+                                setData({ ...data, functions: selectedValues });
+                            }}
+                            options={options}
+                            placeholder='Funções'
+                        />
+                    </div>
+                    <button className={styles.registerBtn} type="submit">Cadastrar</button>
+                    <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
                 </form>
-            </form>
+            </Modal>
         </div>
-    )
+    );
 }
