@@ -69,7 +69,7 @@ export default function NewUser() {
                         />
                     </div>
                     <button className={styles.registerBtn} type="submit">Cadastrar</button>
-                    <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
+                    <button className={styles.cancel} type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
                 </form>
             </Modal>
         </div>

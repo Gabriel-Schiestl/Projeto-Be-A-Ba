@@ -1,5 +1,5 @@
 import Link from "next/link";
-import styles from "./Sidebar.module.css"
+import styles from "../styles/Sidebar.module.css"
 import Image from "next/image";
 import Head from "next/head";
 
