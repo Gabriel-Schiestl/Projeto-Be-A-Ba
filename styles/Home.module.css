@@ -211,7 +211,7 @@
     .content {
         margin: 0;
         display: flex;
-        justify-content: flex-start;
+        justify-content: center;
         flex-direction: column;
         align-items: center;
         width: 50%;
@@ -227,6 +227,12 @@
         height: 100%;
         font-family: "Inter", sans-serif;
         font-weight: 500;
+    }
+
+    .divLabel {
+        width: 60%;
+        display: flex;
+        justify-content: flex-start;
     }
 
     .form button {
@@ -251,9 +257,14 @@
         border: 1px solid;
         opacity: 40%;
         font-size: 26px;
+        margin-bottom: 2%;
     }
 
     .form label {
+        display: flex;
+        justify-content: flex-start !important;
+        align-items: center;
+        text-align: start;
         margin-top: 5px;
         font-size: 23px;
         opacity: 50%;
@@ -274,10 +285,12 @@
     }
 
     .keepConn {
+        width: 60%;
         display: flex;
+        justify-content: flex-start;
         align-items: center;
         margin-top: 20px;
-        margin-bottom: 20px;
+        margin-bottom: 2%;
     }
 
     .keepConn input {
@@ -288,9 +301,9 @@
     }
 
     .keepConn label {
-        margin-top: 2%;
         width: 100%;
-        height: 24px;
+        height: 25px;
+        margin-top: 0;
         opacity: 50%;
         font-size: 20px;
     }

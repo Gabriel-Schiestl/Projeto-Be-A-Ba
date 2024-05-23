@@ -1,28 +1,44 @@
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import Select from 'react-select';
 import Modal from 'react-modal';
-import styles from '../styles/newUser.module.css'; 
+import styles from '../styles/newUser.module.css';
+import validator from 'validator';
+import Sidebar from 'components/Sidebar';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
     { value: 'Estabelecimento', label: 'Estabelecimento' },
 ];
 
-Modal.setAppElement('body'); 
+Modal.setAppElement('body');
 
 export default function NewUser() {
+
     const [data, setData] = useState({ userName: "", email: "", password: "", profiles: [] });
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [errors, setErrors] = useState("");
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(data);
         setModalIsOpen(false);
+
+        if (!validator.isEmail(data.email)) {
+            setErrors("Email inválido");
+        }
     };
 
     return (
         <div className={styles.container}>
-            <button onClick={() => setModalIsOpen(true)}>Novo Usuário</button>
+            <Sidebar></Sidebar>
+            <div className={styles.content}>
+                <div className={styles.center}>
+                    <div className={styles.button}>
+                        <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Novo usuário</button>
+                    </div>
+                    <div className={styles.page}></div>
+                </div>
+            </div>
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}
@@ -70,6 +86,7 @@ export default function NewUser() {
                     </div>
                     <button className={styles.registerBtn} type="submit">Cadastrar</button>
                     <button className={styles.cancel} type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
+                    {errors && <div className={styles.error}>{errors}</div>}
                 </form>
             </Modal>
         </div>

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Select from 'react-select';
 import Modal from 'react-modal';
 import styles from '../styles/newUser.module.css';
+import Sidebar from 'components/Sidebar';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
@@ -22,7 +23,15 @@ export default function NewProfile() {
 
     return (
         <div className={styles.container}>
-            <button onClick={() => setModalIsOpen(true)}>Novo Perfil</button>
+            <Sidebar></Sidebar>
+            <div className={styles.content}>
+                <div className={styles.center}>
+                    <div className={styles.button}>
+                        <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Novo perfil</button>
+                    </div>
+                    <div className={styles.page}></div>
+                </div>
+            </div>
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}

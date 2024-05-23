@@ -9,12 +9,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@mui/icons-material": "^5.15.18",
+    "@mui/material": "^5.15.18",
+    "antd": "^5.17.3",
+    "axios": "^1.7.2",
+    "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.3",
     "next": "14.2.3",
+    "next-auth": "^4.24.7",
+    "pg": "^8.11.5",
     "react": "^18",
     "react-dom": "^18",
     "react-modal": "^3.16.1",
-    "react-select": "^5.8.0"
+    "react-select": "^5.8.0",
+    "sequelize": "^6.37.3",
+    "validator": "^13.12.0"
   },
   "devDependencies": {
     "eslint": "^8",

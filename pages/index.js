@@ -33,11 +33,11 @@ export default function Login() {
                 <div className={styles.content}>
                     <h1 className={styles.h1}>Iniciar sessão na VerdeCard</h1>
                     <form className={styles.form} onSubmit={handleSubmit}>
-                        <label>Nome de usuário</label>
+                        <div className={styles.divLabel}><label>Nome de usuário</label></div>
                         <input type="email" value={data.userName} onChange={(e) => { setData({ ...data, userName: e.target.value }) }}>
                         </input>
                         {errors.userNameError && <div className={styles.userNameFlash}>{errors.userNameError}</div>}
-                        <label>Senha</label>
+                        <div className={styles.divLabel}><label>Senha</label></div>
                         <input type="password" value={data.password} onChange={(e) => { setData({ ...data, password: e.target.value }) }}></input>
                         {errors.passwordError && <div className={styles.passwordFlash}>{errors.passwordError}</div>}
                         <div className={styles.keepConn}>

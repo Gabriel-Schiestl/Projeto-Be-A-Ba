@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 import styles from '../styles/newUser.module.css';
+import Sidebar from 'components/Sidebar';
+import { TextField, Autocomplete, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
@@ -21,7 +24,41 @@ export default function NewFunction() {
 
     return (
         <div className={styles.container}>
-            <button onClick={() => setModalIsOpen(true)}>Nova Função</button>
+            <Sidebar></Sidebar>
+            <div className={styles.content}>
+                <div className={styles.center}>
+                <Autocomplete
+                className={styles.searchBar}
+                    freeSolo
+                    options={options}
+                    renderInput={(params) => (
+                        <TextField 
+                            {...params}
+                            label="Pesquisar"
+                            InputProps={{
+                                ...params.InputProps,
+                                startAdornment: (
+                                    <InputAdornment position="end">
+                                        <SearchIcon />
+                                    </InputAdornment>
+                                ),
+                            }}
+                        />
+                    )}
+                />
+                    <div className={styles.button}>
+                        <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Nova função</button>
+                    </div>
+                    <div className={styles.page}>
+                        <div className={styles.pageHeader}>
+                            <ul>
+                                <li>Nome</li>
+                                <li>Descrição</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}
