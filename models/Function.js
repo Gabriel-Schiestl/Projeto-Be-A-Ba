@@ -7,25 +7,16 @@ const Function = sequelize.define('Function', {
         allowNull: false,
     },
 
-    email: {
+    tag: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
     },
 
-    password: {
+    description: {
         type: DataTypes.STRING,
-        allowNull: false,
-    },
-
-    register: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-    },
-
-    creationDate: {
-        type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
     },
 })
+
+export default Function;

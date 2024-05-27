@@ -12,3 +12,5 @@ const Transaction = sequelize.define('Transaction', {
         allowNull: true,
     }
 })
+
+export default Transaction;

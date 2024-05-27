@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import sequelize from "utils/db";
+import Profile from "./Profile";
 
 const User = sequelize.define('User', {
     name: {
@@ -28,4 +29,14 @@ const User = sequelize.define('User', {
         type: DataTypes.DATE,
         allowNull: false,
     },
+
+    profileId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Profile,
+            key: id,
+        }
+    },
 })
+
+export default User;

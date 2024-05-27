@@ -2,6 +2,7 @@ import { useState } from 'react'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
+import { signIn } from 'next-auth/react'
 
 export default function Login() {
 
@@ -15,7 +16,7 @@ export default function Login() {
         passwordError: ""
     });
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
 
         e.preventDefault();
 
@@ -24,6 +25,21 @@ export default function Login() {
             userNameError: data.userName === "" || data.userName.length < 3 ? "Digite um usuário válido" : "",
             passwordError: data.password === "" || data.password.length < 8 || data.password.length > 20 ? "A senha deve conter entre 8 e 20 caracteres" : ""
         }));
+
+        try{
+
+        if(!errors) {
+
+            signIn('credentials', { 
+                redirect: false,
+                email: data.userName,
+                password: data.password,
+            })
+            
+        }
+    } catch {
+        console.log("Erro ao fazer login");
+    }
     }
 
     return (

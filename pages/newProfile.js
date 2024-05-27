@@ -26,6 +26,25 @@ export default function NewProfile() {
             <Sidebar></Sidebar>
             <div className={styles.content}>
                 <div className={styles.center}>
+                    <Autocomplete
+                        className={styles.searchBar}
+                        freeSolo
+                        options={options}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label="Pesquisar"
+                                InputProps={{
+                                    ...params.InputProps,
+                                    startAdornment: (
+                                        <InputAdornment position="end">
+                                            <SearchIcon />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                            />
+                        )}
+                    />
                     <div className={styles.button}>
                         <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Novo perfil</button>
                     </div>

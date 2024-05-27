@@ -15,3 +15,5 @@ const Profile = sequelize.define('Profile', {
     },
 
 })
+
+export default Profile;
