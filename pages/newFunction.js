@@ -14,7 +14,7 @@ const options = [
 Modal.setAppElement('body');
 
 export default function NewFunction({ session }) {
-    const [data, setData] = useState({ functionName: "", tag: "", description: "" });
+    const [data, setData] = useState({ functionName: "", tag: "", functionDescription: "" });
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const handleSubmit = (e) => {
@@ -73,21 +73,21 @@ export default function NewFunction({ session }) {
                             <input type="text"
                                 value={data.functionName}
                                 placeholder='Nome da Função'
-                                onChange={(e) => { setData({ ...data, functionName: e.target.value }) }}>
+                                onChange={(e) => { setData({ ...prevData, functionName: e.target.value }) }}>
                             </input>
                         </div>
                         <div className={styles.tag}>
                             <input type="text"
                                 value={data.tag}
                                 placeholder='TAG'
-                                onChange={(e) => { setData({ ...data, tag: e.target.value }) }}>
+                                onChange={(e) => { setData({ ...prevData, tag: e.target.value }) }}>
                             </input>
                         </div>
                         <div className={styles.description}>
                             <textarea rows={5} cols={40}
-                                value={data.description}
+                                value={data.functionDescription}
                                 placeholder='Descrição'
-                                onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
+                                onChange={(e) => { setData({ ...prevData, functionDescription: e.target.value }) }}>
                             </textarea>
                         </div>
                         <button className={styles.registerBtn} type="submit">Cadastrar</button>

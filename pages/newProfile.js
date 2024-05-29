@@ -3,6 +3,8 @@ import Select from 'react-select';
 import Modal from 'react-modal';
 import styles from '../styles/newUser.module.css';
 import Sidebar from 'components/Sidebar';
+import { TextField, Autocomplete, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },

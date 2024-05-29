@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import sequelize from "utils/db";
-import Profile from "./Profile";
+import Profiles from "./Profiles";
 
-const User = sequelize.define('User', {
+const Users = sequelize.define('users', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -25,7 +25,7 @@ const User = sequelize.define('User', {
         unique: true,
     },
 
-    creationDate: {
+    created_at: {
         type: DataTypes.DATE,
         allowNull: false,
     },
@@ -33,10 +33,13 @@ const User = sequelize.define('User', {
     profileId: {
         type: DataTypes.INTEGER,
         references: {
-            model: Profile,
-            key: id,
+            model: Profiles,
+            key: 'id',
         }
-    },
+    }
+
+}, {
+    schema: 'projeto'
 })
 
-export default User;
+export default Users;

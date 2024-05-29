@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import sequelize from "utils/db";
 
-const Function = sequelize.define('Function', {
+const Transactions = sequelize.define('transactions', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -16,7 +16,9 @@ const Function = sequelize.define('Function', {
     description: {
         type: DataTypes.STRING,
         allowNull: true,
-    },
+    }
+}, {
+    schema: 'projeto'
 })
 
-export default Function;
+export default Transactions;

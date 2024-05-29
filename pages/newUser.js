@@ -1,9 +1,12 @@
-import React, { use, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import Modal from 'react-modal';
 import styles from '../styles/newUser.module.css';
 import validator from 'validator';
 import Sidebar from 'components/Sidebar';
+import { TextField, Autocomplete, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
@@ -14,16 +17,32 @@ Modal.setAppElement('body');
 
 export default function NewUser() {
 
-    const [data, setData] = useState({ userName: "", email: "", password: "", profiles: [] });
+    const [formData, setFormData] = useState({ userName: "", email: "", register, password: "", profile: "" });
+    const [data, setData] = useState();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [errors, setErrors] = useState("");
 
+    useEffect(async (req, res) => {
+
+        try {
+
+            const response = await axios.get('/api/ProfileAPI.js');
+            const data = response.data;
+
+            setData(data);
+
+        } catch (e) {
+
+        }
+
+    }, []);
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(data);
+        console.log(formData);
         setModalIsOpen(false);
 
-        if (!validator.isEmail(data.email)) {
+        if (!validator.isEmail(formData.email)) {
             setErrors("Email inválido");
         }
     };
@@ -69,17 +88,17 @@ export default function NewUser() {
                     <div className={styles.userName}>
                         <input
                             type="text"
-                            value={data.userName}
+                            value={formData.userName}
                             placeholder="Nome completo"
-                            onChange={(e) => setData({ ...data, userName: e.target.value })}
+                            onChange={(e) => setFormData({ ...prevData, userName: e.target.value })}
                         />
                     </div>
                     <div className={styles.email}>
                         <input
                             type="text"
-                            value={data.email}
+                            value={formData.email}
                             placeholder="E-mail"
-                            onChange={(e) => setData({ ...data, email: e.target.value })}
+                            onChange={(e) => setFormData({ ...prevData, email: e.target.value })}
                         />
                     </div>
                     <div className={styles.password}>
@@ -87,17 +106,15 @@ export default function NewUser() {
                             type="text"
                             value={data.password}
                             placeholder="Senha"
-                            onChange={(e) => setData({ ...data, password: e.target.value })}
+                            onChange={(e) => setFormData({ ...prevData, password: e.target.value })}
                         />
                     </div>
                     <div className={styles.profiles}>
                         <Select
                             className={styles.select}
-                            isMulti
                             value={options.filter(option => data.profiles.includes(option.value))}
-                            onChange={(selectedOptions) => {
-                                const selectedValues = selectedOptions.map(option => option.value);
-                                setData({ ...data, profiles: selectedValues });
+                            onChange={(selectedOption) => {
+                                setFormData({ ...prevData, profile: selectedOption.value });
                             }}
                             options={options}
                             placeholder='Perfis'

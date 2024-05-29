@@ -1,8 +1,10 @@
 import NextAuth from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
 import sequelize from "utils/db";
-import User from '../../../models/User'
 import bcrypt from 'bcryptjs'
+import models from 'models'
+
+const { Users, Profiles, Functions, Modules, Transactions } = models;
 
 export default NextAuth({
     providers: [
@@ -17,9 +19,9 @@ export default NextAuth({
                     return null;
                 }
 
-                const user = await User.findOne({where: {email: credentials.email}})
+                const user = await Users.findOne({ where: { email: credentials.email } })
 
-                if(user && bcrypt.compareSync(credentials.password, user.password)) {
+                if (user && bcrypt.compareSync(credentials.password, user.password)) {
                     return user;
                 } else {
                     throw new Error('E-mail ou senha inválida');
@@ -30,19 +32,26 @@ export default NextAuth({
 
     callbacks: {
         async jwt(token, user) {
-            if(user) {
+            if (user) {
                 token.id = user.id;
                 token.email = user.email;
-                token.profile = user.profile;
+                token.profileId = user.profileId;
             }
 
             return token;
-        }, 
+        },
 
         async session(session, token) {
             session.user.id = token.id;
             session.user.email = token.email;
-            session.user.profile = token.profile;
+            session.user.profile = await Profiles.findOne({
+                where: { id: token.profileId },
+                include: [
+                    { model: Functions, },
+                    { model: Modules, },
+                    { model: Transactions },
+                ]
+            });
 
             return session;
         }
@@ -55,5 +64,5 @@ export default NextAuth({
     jwt: {
         secret: process.env.JWT_SECRET,
     }
-}); 
+});
 

@@ -160,14 +160,26 @@
 
     .sidebar {
         display: none;
+        animation: smooth .4s;
     }
 
     .flex {
         display: flex;
     }
 
+    .none {
+        display: none;
+    }
+
     .ul {
         font-size: 1em;
+    }
+
+    @keyframes smooth {
+        
+        0% { transform: translateX(-100%);}
+        100% { transform: translateX(0%);}
+
     }
 
 }
@@ -186,6 +198,10 @@
         width: 28px;
         height: 28px;
         font-size: 0.8em;
+    }
+
+    .sidebar {
+        width: 40%;
     }
     
     .profile i {
@@ -233,10 +249,6 @@
     .profile i {
         font-size: 1.7em;
         opacity: 50%;
-    }
-
-    .sidebar {
-        width: 50%;
     }
 
     .ul li {

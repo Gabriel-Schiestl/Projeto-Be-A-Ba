@@ -1,19 +1,20 @@
 import { DataTypes } from "sequelize";
 import sequelize from "utils/db";
 
-const Profile = sequelize.define('Profile', {
+const Profiles = sequelize.define('profiles', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
     },
 
-    tag: {
-        type: DataTypes.STRING,
+    created_at: {
+        type: DataTypes.DATE,
         allowNull: false,
-        unique: true,
     },
 
+}, {
+    schema: 'projeto'
 })
 
-export default Profile;
+export default Profiles;

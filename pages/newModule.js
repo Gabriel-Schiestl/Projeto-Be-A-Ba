@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import Modal from 'react-modal';
 import styles from '../styles/newUser.module.css';
 import Sidebar from 'components/Sidebar';
+import { TextField, Autocomplete, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
@@ -12,8 +15,16 @@ const options = [
 Modal.setAppElement('body');
 
 export default function NewModule() {
-    const [data, setData] = useState({ moduleName: "", tag: "", transactions: [], functions: [] });
+
+    const [data, setData] = useState({ moduleName: "", tag: "", moduleDescription, transactions: [] });
     const [modalIsOpen, setModalIsOpen] = useState(false);
+
+    useEffect(async () => {
+
+        const response = axios.get('/api/ModuleAPI');
+        console.log(response)
+
+    })
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -82,7 +93,7 @@ export default function NewModule() {
                             value={options.filter(option => data.transactions.includes(option.value))}
                             onChange={(selectedOptions) => {
                                 const selectedValues = selectedOptions.map(option => option.value);
-                                setData({ ...data, transactions: selectedValues });
+                                setData({ ...prevData, transactions: selectedValues });
                             }}
                             options={options}
                             placeholder='Transações'
@@ -95,7 +106,7 @@ export default function NewModule() {
                             value={options.filter(option => data.functions.includes(option.value))}
                             onChange={(selectedOptions) => {
                                 const selectedValues = selectedOptions.map(option => option.value);
-                                setData({ ...data, functions: selectedValues });
+                                setData({ ...prevData, functions: selectedValues });
                             }}
                             options={options}
                             placeholder='Funções'

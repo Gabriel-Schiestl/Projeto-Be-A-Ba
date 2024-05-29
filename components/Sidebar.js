@@ -35,11 +35,14 @@ export default function Sidebar() {
     useEffect(() => {
 
         const sidebar = sidebarRef.current;
+        const menuButton = menuRef.current;
 
         if (isOpen) {
             sidebar.classList.add(styles.flex);
+            menuButton.classList.add(styles.none);
         } else {
             sidebar.classList.remove(styles.flex);
+            menuButton.classList.remove(styles.none)
         }
 
     }, [isOpen]);

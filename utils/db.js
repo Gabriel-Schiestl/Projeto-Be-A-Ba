@@ -1,17 +1,14 @@
 import { Sequelize } from "sequelize";
 
 const sequelize = new Sequelize(
-    process.env.database,
-    process.env.username, 
-    process.env.password, 
+    process.env.DATABASE,
+    'postgres', 
+    process.env.PASSWORD, 
     {
-    host: process.env.host,
+    host: process.env.HOST,
     dialect: 'postgres',
     dialectOptions: {
-        ssl: {
-            require: true,
-            rejectUnauthorized: false,
-        }
+        ssl: false
     }
 });
 

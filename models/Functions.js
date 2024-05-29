@@ -1,8 +1,7 @@
-import { Description } from "@mui/icons-material";
 import { DataTypes } from "sequelize";
 import sequelize from "utils/db";
 
-const Module = sequelize.define('Module', {
+const Functions = sequelize.define('functions', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -18,6 +17,9 @@ const Module = sequelize.define('Module', {
         type: DataTypes.STRING,
         allowNull: true,
     },
+
+}, {
+    schema: 'projeto'
 })
 
-export default Module;
+export default Functions;

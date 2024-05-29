@@ -3,6 +3,8 @@ import Select from 'react-select';
 import Modal from 'react-modal';
 import styles from '../styles/newUser.module.css';
 import Sidebar from 'components/Sidebar';
+import { TextField, Autocomplete, InputAdornment } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
@@ -12,7 +14,7 @@ const options = [
 Modal.setAppElement('body');
 
 export default function NewTransaction() {
-    const [data, setData] = useState({ transactionName: "", tag: "", functions: [] });
+    const [data, setData] = useState({ transactionName: "", tag: "", transactionDescription, functions: [] });
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const handleSubmit = (e) => {
@@ -64,7 +66,7 @@ export default function NewTransaction() {
                             type="text"
                             value={data.transactionName}
                             placeholder="Nome da transação"
-                            onChange={(e) => setData({ ...data, transactionName: e.target.value })}
+                            onChange={(e) => setData({ ...prevData, transactionName: e.target.value })}
                         />
                     </div>
                     <div className={styles.tag}>
@@ -72,7 +74,7 @@ export default function NewTransaction() {
                             type="text"
                             value={data.tag}
                             placeholder="TAG"
-                            onChange={(e) => setData({ ...data, tag: e.target.value })}
+                            onChange={(e) => setData({ ...prevData, tag: e.target.value })}
                         />
                     </div>
                     <div className={styles.profiles}>
@@ -82,7 +84,7 @@ export default function NewTransaction() {
                             value={options.filter(option => data.functions.includes(option.value))}
                             onChange={(selectedOptions) => {
                                 const selectedValues = selectedOptions.map(option => option.value);
-                                setData({ ...data, functions: selectedValues });
+                                setData({ ...prevData, functions: selectedValues });
                             }}
                             options={options}
                             placeholder='Funções'
