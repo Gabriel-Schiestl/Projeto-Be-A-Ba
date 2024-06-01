@@ -16,6 +16,35 @@ Modal.setAppElement('body');
 export default function NewProfile() {
     const [data, setData] = useState({ profileName: "", modules: [], transactions: [], functions: [] });
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [profiles, setProfiles] = useState([]);
+    const [modules, setModules] = useState([]);
+    const [transactions, setTransactions] = useState([]);
+    const [functions, setFunctions] = useState([]);
+
+    const handleInit = async (req, res) => {
+
+        try {
+
+            const profiles = await axios.get('/api/ProfileAPI');
+
+            setProfiles(profiles);
+
+            const modules = await axios.get('/api/ModuleAPI')
+
+            setModules(modules);
+
+            const transactions = await axios.get('/api/TransactionAPI')
+
+            setTransactions(transactions);
+
+            const functions = await axios.get('/api/FunctionAPI')
+
+            setFunctions(functions);
+
+        } catch (e) {
+
+        }
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -25,6 +54,7 @@ export default function NewProfile() {
 
     return (
         <div className={styles.container}>
+            {handleInit}
             <Sidebar></Sidebar>
             <div className={styles.content}>
                 <div className={styles.center}>
@@ -63,6 +93,7 @@ export default function NewProfile() {
                     <h1>Cadastro de Perfil</h1>
                     <div className={styles.profileName}>
                         <input
+                            required
                             type="text"
                             value={data.profileName}
                             placeholder="Nome do perfil"
@@ -71,6 +102,7 @@ export default function NewProfile() {
                     </div>
                     <div className={styles.profiles}>
                         <Select
+                            required
                             className={styles.select}
                             isMulti
                             value={options.filter(option => data.modules.includes(option.value))}

@@ -26,20 +26,20 @@ export default function Login() {
             passwordError: data.password === "" || data.password.length < 8 || data.password.length > 20 ? "A senha deve conter entre 8 e 20 caracteres" : ""
         }));
 
-        try{
+        try {
 
-        if(!errors) {
+            if (!errors) {
 
-            signIn('credentials', { 
-                redirect: false,
-                email: data.userName,
-                password: data.password,
-            })
-            
+                signIn('credentials', {
+                    redirect: false,
+                    email: data.userName,
+                    password: data.password,
+                })
+
+            }
+        } catch (e) {
+            console.log("Erro ao fazer login");
         }
-    } catch {
-        console.log("Erro ao fazer login");
-    }
     }
 
     return (
@@ -50,11 +50,20 @@ export default function Login() {
                     <h1 className={styles.h1}>Iniciar sessão na VerdeCard</h1>
                     <form className={styles.form} onSubmit={handleSubmit}>
                         <div className={styles.divLabel}><label>Nome de usuário</label></div>
-                        <input type="email" value={data.userName} onChange={(e) => { setData({ ...data, userName: e.target.value }) }}>
+                        <input
+                            required
+                            type="email"
+                            value={data.userName}
+                            onChange={(e) => { setData({ ...data, userName: e.target.value }) }}>
                         </input>
                         {errors.userNameError && <div className={styles.userNameFlash}>{errors.userNameError}</div>}
                         <div className={styles.divLabel}><label>Senha</label></div>
-                        <input type="password" value={data.password} onChange={(e) => { setData({ ...data, password: e.target.value }) }}></input>
+                        <input
+                            required
+                            type="password"
+                            value={data.password}
+                            onChange={(e) => { setData({ ...data, password: e.target.value }) }}>
+                        </input>
                         {errors.passwordError && <div className={styles.passwordFlash}>{errors.passwordError}</div>}
                         <div className={styles.keepConn}>
                             <input type='checkbox'></input>

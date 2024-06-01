@@ -6,16 +6,25 @@ import Sidebar from 'components/Sidebar';
 import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 
-const options = [
-    { value: 'Caixa VC', label: 'Caixa VC' },
-    { value: 'Estabelecimento', label: 'Estabelecimento' },
-];
-
 Modal.setAppElement('body');
 
 export default function NewTransaction() {
     const [data, setData] = useState({ transactionName: "", tag: "", transactionDescription, functions: [] });
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [transactions, setTransactions] = useState([]);
+
+    const handleInit = async (req, res) => {
+
+        try {
+
+            const transactions = await axios.get('/api/TransactionAPI');
+
+            setTransactions(transactions);
+
+        } catch (e) {
+
+        }
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -25,6 +34,7 @@ export default function NewTransaction() {
 
     return (
         <div className={styles.container}>
+            {handleInit}
             <Sidebar></Sidebar>
             <div className={styles.content}>
                 <div className={styles.center}>
@@ -63,6 +73,7 @@ export default function NewTransaction() {
                     <h1>Cadastro de Transação</h1>
                     <div className={styles.transactionName}>
                         <input
+                            required
                             type="text"
                             value={data.transactionName}
                             placeholder="Nome da transação"
@@ -71,6 +82,7 @@ export default function NewTransaction() {
                     </div>
                     <div className={styles.tag}>
                         <input
+                            required
                             type="text"
                             value={data.tag}
                             placeholder="TAG"
@@ -79,6 +91,7 @@ export default function NewTransaction() {
                     </div>
                     <div className={styles.profiles}>
                         <Select
+                            required
                             className={styles.select}
                             isMulti
                             value={options.filter(option => data.functions.includes(option.value))}

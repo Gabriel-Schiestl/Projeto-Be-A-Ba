@@ -70,7 +70,9 @@ export default function NewFunction({ session }) {
                     <form className={styles.form} onSubmit={handleSubmit}>
                         <h1>Cadastro de Função</h1>
                         <div className={styles.functionName}>
-                            <input type="text"
+                            <input
+                                required
+                                type="text"
                                 value={data.functionName}
                                 placeholder='Nome da Função'
                                 onChange={(e) => { setData({ ...prevData, functionName: e.target.value }) }}>
@@ -78,6 +80,7 @@ export default function NewFunction({ session }) {
                         </div>
                         <div className={styles.tag}>
                             <input type="text"
+                                required
                                 value={data.tag}
                                 placeholder='TAG'
                                 onChange={(e) => { setData({ ...prevData, tag: e.target.value }) }}>

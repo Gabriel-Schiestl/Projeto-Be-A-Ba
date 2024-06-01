@@ -7,48 +7,68 @@ import Sidebar from 'components/Sidebar';
 import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
-
-const options = [
-    { value: 'Caixa VC', label: 'Caixa VC' },
-    { value: 'Estabelecimento', label: 'Estabelecimento' },
-];
+import { useSession } from 'next-auth/react';
 
 Modal.setAppElement('body');
 
 export default function NewUser() {
 
-    const [formData, setFormData] = useState({ userName: "", email: "", register, password: "", profile: "" });
-    const [data, setData] = useState();
+    const [formData, setFormData] = useState({ userName: "", email: "", register: "", password: "", profile: "" });
+    const [data, setData] = useState("");
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [errors, setErrors] = useState("");
+    const [options, setOptions] = useState([]);
 
-    useEffect(async (req, res) => {
+    const handleInit = async (req, res) => {
 
         try {
 
-            const response = await axios.get('/api/ProfileAPI.js');
-            const data = response.data;
+            const users = await axios.get('/api/UserAPI');
 
-            setData(data);
+            setData(users);
+
+            const profiles = await axios.get('/api/ProfileAPI')
+
+            setOptions(profiles);
 
         } catch (e) {
 
         }
+    }
 
-    }, []);
+    const registerUser = async (req, res) => {
 
-    const handleSubmit = (e) => {
+
+        try {
+
+            if (!validator.isEmail(formData.email)) {
+
+                setErrors("Email inválido");
+
+            } else {
+                setModalIsOpen(false);
+                setErrors("");
+                await axios.post('/api/UserAPI.js', formData);
+                setFormData({ userName: "", email: "", register: "", password: "", profile: "" });
+            }
+        } catch (e) {
+            setErrors(res.error);
+        }
+
+    }
+
+    const handleSubmit = async (e) => {
+
         e.preventDefault();
         console.log(formData);
-        setModalIsOpen(false);
 
-        if (!validator.isEmail(formData.email)) {
-            setErrors("Email inválido");
-        }
+        await registerUser();
     };
 
     return (
+
         <div className={styles.container}>
+            {handleInit}
             <Sidebar></Sidebar>
             <div className={styles.content}>
                 <div className={styles.center}>
@@ -87,34 +107,47 @@ export default function NewUser() {
                     <h1>Cadastro de usuário</h1>
                     <div className={styles.userName}>
                         <input
+                            required
                             type="text"
                             value={formData.userName}
                             placeholder="Nome completo"
-                            onChange={(e) => setFormData({ ...prevData, userName: e.target.value })}
+                            onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
                         />
                     </div>
                     <div className={styles.email}>
                         <input
+                            required
                             type="text"
                             value={formData.email}
                             placeholder="E-mail"
-                            onChange={(e) => setFormData({ ...prevData, email: e.target.value })}
+                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                        />
+                    </div>
+                    <div className={styles.email}>
+                        <input
+                            required
+                            type="text"
+                            value={formData.register}
+                            placeholder="Matrícula"
+                            onChange={(e) => setFormData({ ...formData, register: e.target.value })}
                         />
                     </div>
                     <div className={styles.password}>
                         <input
-                            type="text"
+                            required
+                            type="password"
                             value={data.password}
                             placeholder="Senha"
-                            onChange={(e) => setFormData({ ...prevData, password: e.target.value })}
+                            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         />
                     </div>
                     <div className={styles.profiles}>
                         <Select
+                            required
                             className={styles.select}
                             value={options.filter(option => data.profiles.includes(option.value))}
                             onChange={(selectedOption) => {
-                                setFormData({ ...prevData, profile: selectedOption.value });
+                                setFormData({ ...formData, profile: selectedOption.value });
                             }}
                             options={options}
                             placeholder='Perfis'

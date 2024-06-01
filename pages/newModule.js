@@ -72,6 +72,7 @@ export default function NewModule() {
                     <h1>Cadastro de Módulo</h1>
                     <div className={styles.moduleName}>
                         <input
+                            required
                             type="text"
                             value={data.moduleName}
                             placeholder="Nome do módulo"
@@ -80,6 +81,7 @@ export default function NewModule() {
                     </div>
                     <div className={styles.tag}>
                         <input
+                            required
                             type="text"
                             value={data.tag}
                             placeholder="TAG"
@@ -88,6 +90,7 @@ export default function NewModule() {
                     </div>
                     <div className={styles.profiles}>
                         <Select
+                            required
                             className={styles.select}
                             isMulti
                             value={options.filter(option => data.transactions.includes(option.value))}
