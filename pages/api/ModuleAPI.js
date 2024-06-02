@@ -2,60 +2,58 @@ import Modules from "models/Modules";
 
 export default async function handler(req, res) {
 
-    if (req.method == 'POST') {
+    if (req.method === 'POST') {
+        const { moduleName, tag, moduleDescription, transactions } = req.body;
 
         try {
+            const nameExists = await Modules.findOne({ where: { name: moduleName } });
+            const tagExists = await Modules.findOne({ where: { tag: tag } });
 
-            const { moduleName, tag, moduleDescription, transactions } = req.body;
-
-            try {
-
-                const nameExists = await Modules.findOne({ where: { moduleName: moduleName } });
-                const tagExists = await Modules.findOne({ where: { tag: tag } });
-
-                if (tagExists) {
-
-                    return res.status(400).json({ error: "Já existe outro módulo com esta tag" });
-
-                } else if (nameExists) {
-
-                    return res.status(400).json({ error: "Já existe outro módulo com este nome" });
-
-                }
-
-            } catch (e) {
-
+            if (nameExists) {
+                return res.status(400).json({error: "Já existe outro módulo com este nome"});
             }
 
-            await Modules.create({
+            if (tagExists) {
+                return res.status(400).json({error: "Já existe outro módulo com esta tag"});
+            }
+
+            const newModule = await Modules.create({
                 name: moduleName,
                 tag: tag,
                 description: moduleDescription,
-            })
+            });
 
-            await Modules.addTransactions(transactions);
+            if (!newModule) {
 
-            res.status(200).json({ message: "Sucesso ao criar módulo" });
+                throw new Error("Erro ao criar módulo");
+                
+            }
+
+            await newModule.addTransactions(transactions);
+
+            return res.status(201).json({ message: "Módulo criado com sucesso" });
 
         } catch (e) {
 
-            res.status(400).json({ error: "Erro ao criar módulo" });
+            return res.status(400).json({ error: e.message || "Erro ao criar módulo" });
 
         }
 
-    } else if (req.method == 'GET') {
+    } else if (req.method === 'GET') {
 
         try {
 
             const modules = await Modules.findAll();
-
-            res.status(200).json(modules);
+            return res.status(200).json(modules);
 
         } catch (e) {
 
-            res.status(400).json({ error: "Erro ao obter módulos" });
+            return res.status(400).json({ error: "Erro ao obter módulos" });
 
         }
+    } else {
+
+        return res.status(405).json({ error: "Método não permitido" });
 
     }
 }

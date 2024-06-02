@@ -3,8 +3,11 @@ import styles from '../styles/Home.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
 import { signIn } from 'next-auth/react'
+import { useRouter } from 'next/router'
 
 export default function Login() {
+
+    const router = useRouter();
 
     const [data, setData] = useState({
         userName: "",
@@ -13,7 +16,7 @@ export default function Login() {
 
     const [errors, setErrors] = useState({
         userNameError: "",
-        passwordError: ""
+        passwordError: "",
     });
 
     async function handleSubmit(e) {
@@ -22,23 +25,35 @@ export default function Login() {
 
         setErrors(prevErrors => ({
             ...prevErrors,
-            userNameError: data.userName === "" || data.userName.length < 3 ? "Digite um usuário válido" : "",
-            passwordError: data.password === "" || data.password.length < 8 || data.password.length > 20 ? "A senha deve conter entre 8 e 20 caracteres" : ""
+            userNameError: data.userName.length < 3 ? "Digite um usuário válido" : "",
+            passwordError: data.password.length < 8 || data.password.length > 20 ? "A senha deve conter entre 8 e 20 caracteres" : ""
         }));
 
-        try {
 
-            if (!errors) {
 
-                signIn('credentials', {
-                    redirect: false,
+        if (!errors) {
+
+            try {
+
+                const result = signIn('credentials', {
+                    redirect: true,
                     email: data.userName,
                     password: data.password,
                 })
 
+                if (result.ok) {
+
+                    router.push('/dashboard');
+
+                } else {
+                    setErrors(result.error);
+                }
+
+
+            } catch (e) {
+                setErrors(e);
             }
-        } catch (e) {
-            console.log("Erro ao fazer login");
+
         }
     }
 

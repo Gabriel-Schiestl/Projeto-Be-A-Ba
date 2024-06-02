@@ -28,7 +28,6 @@ export default function NewModule() {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(data);
         setModalIsOpen(false);
     };
 

@@ -7,7 +7,6 @@ import Sidebar from 'components/Sidebar';
 import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
-import { useSession } from 'next-auth/react';
 
 Modal.setAppElement('body');
 
@@ -39,20 +38,24 @@ export default function NewUser() {
     const registerUser = async (req, res) => {
 
 
-        try {
+        if (!validator.isEmail(formData.email)) {
 
-            if (!validator.isEmail(formData.email)) {
+            setErrors("Email inválido");
 
-                setErrors("Email inválido");
+        } else {
 
-            } else {
-                setModalIsOpen(false);
-                setErrors("");
+            setModalIsOpen(false);
+
+            try {
                 await axios.post('/api/UserAPI.js', formData);
+
                 setFormData({ userName: "", email: "", register: "", password: "", profile: "" });
+
+            } catch (e) {
+
+                setModalIsOpen(true);
+                setErrors(res.error);
             }
-        } catch (e) {
-            setErrors(res.error);
         }
 
     }

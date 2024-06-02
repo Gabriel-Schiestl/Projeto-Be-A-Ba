@@ -5,6 +5,8 @@ import styles from '../styles/newUser.module.css';
 import Sidebar from 'components/Sidebar';
 import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
@@ -14,42 +16,66 @@ const options = [
 Modal.setAppElement('body');
 
 export default function NewProfile() {
+
     const [data, setData] = useState({ profileName: "", modules: [], transactions: [], functions: [] });
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [profiles, setProfiles] = useState([]);
     const [modules, setModules] = useState([]);
     const [transactions, setTransactions] = useState([]);
     const [functions, setFunctions] = useState([]);
+    const [errors, setErrors] = useState("");
 
-    const handleInit = async (req, res) => {
+    useEffect(() => {
+
+        const handleInit = async () => {
+
+            try {
+
+                const [profileRes, moduleRes, transactionRes, functionRes] = await Promise.all([
+                    axios.get('/api/ProfileAPI'),
+                    axios.get('/api/ModuleAPI'),
+                    axios.get('/api/TransactionAPI'),
+                    axios.get('/api/FunctionAPI')
+                ]);
+
+                setProfiles(profileRes.data);
+                setModules(moduleRes.data);
+                setTransactions(transactionRes.data);
+                setFunctions(functionRes.data);
+
+            } catch (e) {
+
+                setErrors("Erro ao carregar dados iniciais");
+
+            }
+        };
+
+        handleInit();
+
+    }, []);
+
+    const handleSubmit = async (e) => {
+
+        e.preventDefault();
+        setErrors("");
 
         try {
 
-            const profiles = await axios.get('/api/ProfileAPI');
+            const result = await axios.post('/api/ProfileAPI', data);
 
-            setProfiles(profiles);
+            if (result.status !== 201) {
 
-            const modules = await axios.get('/api/ModuleAPI')
+                setErrors(result.data.error);
 
-            setModules(modules);
+            }
 
-            const transactions = await axios.get('/api/TransactionAPI')
-
-            setTransactions(transactions);
-
-            const functions = await axios.get('/api/FunctionAPI')
-
-            setFunctions(functions);
+            setModalIsOpen(false);
 
         } catch (e) {
 
-        }
-    }
+            setErrors(e.response?.data?.error || "Erro ao criar perfil");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(data);
-        setModalIsOpen(false);
+        }
     };
 
     return (

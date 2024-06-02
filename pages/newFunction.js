@@ -5,6 +5,7 @@ import Sidebar from 'components/Sidebar';
 import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckAuth from 'components/CheckAuth';
+import axios from 'axios';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
@@ -19,7 +20,6 @@ export default function NewFunction({ session }) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(data);
         setModalIsOpen(false);
     };
 

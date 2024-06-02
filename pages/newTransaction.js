@@ -5,6 +5,7 @@ import styles from '../styles/newUser.module.css';
 import Sidebar from 'components/Sidebar';
 import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import axios from 'axios';
 
 Modal.setAppElement('body');
 

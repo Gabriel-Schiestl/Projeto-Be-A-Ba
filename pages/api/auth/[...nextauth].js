@@ -15,16 +15,25 @@ export default NextAuth({
                 try {
                     await sequelize.sync();
                 } catch {
-                    console.error("Error syncing database");
-                    return null;
+                    throw new Error("Erro ao sincronizar banco de dados");
                 }
 
                 const user = await Users.findOne({ where: { email: credentials.email } })
 
-                if (user && bcrypt.compareSync(credentials.password, user.password)) {
-                    return user;
+                if (user) {
+
+                    if (bcrypt.compareSync(credentials.password, user.password)) {
+
+                        return user;
+
+                    } else {
+
+                        throw new Error("Senha incorreta");
+
+                    }
+
                 } else {
-                    throw new Error('E-mail ou senha inválida');
+                    throw new Error('Não existe cadastro com este e-mail');
                 }
             }
         })

@@ -8,30 +8,32 @@ export default async function handler(req, res) {
 
             const { profileName, modules, transactions, functions } = req.body;
 
-            try {
+            const exists = await Profiles.findOne({ where: { profileName: profileName } });
 
-                const exists = await Profiles.findOne({ where: { profileName: profileName } });
+            if (exists) {
 
-                if (exists) {
-
-                    return res.status(400).json({ error: "Já existe outro perfil com este nome" });
-
-                }
-
-            } catch (e) {
+                return res.status(400).json({ error: "Já existe outro perfil com este nome" });
 
             }
 
-            const response = await Profiles.create({
+            const newProfile = await Profiles.create({
+
                 name: profileName,
                 created_at: new Date(),
+
             })
 
-            res.status(200).json({ message: "Sucesso ao criar perfil" });
+            if (!newProfile) throw new Error("Erro ao criar perfil");
+
+            await newProfile.addFunctions(functions);
+            await newProfile.addTransactions(transactions);
+            await newProfile.addModules(modules);
+
+            res.status(201).json({ message: "Sucesso ao criar perfil" });
 
         } catch (e) {
 
-            res.status(400).json({ error: "Erro ao criar perfil" });
+            res.status(400).json({ error: e.message || "Erro ao criar perfil" });
 
         }
 
@@ -41,7 +43,7 @@ export default async function handler(req, res) {
 
             const profiles = await Profiles.findAll();
 
-            res.status(200).json(profiles);
+            res.status(201).json(profiles);
 
         } catch (e) {
 
