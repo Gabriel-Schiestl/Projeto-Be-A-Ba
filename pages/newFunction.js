@@ -15,16 +15,42 @@ const options = [
 Modal.setAppElement('body');
 
 export default function NewFunction({ session }) {
-    const [data, setData] = useState({ functionName: "", tag: "", functionDescription: "" });
-    const [modalIsOpen, setModalIsOpen] = useState(false);
 
-    const handleSubmit = (e) => {
+    const [data, setData] = useState({ name: "", tag: "", description: "" });
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [errors, setErrors] = useState("");
+
+    const registerFunction = async () => {
+
+        try {
+
+            const result = await axios.post('/api/FunctionAPI', data);
+
+            if (result.status !== 201) {
+
+                setErrors(result.data.error);
+
+            } else {
+
+                setModalIsOpen(false);
+                setData({ name: "", tag: "", description: "" });
+                
+            }
+
+        } catch (e) {
+
+            setErrors(e.response?.data?.error || "Erro ao criar função");
+
+        }
+    }
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setModalIsOpen(false);
+        
+        await registerFunction();
     };
 
     return (
-        <CheckAuth>
             <div className={styles.container}>
                 <Sidebar></Sidebar>
                 <div className={styles.content}>
@@ -73,9 +99,9 @@ export default function NewFunction({ session }) {
                             <input
                                 required
                                 type="text"
-                                value={data.functionName}
+                                value={data.name}
                                 placeholder='Nome da Função'
-                                onChange={(e) => { setData({ ...prevData, functionName: e.target.value }) }}>
+                                onChange={(e) => { setData({ ...data, name: e.target.value }) }}>
                             </input>
                         </div>
                         <div className={styles.tag}>
@@ -83,14 +109,14 @@ export default function NewFunction({ session }) {
                                 required
                                 value={data.tag}
                                 placeholder='TAG'
-                                onChange={(e) => { setData({ ...prevData, tag: e.target.value }) }}>
+                                onChange={(e) => { setData({ ...data, tag: e.target.value }) }}>
                             </input>
                         </div>
                         <div className={styles.description}>
                             <textarea rows={5} cols={40}
-                                value={data.functionDescription}
+                                value={data.description}
                                 placeholder='Descrição'
-                                onChange={(e) => { setData({ ...prevData, functionDescription: e.target.value }) }}>
+                                onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
                             </textarea>
                         </div>
                         <button className={styles.registerBtn} type="submit">Cadastrar</button>
@@ -98,6 +124,5 @@ export default function NewFunction({ session }) {
                     </form>
                 </Modal>
             </div>
-        </CheckAuth>
     );
 }

@@ -8,11 +8,6 @@ const Profiles = sequelize.define('profiles', {
         unique: true,
     },
 
-    created_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-
 }, {
     schema: 'projeto'
 })

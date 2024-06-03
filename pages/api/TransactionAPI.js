@@ -1,43 +1,51 @@
 import Transactions from "models/Transactions";
+import { Op } from "sequelize";
 
-export default async function handler(req, res) {
+export default async function TransactionHandler(req, res) {
 
     if (req.method == 'POST') {
 
+        const { name, tag, description } = req.body;
+
         try {
 
-            const { transactionName, tag, transactionDescription, functions } = req.body;
+            const nameOrTagExists = await Transactions.findOne({
+                where: {
+                    [Op.or]: [
+                        { name: name },
+                        { tag: tag }
+                    ]
+                }
+            });
 
-            try {
+            if (nameOrTagExists) {
 
-                const nameExists = await Transactions.findOne({ where: { transactionName: transactionName } });
-                const tagExists = await Transactions.findOne({ where: { tag: tag } });
-
-                if (tagExists) {
-
-                    return res.status(400).json({ error: "Já existe outra transação com esta tag" });
-
-                } else if (nameExists) {
+                if (nameOrTagExists.name == name) {
 
                     return res.status(400).json({ error: "Já existe outra transação com este nome" });
 
                 }
 
-            } catch (e) {
+                if (nameOrTagExists.tag == tag) {
 
+                    return res.status(400).json({ error: "Já existe outra transação com esta tag" });
+
+                }
             }
 
-            await Transactions.create({
-                name: transactionName,
+            const newTransaction = await Transactions.create({
+                name: name,
                 tag: tag,
-                description: transactionDescription,
+                description: description,
             })
 
-            res.status(200).json({ message: "Sucesso ao criar transação" });
+            if (!newTransaction) throw new Error("Erro ao criar transação");
+
+            res.status(201).json({ message: "Sucesso ao criar transação" });
 
         } catch (e) {
 
-            res.status(400).json({ error: "Erro ao criar transação" });
+            return res.status(400).json({ error: e.message || "Erro ao criar transação" });
 
         }
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import Modal from 'react-modal';
 import styles from '../styles/newUser.module.css';
@@ -31,17 +31,33 @@ export default function NewProfile() {
 
             try {
 
-                const [profileRes, moduleRes, transactionRes, functionRes] = await Promise.all([
+                const [profiles, modules, transactions, functions] = await Promise.all([
                     axios.get('/api/ProfileAPI'),
                     axios.get('/api/ModuleAPI'),
                     axios.get('/api/TransactionAPI'),
                     axios.get('/api/FunctionAPI')
                 ]);
 
-                setProfiles(profileRes.data);
-                setModules(moduleRes.data);
-                setTransactions(transactionRes.data);
-                setFunctions(functionRes.data);
+                setProfiles(profiles.data);
+
+                const modulesOptions = modules.data.map(module => ({
+                    value: module.id,
+                    label: module.name
+                }));
+
+                const transactionsOptions = transactions.data.map(transaction => ({
+                    value: transaction.id,
+                    label: transaction.name
+                }));
+
+                const functionsOptions = functions.data.map(aFunction => ({
+                    value: aFunction.id,
+                    label: aFunction.name
+                }));
+
+                setModules(modulesOptions);
+                setTransactions(transactionsOptions);
+                setFunctions(functionsOptions);
 
             } catch (e) {
 
@@ -54,10 +70,7 @@ export default function NewProfile() {
 
     }, []);
 
-    const handleSubmit = async (e) => {
-
-        e.preventDefault();
-        setErrors("");
+    const registerProfile = async () => {
 
         try {
 
@@ -67,20 +80,29 @@ export default function NewProfile() {
 
                 setErrors(result.data.error);
 
-            }
+            } else {
 
-            setModalIsOpen(false);
+                setModalIsOpen(false);
+                setData({ profileName: "", modules: [], transactions: [], functions: [] });
+
+            }
 
         } catch (e) {
 
             setErrors(e.response?.data?.error || "Erro ao criar perfil");
 
         }
+    }
+
+    const handleSubmit = async (e) => {
+
+        e.preventDefault();
+
+        await registerProfile();
     };
 
     return (
         <div className={styles.container}>
-            {handleInit}
             <Sidebar></Sidebar>
             <div className={styles.content}>
                 <div className={styles.center}>
@@ -131,12 +153,12 @@ export default function NewProfile() {
                             required
                             className={styles.select}
                             isMulti
-                            value={options.filter(option => data.modules.includes(option.value))}
+                            value={modules.filter(option => data.modules.includes(option.value))}
                             onChange={(selectedOptions) => {
                                 const selectedValues = selectedOptions.map(option => option.value);
                                 setData({ ...data, modules: selectedValues });
                             }}
-                            options={options}
+                            options={modules}
                             placeholder='Módulos'
                         />
                     </div>
@@ -144,12 +166,12 @@ export default function NewProfile() {
                         <Select
                             className={styles.select}
                             isMulti
-                            value={options.filter(option => data.transactions.includes(option.value))}
+                            value={transactions.filter(option => data.transactions.includes(option.value))}
                             onChange={(selectedOptions) => {
                                 const selectedValues = selectedOptions.map(option => option.value);
                                 setData({ ...data, transactions: selectedValues });
                             }}
-                            options={options}
+                            options={transactions}
                             placeholder='Transações'
                         />
                     </div>
@@ -157,12 +179,12 @@ export default function NewProfile() {
                         <Select
                             className={styles.select}
                             isMulti
-                            value={options.filter(option => data.functions.includes(option.value))}
+                            value={functions.filter(option => data.functions.includes(option.value))}
                             onChange={(selectedOptions) => {
                                 const selectedValues = selectedOptions.map(option => option.value);
                                 setData({ ...data, functions: selectedValues });
                             }}
-                            options={options}
+                            options={functions}
                             placeholder='Funções'
                         />
                     </div>

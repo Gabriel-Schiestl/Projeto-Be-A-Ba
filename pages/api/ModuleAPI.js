@@ -1,35 +1,58 @@
-import Modules from "models/Modules";
+import { Op } from "sequelize";
+import sequelize from "utils/db";
+import models from 'models'
+
+const {Transactions, Modules} = models;
 
 export default async function handler(req, res) {
 
     if (req.method === 'POST') {
-        const { moduleName, tag, moduleDescription, transactions } = req.body;
+
+        const { name, tag, description, transactions } = req.body;
+
+        await sequelize.sync();
 
         try {
-            const nameExists = await Modules.findOne({ where: { name: moduleName } });
-            const tagExists = await Modules.findOne({ where: { tag: tag } });
 
-            if (nameExists) {
-                return res.status(400).json({error: "Já existe outro módulo com este nome"});
-            }
+            const nameOrTagExists = await Modules.findOne({
+                where: {
+                    [Op.or]: [
+                        { name: name },
+                        { tag: tag }
+                    ]
+                }
+            });
 
-            if (tagExists) {
-                return res.status(400).json({error: "Já existe outro módulo com esta tag"});
+            if (nameOrTagExists) {
+
+                if (nameOrTagExists.name == name) {
+
+                    return res.status(400).json({ error: "Já existe outro módulo com este nome" });
+
+                }
+
+                if (nameOrTagExists.tag == tag) {
+
+                    return res.status(400).json({ error: "Já existe outro módulo com esta tag" });
+                    
+                }
             }
 
             const newModule = await Modules.create({
-                name: moduleName,
+                name: name,
                 tag: tag,
-                description: moduleDescription,
+                description: description,
             });
 
             if (!newModule) {
 
-                throw new Error("Erro ao criar módulo");
-                
-            }
+                throw new Error("Erro ao criar módulo")
 
-            await newModule.addTransactions(transactions);
+            } else {
+
+                await newModule.addTransactions(transactions);
+
+            }
 
             return res.status(201).json({ message: "Módulo criado com sucesso" });
 
@@ -43,7 +66,8 @@ export default async function handler(req, res) {
 
         try {
 
-            const modules = await Modules.findAll();
+            const modules = await Modules.findAll({include: Transactions});
+
             return res.status(200).json(modules);
 
         } catch (e) {

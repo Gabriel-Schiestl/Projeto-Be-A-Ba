@@ -25,11 +25,6 @@ const Users = sequelize.define('users', {
         unique: true,
     },
 
-    created_at: {
-        type: DataTypes.DATE,
-        allowNull: false,
-    },
-
     profileId: {
         type: DataTypes.INTEGER,
         references: {

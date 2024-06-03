@@ -7,28 +7,78 @@ import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 
-const options = [
-    { value: 'Caixa VC', label: 'Caixa VC' },
-    { value: 'Estabelecimento', label: 'Estabelecimento' },
-];
-
 Modal.setAppElement('body');
 
 export default function NewModule() {
 
-    const [data, setData] = useState({ moduleName: "", tag: "", moduleDescription, transactions: [] });
+    const [data, setData] = useState({ name: "", tag: "", description: "", transactions: [] });
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [transactions, setTransactions] = useState([]);
+    const [errors, setErrors] = useState("");
 
-    useEffect(async () => {
+    useEffect(() => {
 
-        const response = axios.get('/api/ModuleAPI');
-        console.log(response)
+        const getTransactions = async () => {
 
-    })
+            try {
 
-    const handleSubmit = (e) => {
+                const response = await axios.get('/api/TransactionAPI');
+
+                if (response.status != 200) {
+
+                    setErrors("Erro ao carregar transações");
+
+                } else {
+
+                    const transactionsOptions = response.data.map(transaction => ({
+                        value: transaction.id,
+                        label: transaction.name
+                    }));
+
+                    setTransactions(transactionsOptions);
+
+                }
+
+            } catch (e) {
+
+                setErrors("Erro ao carregar transações");
+
+            }
+        }
+
+        getTransactions();
+
+    }, []);
+
+    const registerModule = async () => {
+
+        try {
+
+            const result = await axios.post('/api/ModuleAPI', data);
+
+            if (result.status !== 201) {
+
+                setErrors(result.data.error);
+
+            } else {
+
+                setModalIsOpen(false);
+                setData({ name: "", tag: "", description: "", transactions: [] });
+
+            }
+
+        } catch (e) {
+
+            setErrors(e.response?.data?.error || "Erro ao criar módulo");
+
+        }
+    }
+
+    const handleSubmit = async (e) => {
+
         e.preventDefault();
-        setModalIsOpen(false);
+
+        await registerModule();
     };
 
     return (
@@ -39,7 +89,7 @@ export default function NewModule() {
                     <Autocomplete
                         className={styles.searchBar}
                         freeSolo
-                        options={options}
+                        options={transactions}
                         renderInput={(params) => (
                             <TextField
                                 {...params}
@@ -73,9 +123,9 @@ export default function NewModule() {
                         <input
                             required
                             type="text"
-                            value={data.moduleName}
+                            value={data.name}
                             placeholder="Nome do módulo"
-                            onChange={(e) => setData({ ...data, moduleName: e.target.value })}
+                            onChange={(e) => setData({ ...data, name: e.target.value })}
                         />
                     </div>
                     <div className={styles.tag}>
@@ -87,31 +137,25 @@ export default function NewModule() {
                             onChange={(e) => setData({ ...data, tag: e.target.value })}
                         />
                     </div>
+                    <div className={styles.description}>
+                        <textarea rows={5} cols={40}
+                            value={data.description}
+                            placeholder='Descrição'
+                            onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
+                        </textarea>
+                    </div>
                     <div className={styles.profiles}>
                         <Select
                             required
                             className={styles.select}
                             isMulti
-                            value={options.filter(option => data.transactions.includes(option.value))}
+                            value={transactions.filter(transaction => data.transactions.includes(transaction.value))}
                             onChange={(selectedOptions) => {
                                 const selectedValues = selectedOptions.map(option => option.value);
-                                setData({ ...prevData, transactions: selectedValues });
+                                setData({ ...data, transactions: selectedValues });
                             }}
-                            options={options}
+                            options={transactions}
                             placeholder='Transações'
-                        />
-                    </div>
-                    <div className={styles.profiles}>
-                        <Select
-                            className={styles.select}
-                            isMulti
-                            value={options.filter(option => data.functions.includes(option.value))}
-                            onChange={(selectedOptions) => {
-                                const selectedValues = selectedOptions.map(option => option.value);
-                                setData({ ...prevData, functions: selectedValues });
-                            }}
-                            options={options}
-                            placeholder='Funções'
                         />
                     </div>
                     <button className={styles.registerBtn} type="submit">Cadastrar</button>

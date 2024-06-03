@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Select from 'react-select';
 import Modal from 'react-modal';
 import styles from '../styles/newUser.module.css';
@@ -9,33 +9,49 @@ import axios from 'axios';
 
 Modal.setAppElement('body');
 
+const options = ['oi']
+
 export default function NewTransaction() {
-    const [data, setData] = useState({ transactionName: "", tag: "", transactionDescription, functions: [] });
+
+    const [data, setData] = useState({ name: "", tag: "", description: "" });
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [transactions, setTransactions] = useState([]);
+    const [errors, setErrors] = useState("");
 
-    const handleInit = async (req, res) => {
+
+
+    const registerTransaction = async () => {
 
         try {
 
-            const transactions = await axios.get('/api/TransactionAPI');
+            const result = await axios.post('/api/TransactionAPI', data);
 
-            setTransactions(transactions);
+            if (result.status !== 201) {
+
+                setErrors(result.data.error);
+
+            } else {
+
+                setModalIsOpen(false);
+                setData({ name: "", tag: "", description: "" });
+
+            }
 
         } catch (e) {
+
+            setErrors(e.response?.data?.error || "Erro ao criar transação");
 
         }
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(data);
-        setModalIsOpen(false);
+
+        await registerTransaction();
     };
 
     return (
         <div className={styles.container}>
-            {handleInit}
             <Sidebar></Sidebar>
             <div className={styles.content}>
                 <div className={styles.center}>
@@ -76,9 +92,9 @@ export default function NewTransaction() {
                         <input
                             required
                             type="text"
-                            value={data.transactionName}
+                            value={data.name}
                             placeholder="Nome da transação"
-                            onChange={(e) => setData({ ...prevData, transactionName: e.target.value })}
+                            onChange={(e) => setData({ ...data, name: e.target.value })}
                         />
                     </div>
                     <div className={styles.tag}>
@@ -87,22 +103,15 @@ export default function NewTransaction() {
                             type="text"
                             value={data.tag}
                             placeholder="TAG"
-                            onChange={(e) => setData({ ...prevData, tag: e.target.value })}
+                            onChange={(e) => setData({ ...data, tag: e.target.value })}
                         />
                     </div>
-                    <div className={styles.profiles}>
-                        <Select
-                            required
-                            className={styles.select}
-                            isMulti
-                            value={options.filter(option => data.functions.includes(option.value))}
-                            onChange={(selectedOptions) => {
-                                const selectedValues = selectedOptions.map(option => option.value);
-                                setData({ ...prevData, functions: selectedValues });
-                            }}
-                            options={options}
-                            placeholder='Funções'
-                        />
+                    <div className={styles.description}>
+                        <textarea rows={5} cols={40}
+                            value={data.description}
+                            placeholder='Descrição'
+                            onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
+                        </textarea>
                     </div>
                     <button className={styles.registerBtn} type="submit">Cadastrar</button>
                     <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>

@@ -5,6 +5,7 @@ const Functions = sequelize.define('functions', {
     name: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true
     },
 
     tag: {

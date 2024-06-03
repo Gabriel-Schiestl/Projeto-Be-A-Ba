@@ -1,46 +1,60 @@
-import Users from "models/Users";
+import { Op } from "sequelize";
+import bcrypt from 'bcryptjs';
+import models from 'models'
+
+const {Users, Profiles} = models;
 
 export default async function handler(req, res) {
 
     if (req.method == 'POST') {
 
+        const { userName, email, password, register, profile } = req.body;
+
         try {
 
-            const { userName, email, password, register, profile } = req.body;
+            const nameOrEmailExists = await Users.findOne({
+                where: {
+                    [Op.or]: [
+                        { name: userName },
+                        { email: email }
+                    ]
+                }
+            });
 
-            try {
+            if (nameOrEmailExists) {
 
-                const emailExists = await Users.findOne({ where: { email: email } });
-                const registerExists = await Users.findOne({ where: { register: register } });
+                if (nameOrEmailExists.name == moduleName) {
 
-                if (emailExists) {
-
-                    return res.status(400).json({ error: "Já existe outro usuário com este e-mail" });
-
-                } else if (registerExists) {
-
-                    return res.status(400).json({ error: "Já existe outro usuário com esta matrícula" });
+                    return res.status(400).json({ error: "Já existe outro usuário com este nome" });
 
                 }
 
-            } catch (e) {
+                if (nameOrEmailExists.email == email) {
 
+                    return res.status(400).json({ error: "Já existe outro usuário com este e-mail" });
+
+                }
             }
 
-            await Users.create({
+            const findProfile = await Profiles.findByPk(profile);
+
+            const hashedPassword = bcrypt.hashSync(password, 10);
+
+            const newUser = await Users.create({
                 name: userName,
                 email: email,
-                password: password,
+                password: hashedPassword,
                 register: register,
-                created_at: new Date(),
-                profileId: profile,
+                profileId: findProfile.id,
             })
 
-            res.status(200).json({ message: "Sucesso ao criar usuário" });
+            if(!newUser) throw new Error("Erro ao criar usuário");
+
+            res.status(201).json({ message: "Sucesso ao criar usuário" });
 
         } catch (e) {
 
-            res.status(400).json({ error: "Erro ao criar usuário" });
+            res.status(400).json({ error: e.message || "Erro ao criar usuário"});
 
         }
 
@@ -48,7 +62,12 @@ export default async function handler(req, res) {
 
         try {
 
-            const users = await Users.findAll();
+            const users = await Users.findAll({
+                include: {
+                    model: Profiles,
+                    include: [Functions, Modules, Transactions]
+                }
+            });
 
             res.status(200).json(users);
 

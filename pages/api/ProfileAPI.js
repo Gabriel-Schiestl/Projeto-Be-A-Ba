@@ -1,4 +1,6 @@
-import Profiles from "models/Profiles";
+import models from 'models'
+
+const { Profiles, Functions, Transactions, Modules } = models;
 
 export default async function handler(req, res) {
 
@@ -19,15 +21,20 @@ export default async function handler(req, res) {
             const newProfile = await Profiles.create({
 
                 name: profileName,
-                created_at: new Date(),
 
             })
 
-            if (!newProfile) throw new Error("Erro ao criar perfil");
+            if (!newProfile) {
 
-            await newProfile.addFunctions(functions);
-            await newProfile.addTransactions(transactions);
-            await newProfile.addModules(modules);
+                throw new Error("Erro ao criar perfil");
+
+            } else {
+
+                await newProfile.addFunctions(functions);
+                await newProfile.addTransactions(transactions);
+                await newProfile.addModules(modules);
+
+            }
 
             res.status(201).json({ message: "Sucesso ao criar perfil" });
 

@@ -32,6 +32,8 @@ export default function NewUser() {
 
         } catch (e) {
 
+            setErrors("Erro no carregamento inicial");
+
         }
     }
 
@@ -44,17 +46,25 @@ export default function NewUser() {
 
         } else {
 
-            setModalIsOpen(false);
-
             try {
-                await axios.post('/api/UserAPI.js', formData);
 
-                setFormData({ userName: "", email: "", register: "", password: "", profile: "" });
+                const result = await axios.post('/api/UserAPI.js', data);
+
+                if (result.status !== 201) {
+
+                    setErrors(result.data.error);
+
+                } else {
+
+                    setModalIsOpen(false);
+                    setFormData({ userName: "", email: "", register: "", password: "", profile: "" });
+
+                }
 
             } catch (e) {
 
-                setModalIsOpen(true);
-                setErrors(res.error);
+                setErrors(e.response?.data?.error || "Erro ao criar usuário");
+
             }
         }
 
