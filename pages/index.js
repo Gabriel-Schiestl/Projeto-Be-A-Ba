@@ -4,13 +4,14 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
+import validator from 'validator'
 
 export default function Login() {
 
     const router = useRouter();
 
     const [data, setData] = useState({
-        userName: "",
+        email: "",
         password: ""
     })
 
@@ -23,36 +24,39 @@ export default function Login() {
 
         e.preventDefault();
 
-        setErrors(prevErrors => ({
-            ...prevErrors,
-            userNameError: data.userName.length < 3 ? "Digite um usuário válido" : "",
-            passwordError: data.password.length < 8 || data.password.length > 20 ? "A senha deve conter entre 8 e 20 caracteres" : ""
-        }));
+        const userNameError = data.email.length < 3 || !validator.isEmail(data.email) ? "Digite um usuário válido" : "";
+        const passwordError = data.password.length < 8 || data.password.length > 20 ? "A senha deve conter entre 8 e 20 caracteres" : "";
 
+        if (userNameError || passwordError) {
 
+            setErrors({
+                userNameError,
+                passwordError,
+            });
 
-        if (!errors) {
+            return;
+        }
 
-            try {
+        try {
 
-                const result = signIn('credentials', {
-                    redirect: true,
-                    email: data.userName,
-                    password: data.password,
-                })
+            const result = await signIn('credentials', {
+                redirect: false,
+                email: data.email,
+                password: data.password
+            })
 
-                if (result.ok) {
+            if (result.error) {
 
-                    router.push('/dashboard');
+                console.log("Nao autorizada");
 
-                } else {
-                    setErrors(result.error);
-                }
-
-
-            } catch (e) {
-                setErrors(e);
+                return;
             }
+
+            router.replace('/newUser');
+
+        } catch (e) {
+
+            console.log(e);
 
         }
     }
@@ -68,8 +72,8 @@ export default function Login() {
                         <input
                             required
                             type="email"
-                            value={data.userName}
-                            onChange={(e) => { setData({ ...data, userName: e.target.value }) }}>
+                            value={data.email}
+                            onChange={(e) => { setData({ ...data, email: e.target.value }) }}>
                         </input>
                         {errors.userNameError && <div className={styles.userNameFlash}>{errors.userNameError}</div>}
                         <div className={styles.divLabel}><label>Senha</label></div>
@@ -90,14 +94,18 @@ export default function Login() {
                 </div>
                 <div className={styles.images}>
                     <div className={styles.logoContainer}>
-                        <Image className={styles.logo} src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg'
+                        <Image className={styles.logo}
+                            alt='Logo Quero-Quero'
+                            src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg'
                             layout='intrinsic'
                             width={600}
                             height={400}>
                         </Image>
                     </div>
                     <div className={styles.michel}>
-                        <Image className={styles.logo} src='/michel_card.png'
+                        <Image className={styles.logo}
+                            alt='Michel Teló'
+                            src='/michel_card.png'
                             layout='intrinsic'
                             width={700}
                             height={500}>

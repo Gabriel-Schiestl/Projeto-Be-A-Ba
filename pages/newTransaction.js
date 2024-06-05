@@ -6,6 +6,7 @@ import Sidebar from 'components/Sidebar';
 import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
+import CheckAuth from "components/CheckAuth";
 
 Modal.setAppElement('body');
 
@@ -51,72 +52,76 @@ export default function NewTransaction() {
     };
 
     return (
-        <div className={styles.container}>
-            <Sidebar></Sidebar>
-            <div className={styles.content}>
-                <div className={styles.center}>
-                    <Autocomplete
-                        className={styles.searchBar}
-                        freeSolo
-                        options={options}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Pesquisar"
-                                InputProps={{
-                                    ...params.InputProps,
-                                    startAdornment: (
-                                        <InputAdornment position="end">
-                                            <SearchIcon />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        )}
-                    />
-                    <div className={styles.button}>
-                        <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Nova transação</button>
+        <CheckAuth>
+            <div className={styles.container}>
+                <Sidebar></Sidebar>
+                <div className={styles.content}>
+                    <div className={styles.center}>
+                        <Autocomplete
+                            className={styles.searchBar}
+                            freeSolo
+                            options={options}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Pesquisar"
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        startAdornment: (
+                                            <InputAdornment position="end">
+                                                <SearchIcon />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            )}
+                        />
+                        <div className={styles.button}>
+                            <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Nova transação</button>
+                        </div>
+                        <div className={styles.page}></div>
                     </div>
-                    <div className={styles.page}></div>
                 </div>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={() => setModalIsOpen(false)}
+                    contentLabel="Cadastro de Nova Transação"
+                    className={styles.modal}
+                    overlayClassName={styles.overlay}>
+                    <form className={styles.form} onSubmit={handleSubmit}>
+                        <h1>Cadastro de Transação</h1>
+                        <div className={styles.transactionName}>
+                            <input
+                                className={styles.input}
+                                required
+                                type="text"
+                                value={data.name}
+                                placeholder="Nome da transação"
+                                onChange={(e) => setData({ ...data, name: e.target.value })}
+                            />
+                        </div>
+                        <div className={styles.tag}>
+                            <input
+                                className={styles.input}
+                                required
+                                type="text"
+                                value={data.tag}
+                                placeholder="TAG"
+                                onChange={(e) => setData({ ...data, tag: e.target.value })}
+                            />
+                        </div>
+                        <div className={styles.description}>
+                            <textarea rows={5} cols={40}
+                                value={data.description}
+                                placeholder='Descrição'
+                                onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
+                            </textarea>
+                        </div>
+                        <button className={styles.registerBtn} type="submit">Cadastrar</button>
+                        <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
+                    </form>
+                </Modal>
             </div>
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)}
-                contentLabel="Cadastro de Nova Transação"
-                className={styles.modal}
-                overlayClassName={styles.overlay}>
-                <form className={styles.form} onSubmit={handleSubmit}>
-                    <h1>Cadastro de Transação</h1>
-                    <div className={styles.transactionName}>
-                        <input
-                            required
-                            type="text"
-                            value={data.name}
-                            placeholder="Nome da transação"
-                            onChange={(e) => setData({ ...data, name: e.target.value })}
-                        />
-                    </div>
-                    <div className={styles.tag}>
-                        <input
-                            required
-                            type="text"
-                            value={data.tag}
-                            placeholder="TAG"
-                            onChange={(e) => setData({ ...data, tag: e.target.value })}
-                        />
-                    </div>
-                    <div className={styles.description}>
-                        <textarea rows={5} cols={40}
-                            value={data.description}
-                            placeholder='Descrição'
-                            onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
-                        </textarea>
-                    </div>
-                    <button className={styles.registerBtn} type="submit">Cadastrar</button>
-                    <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
-                </form>
-            </Modal>
-        </div>
+        </CheckAuth>
     );
 }

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
-import { getSession } from 'next-auth/react'
+import { getSession } from 'next-auth/react';
 
 export default function CheckAuth({ children }) {
 
@@ -14,9 +14,13 @@ export default function CheckAuth({ children }) {
             const session = await getSession();
 
             if (!session) {
-                router.push('/')
+
+                router.replace('/');
+
             } else {
-                setLoading(false)
+
+                setLoading(false);
+
             }
 
         }

@@ -10,31 +10,31 @@ export default NextAuth({
     providers: [
         Credentials({
             name: 'Credentials',
-            credentials: {},
+            credentials: {
+                email: { label: "Email", type: "email", placeholder: "email@example.com" },
+                password: { label: "Password", type: "password" }
+            },
+
             async authorize(credentials) {
+
                 try {
                     await sequelize.sync();
                 } catch {
-                    throw new Error("Erro ao sincronizar banco de dados");
+                    throw new Error("Erro ao sincronizar com banco de dados");
                 }
 
                 const user = await Users.findOne({ where: { email: credentials.email } })
 
                 if (user) {
 
-                    if (bcrypt.compareSync(credentials.password, user.password)) {
+                    if (await bcrypt.compare(credentials.password, user.password)) return user;
 
-                        return user;
+                    throw new Error("Senha incorreta");
 
-                    } else {
-
-                        throw new Error("Senha incorreta");
-
-                    }
-
-                } else {
-                    throw new Error('Não existe cadastro com este e-mail');
                 }
+
+                throw new Error("Usuário não encontrado não encontrado");
+
             }
         })
     ],
@@ -42,36 +42,36 @@ export default NextAuth({
     callbacks: {
         async jwt(token, user) {
             if (user) {
-                token.id = user.id;
-                token.email = user.email;
-                token.profileId = user.profileId;
+                token.user = user;
             }
 
             return token;
         },
 
         async session(session, token) {
-            session.user.id = token.id;
-            session.user.email = token.email;
-            session.user.profile = await Profiles.findOne({
-                where: { id: token.profileId },
-                include: [
-                    { model: Functions, },
-                    { model: Modules, },
-                    { model: Transactions },
-                ]
-            });
-
+            if (token && token.user) {
+                session.user = {
+                    id: token.user.id,
+                    email: token.user.email,
+                    profile: token.user.profileId
+                };
+            }
+            
             return session;
         }
     },
 
     session: {
-        jwt: true,
+        strategy: "jwt",
+        maxAge: 3600
     },
 
     jwt: {
         secret: process.env.JWT_SECRET,
+    },
+
+    pages: {
+        signIn: '/'
     }
 });
 

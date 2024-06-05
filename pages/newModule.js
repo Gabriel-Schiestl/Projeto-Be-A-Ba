@@ -6,6 +6,7 @@ import Sidebar from 'components/Sidebar';
 import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
+import CheckAuth from "components/CheckAuth";
 
 Modal.setAppElement('body');
 
@@ -81,7 +82,33 @@ export default function NewModule() {
         await registerModule();
     };
 
+    const customStyles = {
+        control: (provided) => ({
+            ...provided,
+            minHeight: '100%',
+            boxShadow: 'none',
+            border: '1px solid'
+        }),
+        valueContainer: (provided) => ({
+            ...provided,
+            height: '100%',
+            padding: '0 3%',
+        }),
+        input: (provided) => ({
+            ...provided,
+            margin: '0px',
+            height: '100%'
+        }),
+        placeholder: (provided) => ({
+            ...provided,
+            margin: '0px',
+            fontSize: '1em',
+            fontWeight: '525'
+        }),
+    };
+
     return (
+        <CheckAuth>
         <div className={styles.container}>
             <Sidebar></Sidebar>
             <div className={styles.content}>
@@ -121,6 +148,7 @@ export default function NewModule() {
                     <h1>Cadastro de Módulo</h1>
                     <div className={styles.moduleName}>
                         <input
+                        className={styles.input}
                             required
                             type="text"
                             value={data.name}
@@ -129,7 +157,8 @@ export default function NewModule() {
                         />
                     </div>
                     <div className={styles.tag}>
-                        <input
+                        <input 
+                        className={styles.input}
                             required
                             type="text"
                             value={data.tag}
@@ -149,6 +178,7 @@ export default function NewModule() {
                             required
                             className={styles.select}
                             isMulti
+                            styles={customStyles}
                             value={transactions.filter(transaction => data.transactions.includes(transaction.value))}
                             onChange={(selectedOptions) => {
                                 const selectedValues = selectedOptions.map(option => option.value);
@@ -163,5 +193,6 @@ export default function NewModule() {
                 </form>
             </Modal>
         </div>
+        </CheckAuth>
     );
 }

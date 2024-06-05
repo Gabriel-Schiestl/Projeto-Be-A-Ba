@@ -2,59 +2,64 @@ import { Op } from "sequelize";
 import bcrypt from 'bcryptjs';
 import models from 'models'
 
-const {Users, Profiles} = models;
+const { Users, Profiles, Modules, Transactions, Functions } = models;
 
 export default async function handler(req, res) {
 
     if (req.method == 'POST') {
 
-        const { userName, email, password, register, profile } = req.body;
+        const { name, email, password, register, profile } = req.body;
 
         try {
 
-            const nameOrEmailExists = await Users.findOne({
+            const userExists = await Users.findOne({
                 where: {
                     [Op.or]: [
-                        { name: userName },
-                        { email: email }
+                        { name: name },
+                        { email: email },
+                        { register: register }
                     ]
                 }
             });
 
-            if (nameOrEmailExists) {
+            if (userExists) {
 
-                if (nameOrEmailExists.name == moduleName) {
+                if (userExists.name == name) {
 
                     return res.status(400).json({ error: "Já existe outro usuário com este nome" });
 
                 }
 
-                if (nameOrEmailExists.email == email) {
+                if (userExists.email == email) {
 
                     return res.status(400).json({ error: "Já existe outro usuário com este e-mail" });
 
                 }
-            }
 
-            const findProfile = await Profiles.findByPk(profile);
+                if (userExists.register == register) {
+
+                    return res.status(400).json({ error: "Já existe outro usuário com este registro" });
+
+                }
+            }
 
             const hashedPassword = bcrypt.hashSync(password, 10);
 
             const newUser = await Users.create({
-                name: userName,
+                name: name,
                 email: email,
                 password: hashedPassword,
                 register: register,
-                profileId: findProfile.id,
+                profileId: profile,
             })
 
-            if(!newUser) throw new Error("Erro ao criar usuário");
+            if (!newUser) throw new Error("Erro ao criar usuário");
 
             res.status(201).json({ message: "Sucesso ao criar usuário" });
 
         } catch (e) {
 
-            res.status(400).json({ error: e.message || "Erro ao criar usuário"});
+            res.status(400).json({ error: e.message || "Erro ao criar usuário" });
 
         }
 

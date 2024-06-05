@@ -8,9 +8,9 @@ export default async function handler(req, res) {
 
         try {
 
-            const { profileName, modules, transactions, functions } = req.body;
+            const { name, modules, transactions, functions } = req.body;
 
-            const exists = await Profiles.findOne({ where: { profileName: profileName } });
+            const exists = await Profiles.findOne({ where: { name: name } });
 
             if (exists) {
 
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
             const newProfile = await Profiles.create({
 
-                name: profileName,
+                name: name,
 
             })
 

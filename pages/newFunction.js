@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import styles from '../styles/newUser.module.css';
 import Sidebar from 'components/Sidebar';
@@ -6,19 +6,31 @@ import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckAuth from 'components/CheckAuth';
 import axios from 'axios';
-
-const options = [
-    { value: 'Caixa VC', label: 'Caixa VC' },
-    { value: 'Estabelecimento', label: 'Estabelecimento' },
-];
+import { useRouter } from 'next/router';
 
 Modal.setAppElement('body');
 
 export default function NewFunction({ session }) {
 
+    const router = useRouter();
     const [data, setData] = useState({ name: "", tag: "", description: "" });
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [errors, setErrors] = useState("");
+    const [functions, setFunctions] = useState([]);
+
+    useEffect(() => {
+
+        const getFunctions = async () => {
+
+            const response = await axios.get('/api/FunctionAPI');
+
+            if(response) setFunctions(response.data);
+
+        }
+
+        getFunctions();
+
+    }, []);
 
     const registerFunction = async () => {
 
@@ -34,7 +46,7 @@ export default function NewFunction({ session }) {
 
                 setModalIsOpen(false);
                 setData({ name: "", tag: "", description: "" });
-                
+
             }
 
         } catch (e) {
@@ -46,11 +58,18 @@ export default function NewFunction({ session }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         await registerFunction();
     };
 
+    const openEspecificFuntion = (id) => {
+
+        router.push('/functions/${id}');
+
+    }
+
     return (
+        <CheckAuth>
             <div className={styles.container}>
                 <Sidebar></Sidebar>
                 <div className={styles.content}>
@@ -58,7 +77,7 @@ export default function NewFunction({ session }) {
                         <Autocomplete
                             className={styles.searchBar}
                             freeSolo
-                            options={options}
+                            options={functions}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -78,12 +97,24 @@ export default function NewFunction({ session }) {
                             <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Nova função</button>
                         </div>
                         <div className={styles.page}>
-                            <div className={styles.pageHeader}>
-                                <ul>
-                                    <li>Nome</li>
-                                    <li>Descrição</li>
-                                </ul>
-                            </div>
+                            <table className={styles.table}>
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>TAG</th>
+                                        <th>Descrição</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {functions.map(func => (
+                                        <tr key={func.id} onClick={() => openEspecificFuntion(func.id)}>
+                                            <td>{func.name}</td>
+                                            <td>{func.tag}</td>
+                                            <td>{func.description}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -97,6 +128,7 @@ export default function NewFunction({ session }) {
                         <h1>Cadastro de Função</h1>
                         <div className={styles.functionName}>
                             <input
+                                className={styles.input}
                                 required
                                 type="text"
                                 value={data.name}
@@ -105,7 +137,9 @@ export default function NewFunction({ session }) {
                             </input>
                         </div>
                         <div className={styles.tag}>
-                            <input type="text"
+                            <input
+                                className={styles.input}
+                                type="text"
                                 required
                                 value={data.tag}
                                 placeholder='TAG'
@@ -124,5 +158,6 @@ export default function NewFunction({ session }) {
                     </form>
                 </Modal>
             </div>
+        </CheckAuth>
     );
 }

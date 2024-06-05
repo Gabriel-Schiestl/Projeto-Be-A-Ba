@@ -2,12 +2,15 @@ import Link from "next/link";
 import styles from "../styles/Sidebar.module.css"
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import { signOut } from "next-auth/react";
+import Modal from 'react-modal';
 
 export default function Sidebar() {
 
     const [isOpen, setIsOpen] = useState(false);
     const sidebarRef = useRef(null);
     const menuRef = useRef(null);
+    const [signOutModalOpen, setSignOutModalOpen] = useState(false);
 
     const handleMenu = () => {
         setIsOpen(!isOpen);
@@ -47,6 +50,12 @@ export default function Sidebar() {
 
     }, [isOpen]);
 
+    const handleSignOut = () => {
+
+        signOut();
+
+    }
+
     return (
         <>
             <div className={styles.menu}
@@ -58,6 +67,7 @@ export default function Sidebar() {
                 <div>
                     <div className={styles.logoContainer}>
                         <Image className={styles.logo}
+                            alt="Logo Quero-Quero"
                             src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg'
                             layout='responsive'
                             width={400}
@@ -83,9 +93,26 @@ export default function Sidebar() {
                             <div>Gabriel Schiestl</div>
                             <div>980216</div>
                         </div>
-                        <i class="bi bi-box-arrow-in-right"></i>
+                        <i
+                            class="bi bi-box-arrow-in-right"
+                            onClick={() => setSignOutModalOpen(true)}></i>
                     </div>
                 </div>
+                <Modal
+                    isOpen={signOutModalOpen}
+                    onRequestClose={() => setSignOutModalOpen(false)}
+                    contentLabel="Sair da conta?"
+                    className={styles.modal}
+                    overlayClassName={styles.overlay}>
+                    <div className={styles.modalContent}>
+                        <h2>Tem certeza que deseja sair da conta?</h2>
+                        <p>Esta ação fará com que seja necessário inserir novamente suas credenciais para login!</p>
+                        <div className={styles.buttonsDiv}>
+                        <button type="button" onClick={() => setSignOutModalOpen(false)}>Cancelar</button>
+                        <button className={styles.confirmBtn} type="button" onClick={handleSignOut}>Sair</button>
+                        </div>
+                    </div>
+                </Modal>
             </div>
         </>
     )

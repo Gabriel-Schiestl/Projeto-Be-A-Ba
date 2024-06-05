@@ -7,6 +7,7 @@ import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import CheckAuth from "components/CheckAuth";
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
@@ -17,7 +18,7 @@ Modal.setAppElement('body');
 
 export default function NewProfile() {
 
-    const [data, setData] = useState({ profileName: "", modules: [], transactions: [], functions: [] });
+    const [data, setData] = useState({ name: "", modules: [], transactions: [], functions: [] });
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [profiles, setProfiles] = useState([]);
     const [modules, setModules] = useState([]);
@@ -83,7 +84,7 @@ export default function NewProfile() {
             } else {
 
                 setModalIsOpen(false);
-                setData({ profileName: "", modules: [], transactions: [], functions: [] });
+                setData({ name: "", modules: [], transactions: [], functions: [] });
 
             }
 
@@ -101,97 +102,126 @@ export default function NewProfile() {
         await registerProfile();
     };
 
+const customStyles = {
+        control: (provided) => ({
+            ...provided,
+            marginTop: '4%',
+            minHeight: '100%',
+            boxShadow: 'none',
+            border: '1px solid'
+        }),
+        valueContainer: (provided) => ({
+            ...provided,
+            height: '100%',
+            padding: '0 3%',
+        }),
+        input: (provided) => ({
+            ...provided,
+            margin: '0px',
+            height: '100%',
+        }),
+        placeholder: (provided) => ({
+            ...provided,
+            margin: '0px',
+            fontSize: '1em',
+            fontWeight: '525'
+        }),
+    };
+
     return (
-        <div className={styles.container}>
-            <Sidebar></Sidebar>
-            <div className={styles.content}>
-                <div className={styles.center}>
-                    <Autocomplete
-                        className={styles.searchBar}
-                        freeSolo
-                        options={options}
-                        renderInput={(params) => (
-                            <TextField
-                                {...params}
-                                label="Pesquisar"
-                                InputProps={{
-                                    ...params.InputProps,
-                                    startAdornment: (
-                                        <InputAdornment position="end">
-                                            <SearchIcon />
-                                        </InputAdornment>
-                                    ),
-                                }}
-                            />
-                        )}
-                    />
-                    <div className={styles.button}>
-                        <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Novo perfil</button>
+        <CheckAuth>
+            <div className={styles.container}>
+                <Sidebar></Sidebar>
+                <div className={styles.content}>
+                    <div className={styles.center}>
+                        <Autocomplete
+                            className={styles.searchBar}
+                            freeSolo
+                            options={options}
+                            renderInput={(params) => (
+                                <TextField
+                                    {...params}
+                                    label="Pesquisar"
+                                    InputProps={{
+                                        ...params.InputProps,
+                                        startAdornment: (
+                                            <InputAdornment position="end">
+                                                <SearchIcon />
+                                            </InputAdornment>
+                                        ),
+                                    }}
+                                />
+                            )}
+                        />
+                        <div className={styles.button}>
+                            <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Novo perfil</button>
+                        </div>
+                        <div className={styles.page}></div>
                     </div>
-                    <div className={styles.page}></div>
                 </div>
+                <Modal
+                    isOpen={modalIsOpen}
+                    onRequestClose={() => setModalIsOpen(false)}
+                    contentLabel="Cadastro de Novo Perfil"
+                    className={styles.modal}
+                    overlayClassName={styles.overlay}>
+                    <form className={styles.form} onSubmit={handleSubmit}>
+                        <h1>Cadastro de Perfil</h1>
+                        <div className={styles.profileName} style={{marginBottom: '3%'}}>
+                            <input
+                                className={styles.input}
+                                required
+                                type="text"
+                                value={data.name}
+                                placeholder="Nome do perfil"
+                                onChange={(e) => setData({ ...data, name: e.target.value })}
+                            />
+                        </div>
+                        <div className={styles.profiles}>
+                            <Select
+                                required
+                                className={styles.select}
+                                isMulti
+                                value={modules.filter(option => data.modules.includes(option.value))}
+                                onChange={(selectedOptions) => {
+                                    const selectedValues = selectedOptions.map(option => option.value);
+                                    setData({ ...data, modules: selectedValues });
+                                }}
+                                options={modules}
+                                placeholder='Módulos'
+                            />
+                        </div>
+                        <div className={styles.profiles}>
+                            <Select
+                                className={styles.select}
+                                isMulti
+                                value={transactions.filter(option => data.transactions.includes(option.value))}
+                                onChange={(selectedOptions) => {
+                                    const selectedValues = selectedOptions.map(option => option.value);
+                                    setData({ ...data, transactions: selectedValues });
+                                }}
+                                options={transactions}
+                                placeholder='Transações'
+                            />
+                        </div>
+                        <div className={styles.profiles}>
+                            <Select
+                                className={styles.select}
+                                isMulti
+                                value={functions.filter(option => data.functions.includes(option.value))}
+                                onChange={(selectedOptions) => {
+                                    const selectedValues = selectedOptions.map(option => option.value);
+                                    setData({ ...data, functions: selectedValues });
+                                }}
+                                options={functions}
+                                placeholder='Funções'
+                            />
+                        </div>
+                        <button className={styles.registerBtn} type="submit">Cadastrar</button>
+                        <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
+                    </form>
+                </Modal>
             </div>
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={() => setModalIsOpen(false)}
-                contentLabel="Cadastro de Novo Perfil"
-                className={styles.modal}
-                overlayClassName={styles.overlay}>
-                <form className={styles.form} onSubmit={handleSubmit}>
-                    <h1>Cadastro de Perfil</h1>
-                    <div className={styles.profileName}>
-                        <input
-                            required
-                            type="text"
-                            value={data.profileName}
-                            placeholder="Nome do perfil"
-                            onChange={(e) => setData({ ...data, profileName: e.target.value })}
-                        />
-                    </div>
-                    <div className={styles.profiles}>
-                        <Select
-                            required
-                            className={styles.select}
-                            isMulti
-                            value={modules.filter(option => data.modules.includes(option.value))}
-                            onChange={(selectedOptions) => {
-                                const selectedValues = selectedOptions.map(option => option.value);
-                                setData({ ...data, modules: selectedValues });
-                            }}
-                            options={modules}
-                            placeholder='Módulos'
-                        />
-                    </div>
-                    <div className={styles.profiles}>
-                        <Select
-                            className={styles.select}
-                            isMulti
-                            value={transactions.filter(option => data.transactions.includes(option.value))}
-                            onChange={(selectedOptions) => {
-                                const selectedValues = selectedOptions.map(option => option.value);
-                                setData({ ...data, transactions: selectedValues });
-                            }}
-                            options={transactions}
-                            placeholder='Transações'
-                        />
-                    </div>
-                    <div className={styles.profiles}>
-                        <Select
-                            className={styles.select}
-                            isMulti
-                            value={functions.filter(option => data.functions.includes(option.value))}
-                            onChange={(selectedOptions) => {
-                                const selectedValues = selectedOptions.map(option => option.value);
-                                setData({ ...data, functions: selectedValues });
-                            }}
-                            options={functions}
-                            placeholder='Funções'
-                        />
-                    </div>
-                    <button className={styles.registerBtn} type="submit">Cadastrar</button>
-                    <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
-                </form>
-            </Modal>
-        </div>
+        </CheckAuth>
     );
 }
