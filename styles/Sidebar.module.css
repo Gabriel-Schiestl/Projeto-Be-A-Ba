@@ -248,6 +248,7 @@
     .sidebar {
         display: none;
         animation: smooth .4s;
+        width: 40%;
     }
 
     .flex {
@@ -262,19 +263,19 @@
         font-size: 1em;
     }
 
+    .profile .informations {
+        font-size: 1.1em;
+    }
+
+    .profile i {
+        font-size: 2em;
+    }
+
     @keyframes smooth {
         
         0% { transform: translateX(-100%);}
         100% { transform: translateX(0%);}
 
-    }
-
-}
-
-@media screen and (max-width: 1000px) {
-    
-    .profile .informations {
-        font-size: 0.7em;
     }
 
 }
@@ -322,6 +323,10 @@
 }
 
 @media screen and (max-width: 767px) {
+
+    .sidebar {
+        width: 80%;
+    }
     
     .picture {
         width: 28px;
@@ -340,7 +345,7 @@
 
     .ul li {
         margin-bottom: 15%;
-        font-size: 0.8em;
+        font-size: 1em;
     }
 
 }

@@ -40,7 +40,7 @@ export default NextAuth({
     ],
 
     callbacks: {
-        async jwt(token, user) {
+        async jwt({token, user}) {
             if (user) {
                 token.user = user;
             }
@@ -48,15 +48,12 @@ export default NextAuth({
             return token;
         },
 
-        async session(session, token) {
+        async session({session, token}) {
             if (token && token.user) {
-                session.user = {
-                    id: token.user.id,
-                    email: token.user.email,
-                    profile: token.user.profileId
-                };
+                session.user.name = token.user.name;
+                session.user.register = token.user.register;
             }
-            
+
             return session;
         }
     },

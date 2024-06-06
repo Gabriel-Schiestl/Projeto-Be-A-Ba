@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import { signOut } from "next-auth/react";
 import Modal from 'react-modal';
+import { getSession } from "next-auth/react";
 
 export default function Sidebar() {
 
@@ -11,12 +12,15 @@ export default function Sidebar() {
     const sidebarRef = useRef(null);
     const menuRef = useRef(null);
     const [signOutModalOpen, setSignOutModalOpen] = useState(false);
+    const [session, setSession] = useState();
+    const [name, setName] = useState("");
 
     const handleMenu = () => {
         setIsOpen(!isOpen);
     };
 
     useEffect(() => {
+
         const handleClickOutside = (e) => {
             if (
                 sidebarRef.current &&
@@ -33,6 +37,27 @@ export default function Sidebar() {
         return () => {
             document.removeEventListener('click', handleClickOutside);
         };
+    }, []);
+
+    useEffect(() => {
+
+        const fetchSession = async () => {
+
+            const session = await getSession();
+
+            setSession(session);
+
+            if (session) {
+
+                const splitedName = session.user.name.split(' ');
+                
+                setName(splitedName[0] + " " + splitedName[splitedName.length - 1]);
+            }
+
+        }
+
+        fetchSession();
+
     }, []);
 
     useEffect(() => {
@@ -90,8 +115,12 @@ export default function Sidebar() {
                     <div className={styles.profile}>
                         <div className={styles.picture}>GS</div>
                         <div className={styles.informations}>
-                            <div>Gabriel Schiestl</div>
-                            <div>980216</div>
+                            {session && (
+                                <>
+                                    <div>{name}</div>
+                                    <div>{session.user.register}</div>
+                                </>
+                            )}
                         </div>
                         <i
                             class="bi bi-box-arrow-in-right"
@@ -108,8 +137,8 @@ export default function Sidebar() {
                         <h2>Tem certeza que deseja sair da conta?</h2>
                         <p>Esta ação fará com que seja necessário inserir novamente suas credenciais para login!</p>
                         <div className={styles.buttonsDiv}>
-                        <button type="button" onClick={() => setSignOutModalOpen(false)}>Cancelar</button>
-                        <button className={styles.confirmBtn} type="button" onClick={handleSignOut}>Sair</button>
+                            <button type="button" onClick={() => setSignOutModalOpen(false)}>Cancelar</button>
+                            <button className={styles.confirmBtn} type="button" onClick={handleSignOut}>Sair</button>
                         </div>
                     </div>
                 </Modal>

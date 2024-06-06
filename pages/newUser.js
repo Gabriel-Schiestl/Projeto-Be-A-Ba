@@ -8,11 +8,13 @@ import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import CheckAuth from "components/CheckAuth";
+import { useRouter } from 'next/router';
 
 Modal.setAppElement('body');
 
 export default function NewUser() {
 
+    const router = useRouter();
     const [formData, setFormData] = useState({ name: "", email: "", register: "", password: "", profile: [] });
     const [data, setData] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -116,6 +118,12 @@ export default function NewUser() {
         }),
     };
 
+    const openEspecificUser = (id) => {
+
+        router.push(`/users/${id}`);
+
+    }
+
     return (
         <CheckAuth>
             <div className={styles.container}>
@@ -125,7 +133,7 @@ export default function NewUser() {
                         <Autocomplete
                             className={styles.searchBar}
                             freeSolo
-                            options={profiles}
+                            options={data}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -144,7 +152,26 @@ export default function NewUser() {
                         <div className={styles.button}>
                             <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Novo usuário</button>
                         </div>
-                        <div className={styles.page}></div>
+                        <div className={styles.page}>
+                        <table className={styles.table}>
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Matrícula</th>
+                                        <th>E-mail</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {data.map(user => (
+                                        <tr key={user.id} onClick={() => openEspecificUser(user.id)}>
+                                            <td>{user.name}</td>
+                                            <td>{user.register}</td>
+                                            <td>{user.email}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <Modal

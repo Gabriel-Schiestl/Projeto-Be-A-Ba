@@ -8,6 +8,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import CheckAuth from "components/CheckAuth";
+import { useRouter } from 'next/router';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
@@ -18,6 +19,7 @@ Modal.setAppElement('body');
 
 export default function NewProfile() {
 
+    const router = useRouter();
     const [data, setData] = useState({ name: "", modules: [], transactions: [], functions: [] });
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [profiles, setProfiles] = useState([]);
@@ -102,6 +104,12 @@ export default function NewProfile() {
         await registerProfile();
     };
 
+    const openEspecificProfile = (id) => {
+
+        router.push(`/profiles/${id}`);
+
+    }
+
 const customStyles = {
         control: (provided) => ({
             ...provided,
@@ -156,7 +164,24 @@ const customStyles = {
                         <div className={styles.button}>
                             <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Novo perfil</button>
                         </div>
-                        <div className={styles.page}></div>
+                        <div className={styles.page}>
+                        <table className={styles.table}>
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Data de criação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {profiles.map(profile => (
+                                        <tr key={profile.id} onClick={() => openEspecificProfile(profile.id)}>
+                                            <td>{profile.name}</td>
+                                            <td>{profile.createdAt}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <Modal

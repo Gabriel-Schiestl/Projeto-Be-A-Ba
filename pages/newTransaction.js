@@ -99,7 +99,7 @@ export default function NewTransaction() {
                             <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Nova transação</button>
                         </div>
                         <div className={styles.page}>
-                            <table>
+                            <table className={styles.table}>
                                 <thead>
                                     <tr>
                                         <th>Nome</th>

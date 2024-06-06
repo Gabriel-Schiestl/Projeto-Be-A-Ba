@@ -145,6 +145,10 @@
         left: 0;
     }
 
+    .center {
+        width: 85%;
+    }
+
 }
 
 .modal {
