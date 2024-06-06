@@ -64,7 +64,7 @@ export default function NewFunction({ session }) {
 
     const openEspecificFuntion = (id) => {
 
-        router.push('/functions/${id}');
+        router.push(`/functions/${id}`);
 
     }
 

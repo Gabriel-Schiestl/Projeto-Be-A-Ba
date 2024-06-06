@@ -7,18 +7,31 @@ import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import CheckAuth from "components/CheckAuth";
+import { useRouter } from 'next/router';
 
 Modal.setAppElement('body');
 
-const options = ['oi']
-
 export default function NewTransaction() {
 
+    const router = useRouter;
     const [data, setData] = useState({ name: "", tag: "", description: "" });
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [errors, setErrors] = useState("");
 
+    useEffect(() => {
+
+        const getTransactions = async () => {
+
+            const response = await axios.get('/api/TransactionAPI');
+
+            if (response) setTransactions(response.data);
+
+        }
+
+        getTransactions();
+
+    }, [])
 
 
     const registerTransaction = async () => {
@@ -51,6 +64,12 @@ export default function NewTransaction() {
         await registerTransaction();
     };
 
+    const openEspecifictransaction = () => {
+
+        router.push(`/transactions/${id}`);
+
+    }
+
     return (
         <CheckAuth>
             <div className={styles.container}>
@@ -60,7 +79,7 @@ export default function NewTransaction() {
                         <Autocomplete
                             className={styles.searchBar}
                             freeSolo
-                            options={options}
+                            options={transactions}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}
@@ -79,7 +98,26 @@ export default function NewTransaction() {
                         <div className={styles.button}>
                             <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Nova transação</button>
                         </div>
-                        <div className={styles.page}></div>
+                        <div className={styles.page}>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>TAG</th>
+                                        <th>Descrição</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {transactions.map(transaction => (
+                                        <tr key={transaction.id} onClick={() => openEspecifictransaction(transaction.id)}>
+                                            <td>{transaction.name}</td>
+                                            <td>{transaction.tag}</td>
+                                            <td>{transaction.description}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <Modal
