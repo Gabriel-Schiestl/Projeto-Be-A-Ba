@@ -21,18 +21,22 @@ export default function NewTransaction() {
 
     useEffect(() => {
 
-        const getTransactions = async () => {
+        handleTransactions();
 
-            const response = await axios.get('/api/TransactionAPI');
+    }, []);
 
-            if (response) setTransactions(response.data);
+    const handleTransactions = async () => {
 
+        try{
+
+        const response = await axios.get('/api/TransactionAPI');
+
+        if (response) setTransactions(response.data);
+
+        } catch (e) {
+            console.log(e);
         }
-
-        getTransactions();
-
-    }, [])
-
+    }
 
     const registerTransaction = async () => {
 
@@ -46,6 +50,7 @@ export default function NewTransaction() {
 
             } else {
 
+                handleTransactions();
                 setModalIsOpen(false);
                 setData({ name: "", tag: "", description: "" });
 

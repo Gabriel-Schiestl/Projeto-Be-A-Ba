@@ -21,6 +21,21 @@ export default function NewUser() {
     const [errors, setErrors] = useState("");
     const [profiles, setProfiles] = useState([]);
 
+    const handleUsers = async () => {
+
+        try {
+
+            const users = await axios.get('/api/UserAPI');
+
+            setData(users.data);
+
+        } catch (e) {
+
+            setErrors(e.message);
+
+        }
+    }
+
 
     useEffect(() => {
 
@@ -71,6 +86,7 @@ export default function NewUser() {
 
                 } else {
 
+                    handleUsers();
                     setModalIsOpen(false);
                     setFormData({ name: "", email: "", register: "", password: "", profile: [] });
 
@@ -153,7 +169,7 @@ export default function NewUser() {
                             <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Novo usuário</button>
                         </div>
                         <div className={styles.page}>
-                        <table className={styles.table}>
+                            <table className={styles.table}>
                                 <thead>
                                     <tr>
                                         <th>Nome</th>
@@ -236,7 +252,7 @@ export default function NewUser() {
                             />
                         </div>
                         <button
-                        style={{marginTop: '5%'}}
+                            style={{ marginTop: '5%' }}
                             className={styles.registerBtn}
                             type="submit">
                             Cadastrar</button>

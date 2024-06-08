@@ -58,6 +58,20 @@ export default function NewModule() {
 
     }, []);
 
+    const handleModules = async () => {
+
+        try {
+
+            const result = await axios.get('/api/ModuleAPI');
+
+            if(result) setModules(result.data);
+
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
+
     const registerModule = async () => {
 
         try {
@@ -70,6 +84,7 @@ export default function NewModule() {
 
             } else {
 
+                handleModules();
                 setModalIsOpen(false);
                 setData({ name: "", tag: "", description: "", transactions: [] });
 
@@ -225,6 +240,6 @@ export default function NewModule() {
                     </form>
                 </Modal>
             </div>
-        </CheckAuth>
+       </CheckAuth>
     );
 }

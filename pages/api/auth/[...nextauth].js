@@ -4,7 +4,7 @@ import sequelize from "utils/db";
 import bcrypt from 'bcryptjs'
 import models from 'models'
 
-const { Users, Profiles, Functions, Modules, Transactions } = models;
+const { Users } = models;
 
 export default NextAuth({
     providers: [
@@ -26,7 +26,7 @@ export default NextAuth({
                 const user = await Users.findOne({ where: { email: credentials.email } })
 
                 if (user) {
-
+                    
                     if (await bcrypt.compare(credentials.password, user.password)) return user;
 
                     throw new Error("Senha incorreta");

@@ -73,6 +73,19 @@ export default function NewProfile() {
 
     }, []);
 
+    const handleProfiles = async () => {
+
+        try {
+
+            const result = await axios.get('/api/ProfileAPI');
+
+            if(result) setProfiles(result.data);
+
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
     const registerProfile = async () => {
 
         try {
@@ -85,6 +98,7 @@ export default function NewProfile() {
 
             } else {
 
+                handleProfiles();
                 setModalIsOpen(false);
                 setData({ name: "", modules: [], transactions: [], functions: [] });
 

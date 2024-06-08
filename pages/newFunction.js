@@ -20,17 +20,17 @@ export default function NewFunction({ session }) {
 
     useEffect(() => {
 
-        const getFunctions = async () => {
-
-            const response = await axios.get('/api/FunctionAPI');
-
-            if(response) setFunctions(response.data);
-
-        }
-
-        getFunctions();
+        handleFunctions();
 
     }, []);
+
+    const handleFunctions = async () => {
+
+        const response = await axios.get('/api/FunctionAPI');
+
+        if(response) setFunctions(response.data);
+
+    }
 
     const registerFunction = async () => {
 
@@ -44,6 +44,7 @@ export default function NewFunction({ session }) {
 
             } else {
 
+                handleFunctions();
                 setModalIsOpen(false);
                 setData({ name: "", tag: "", description: "" });
 
