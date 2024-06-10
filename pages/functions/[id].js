@@ -5,44 +5,98 @@ import styles from 'styles/[id].module.css'
 import Sidebar from "components/Sidebar";
 import Modal from 'react-modal';
 
-export default function User() {
+Modal.setAppElement('body');
+
+export default function aFunction() {
 
     const router = useRouter();
     const { id } = router.query;
-    const [aFunction, setFunction] = useState("");
+    const [aFunction, setAFunction] = useState("");
     const [isOpen, setOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
     const [data, setData] = useState({ name: "", tag: "", description: "" });
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-
-        const getFunction = async () => {
-
-            try {
-
-                const result = await axios.get(`/api/FunctionAPI?id=${id}`);
-
-                if (result) {
-                    setFunction(result.data);
-                }
-
-            } catch (e) {
-                console.log(e);
-            }
-
-        }
 
         getFunction();
 
     }, [id]);
 
+    const getFunction = async () => {
+
+        if(!id) return;
+
+        try {
+
+            const result = await axios.get(`/api/FunctionAPI?id=${id}`);
+
+            if (result) {
+                setAFunction(result.data);
+            }
+
+        } catch (e) {
+            console.log(e);
+        } finally {
+            setIsLoading(false);
+        }
+
+    }
+
     const handleBack = () => {
         router.back();
     }
 
-    const handleEdit = () => {
+    const handleEdit = async (e) => {
 
+        e.preventDefault();
 
+        if (data.name != aFunction.name || data.tag != aFunction.tag || data.description != aFunction.description) {
 
+            try {
+
+                const result = await axios.put(`/api/FunctionAPI?id=${id}`, data);
+
+                if (result.status != 200) {
+
+                    console.log(result.statusText);
+                    return;
+
+                }
+
+                getFunction();
+                setOpen(false);
+                console.log("Sucesso ao editar função");
+
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    }
+
+    const deleteFunction = async () => {
+
+        try {
+
+            const result = await axios.delete(`/api/FunctionAPI?id=${id}`);
+
+            if (result.status != 200) {
+                console.log(result.statusText);
+                return;
+            }
+
+            setDeleteOpen(false);
+            console.log("Sucesso ao deletar função");
+            router.push('/newFunction');
+
+        } catch (e) {
+            console.log(e);
+        }
+
+    }
+
+    if (isLoading) {
+        return <div>Carregando...</div>;
     }
 
     return (
@@ -62,8 +116,8 @@ export default function User() {
                         </table>
                     </div>
                     <div className={styles.btns}>
-                        <button>Excluir</button>
-                        <button onClick={() => {
+                        <button className={styles.deleteBtn} onClick={() => setDeleteOpen(true)}>Excluir</button>
+                        <button className={styles.editBtn} onClick={() => {
                             setOpen(true)
                             setData({ name: aFunction.name, tag: aFunction.tag, description: aFunction.description });
                         }}>Editar</button>
@@ -71,13 +125,28 @@ export default function User() {
                 </div>
             </div>
             <Modal
+                isOpen={deleteOpen}
+                onRequestClose={() => setDeleteOpen(false)}
+                contentLabel="Excluir função?"
+                className={styles.deleteModal}
+                overlayClassName={styles.overlay}>
+                <div className={styles.modalContent}>
+                    <h2>Tem certeza que deseja excluir esta função?</h2>
+                    <p>Esta ação excluirá a função permanentemente!</p>
+                    <div className={styles.buttonsDiv}>
+                        <button type="button" onClick={() => setDeleteOpen(false)}>Cancelar</button>
+                        <button className={styles.confirmBtn} type="button" onClick={deleteFunction}>Excluir</button>
+                    </div>
+                </div>
+            </Modal>
+            <Modal
                 isOpen={isOpen}
                 onRequestClose={() => setOpen(false)}
-                contentLabel="Edicao de Função"
+                contentLabel="Edição de Função"
                 className={styles.modal}
                 overlayClassName={styles.overlay}>
                 <form className={styles.form} onSubmit={handleEdit}>
-                    <h1>Cadastro de Função</h1>
+                    <h1>Edição de Função</h1>
                     <div className={styles.functionName}>
                         <input
                             className={styles.input}
@@ -105,8 +174,8 @@ export default function User() {
                             onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
                         </textarea>
                     </div>
-                    <button className={styles.registerBtn} type="submit">Salvar</button>
-                    <button type="button" onClick={() => setOpen(false)}>Cancelar</button>
+                    <button className={styles.registerBtn} onClick={handleEdit}>Salvar</button>
+                    <button className={styles.cancel} onClick={() => setOpen(false)}>Cancelar</button>
                 </form>
             </Modal>
         </div>

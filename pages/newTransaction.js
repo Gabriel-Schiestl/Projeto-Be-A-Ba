@@ -13,7 +13,7 @@ Modal.setAppElement('body');
 
 export default function NewTransaction() {
 
-    const router = useRouter;
+    const router = useRouter();
     const [data, setData] = useState({ name: "", tag: "", description: "" });
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [transactions, setTransactions] = useState([]);
@@ -69,7 +69,7 @@ export default function NewTransaction() {
         await registerTransaction();
     };
 
-    const openEspecifictransaction = () => {
+    const openEspecifictransaction = (id) => {
 
         router.push(`/transactions/${id}`);
 

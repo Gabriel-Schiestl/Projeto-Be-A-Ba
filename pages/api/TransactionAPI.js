@@ -78,6 +78,42 @@ export default async function TransactionHandler(req, res) {
             return res.status(400).json({ error: "Erro ao obter transações" });
 
         }
+    } else if (req.method == 'PUT') {
 
+        const {id} = req.query;
+        const {name, tag, description} = req.body;
+
+        try {
+
+            const result = await Transactions.update(
+                {name: name, tag: tag, description: description},
+                {where: {id: id}}
+            )
+
+            if(!result) return res.status(400).json({error: "Erro ao atualizar transação"});
+
+            return res.status(200).json(result);
+
+        } catch (e) {
+            return res.status(400).json({error: "Erro ao atualizar transação"});
+        }
+
+    } else if (req.method == 'DELETE') {
+
+        const {id} = req.query;
+
+        try {
+
+            const result = await Transactions.destroy(
+                {where: {id: id}}
+            );
+
+            if(!result) return res.status(400).json({error: "Erro ao deletar transação"});
+
+            return res.status(200).json(result);
+
+        }catch(e) {
+            return res.status(400).json({error: "Erro ao deletar transação"});
+        }
     }
 }

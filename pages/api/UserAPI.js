@@ -74,7 +74,7 @@ export default async function handler(req, res) {
                 const user = await Users.findByPk(id, {
                     include: {
                         model: Profiles,
-                        include: [Functions, Modules, Transactions]
+                        as: 'profile',
                     }
                 });
 
@@ -96,6 +96,49 @@ export default async function handler(req, res) {
             res.status(400).json({ error: "Erro ao obter usuários" });
 
         }
+    } else if (req.method == 'PUT') {
 
+        const { id } = req.query;
+        let { name, email, register, password, profileId } = req.body;
+
+        try {
+
+            if (password) {
+                password = bcrypt.hashSync(password, 10);
+            } else {
+                const user = await Users.findByPk(id);
+                password = user.password;
+            }
+
+            const result = await Users.update(
+                { name: name, email: email, register: register, password: password, profileId: profileId },
+                { where: { id: id } }
+            )
+
+            if (!result) return res.status(400).json({ error: "Erro ao atualizar usuário" });
+
+            return res.status(200).json(result);
+
+        } catch (e) {
+            return res.status(400).json({ error: "Erro ao atualizar usuário" });
+        }
+
+    } else if (req.method == 'DELETE') {
+
+        const { id } = req.query;
+
+        try {
+
+            const result = await Users.destroy(
+                { where: { id: id } }
+            );
+
+            if (!result) return res.status(400).json({ error: "Erro ao deletar usuário" });
+
+            return res.status(200).json(result);
+
+        } catch (e) {
+            return res.status(400).json({ error: "Erro ao deletar usuário" });
+        }
     }
 }

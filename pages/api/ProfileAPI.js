@@ -76,5 +76,48 @@ export default async function handler(req, res) {
 
         }
 
+    } else if (req.method == 'PUT') {
+
+        const { id } = req.query;
+        let { name, modules, functions, transactions } = req.body;
+
+        try {
+
+            const result = await Profiles.update(
+                { name: name },
+                { where: { id: id } }
+            )
+
+            if (!result) return res.status(400).json({ error: "Erro ao atualizar perfil" });
+
+            const profile = await Profiles.findByPk(id);
+
+            await profile.setModules(modules);
+            await profile.setFunctions(functions);
+            await profile.setTransactions(transactions);
+
+            return res.status(200).json(result);
+
+        } catch (e) {
+            return res.status(400).json({ error: "Erro ao atualizar perfil" });
+        }
+
+    } else if (req.method == 'DELETE') {
+
+        const { id } = req.query;
+
+        try {
+
+            const result = await Profiles.destroy(
+                { where: { id: id } }
+            );
+
+            if (!result) return res.status(400).json({ error: "Erro ao deletar perfil" });
+
+            return res.status(200).json(result);
+
+        } catch (e) {
+            return res.status(400).json({ error: "Erro ao deletar perfil" });
+        }
     }
 }
