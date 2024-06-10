@@ -30,7 +30,7 @@
     background-color: #FBFBFD;
     border-radius: 14px;
     margin-top: 1%;
-    overflow-y: scroll;
+    overflow: scroll;
 }
 
 .table {

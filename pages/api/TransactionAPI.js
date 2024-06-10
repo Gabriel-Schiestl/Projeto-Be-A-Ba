@@ -39,9 +39,9 @@ export default async function TransactionHandler(req, res) {
                 description: description,
             })
 
-            if (!newTransaction) throw new Error("Erro ao criar transação");
+            if (!newTransaction) return res.status(400).json({ error: "Erro ao criar transação" });
 
-            res.status(201).json({ message: "Sucesso ao criar transação" });
+            return res.status(201).json({ message: "Sucesso ao criar transação" });
 
         } catch (e) {
 
@@ -53,13 +53,29 @@ export default async function TransactionHandler(req, res) {
 
         try {
 
-            const transactions = await Transactions.findAll();
+            const { id } = req.query;
 
-            res.status(200).json(transactions);
+            if (id) {
+
+                const transaction = await Transactions.findByPk(id);
+
+                if (!transaction) return res.status(404).json({ error: "Transação não encontrada" });
+
+                return res.status(200).json(transaction);
+
+            } else {
+
+                const transactions = await Transactions.findAll();
+
+                if (!transactions) return res.status(404).json({ error: "Transações não encontradas" });
+
+                return res.status(200).json(transactions);
+
+            }
 
         } catch (e) {
 
-            res.status(400).json({ error: "Erro ao obter transações" });
+            return res.status(400).json({ error: "Erro ao obter transações" });
 
         }
 

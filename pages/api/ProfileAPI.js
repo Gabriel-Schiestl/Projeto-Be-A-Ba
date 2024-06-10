@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
             if (!newProfile) {
 
-                throw new Error("Erro ao criar perfil");
+                return res.status(400).json({ error: "Erro ao criar perfil" });
 
             } else {
 
@@ -36,11 +36,11 @@ export default async function handler(req, res) {
 
             }
 
-            res.status(201).json({ message: "Sucesso ao criar perfil" });
+            return res.status(201).json({ message: "Sucesso ao criar perfil" });
 
         } catch (e) {
 
-            res.status(400).json({ error: e.message || "Erro ao criar perfil" });
+            return res.status(400).json({ error: e.message || "Erro ao criar perfil" });
 
         }
 
@@ -48,13 +48,31 @@ export default async function handler(req, res) {
 
         try {
 
-            const profiles = await Profiles.findAll();
+            const { id } = req.query;
 
-            res.status(201).json(profiles);
+            if (id) {
+
+                const profile = await Profiles.findByPk(id, {
+                    include: [Functions, Transactions, Modules]
+                });
+
+                if (!profile) return res.status(404).json({ error: "Perfil não encontrado" });
+
+                return res.status(200).json(profile);
+
+            } else {
+
+                const profiles = await Profiles.findAll();
+
+                if (!profiles) return res.status(404).json({ error: "Perfis não encontrados" });
+
+                return res.status(200).json(profiles);
+
+            }
 
         } catch (e) {
 
-            res.status(400).json({ error: "Erro ao obter perfis" });
+            return res.status(400).json({ error: "Erro ao obter perfis" });
 
         }
 

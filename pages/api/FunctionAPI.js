@@ -53,13 +53,29 @@ export default async function handler(req, res) {
 
         try {
 
+            const {id} = req.query;
+
+            if(id) {
+
+                const aFunction = await Functions.findByPk(id);
+
+                if(!aFunction) return res.status(404).json({error: "Função não encontrada"});
+
+                return res.status(200).json(aFunction);
+
+            } else {
+
             const functions = await Functions.findAll();
 
-            res.status(200).json(functions);
+            if (!functions) return res.status(404).json({ error: "Funções não encontradas" });
+
+            return res.status(200).json(functions);
+
+            }
 
         } catch (e) {
 
-            res.status(400).json({ error: "Erro ao obter funções" });
+            return res.status(400).json({ error: "Erro ao obter funções" });
 
         }
 
