@@ -26,7 +26,7 @@ export default async function handler(req, res) {
 
             if (!newProfile) {
 
-                return res.status(400).json({ error: "Erro ao criar perfil" });
+                return res.status(500).json({ error: "Erro ao criar perfil" });
 
             } else {
 
@@ -36,11 +36,11 @@ export default async function handler(req, res) {
 
             }
 
-            return res.status(201).json({ message: "Sucesso ao criar perfil" });
+            return res.status(201).json({ success: "Sucesso ao criar perfil" });
 
         } catch (e) {
 
-            return res.status(400).json({ error: e.message || "Erro ao criar perfil" });
+            return res.status(500).json({ error: e.message || "Erro ao criar perfil" });
 
         }
 
@@ -72,7 +72,7 @@ export default async function handler(req, res) {
 
         } catch (e) {
 
-            return res.status(400).json({ error: "Erro ao obter perfis" });
+            return res.status(500).json({ error: "Erro ao obter perfis" });
 
         }
 
@@ -88,7 +88,7 @@ export default async function handler(req, res) {
                 { where: { id: id } }
             )
 
-            if (!result) return res.status(400).json({ error: "Erro ao atualizar perfil" });
+            if (!result) return res.status(500).json({ error: "Erro ao atualizar perfil" });
 
             const profile = await Profiles.findByPk(id);
 
@@ -99,7 +99,7 @@ export default async function handler(req, res) {
             return res.status(200).json(result);
 
         } catch (e) {
-            return res.status(400).json({ error: "Erro ao atualizar perfil" });
+            return res.status(500).json({ error: "Erro ao atualizar perfil" });
         }
 
     } else if (req.method == 'DELETE') {
@@ -112,12 +112,12 @@ export default async function handler(req, res) {
                 { where: { id: id } }
             );
 
-            if (!result) return res.status(400).json({ error: "Erro ao deletar perfil" });
+            if (!result) return res.status(500).json({ error: "Erro ao deletar perfil" });
 
             return res.status(200).json(result);
 
         } catch (e) {
-            return res.status(400).json({ error: "Erro ao deletar perfil" });
+            return res.status(500).json({ error: "Erro ao deletar perfil" });
         }
     }
 }

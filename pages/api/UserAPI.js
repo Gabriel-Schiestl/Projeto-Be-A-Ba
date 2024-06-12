@@ -53,19 +53,20 @@ export default async function handler(req, res) {
                 profileId: profile,
             })
 
-            if (!newUser) return res.status(400).json({ error: "Erro ao criar usuário" });
+            if (!newUser) return res.status(500).json({ error: "Erro ao criar usuário" });
 
-            res.status(201).json({ message: "Sucesso ao criar usuário" });
+            res.status(201).json({ success: "Sucesso ao criar usuário" });
 
         } catch (e) {
 
-            res.status(400).json({ error: e.message || "Erro ao criar usuário" });
+            res.status(500).json({ error: e.message || "Erro ao criar usuário" });
 
         }
 
     } else if (req.method == 'GET') {
 
         const { id } = req.query;
+        const {email} = req.query;
 
         try {
 
@@ -82,6 +83,14 @@ export default async function handler(req, res) {
 
                 return res.status(200).json(user);
 
+            } else if(email) {
+
+                const user = await Users.findOne({where: {email: email}});
+
+                if(user) return res.status(200).json({id: user.id});
+
+                return res.status(404).json({error: 'Não há usuário cadastrado com este e-mail'});
+
             } else {
 
                 const users = await Users.findAll();
@@ -93,7 +102,7 @@ export default async function handler(req, res) {
 
         } catch (e) {
 
-            res.status(400).json({ error: "Erro ao obter usuários" });
+            res.status(500).json({ error: "Erro ao obter usuários" });
 
         }
     } else if (req.method == 'PUT') {
@@ -115,12 +124,12 @@ export default async function handler(req, res) {
                 { where: { id: id } }
             )
 
-            if (!result) return res.status(400).json({ error: "Erro ao atualizar usuário" });
+            if (!result) return res.status(500).json({ error: "Erro ao atualizar usuário" });
 
             return res.status(200).json(result);
 
         } catch (e) {
-            return res.status(400).json({ error: "Erro ao atualizar usuário" });
+            return res.status(500).json({ error: "Erro ao atualizar usuário" });
         }
 
     } else if (req.method == 'DELETE') {
@@ -133,12 +142,32 @@ export default async function handler(req, res) {
                 { where: { id: id } }
             );
 
-            if (!result) return res.status(400).json({ error: "Erro ao deletar usuário" });
+            if (!result) return res.status(500).json({ error: "Erro ao deletar usuário" });
 
             return res.status(200).json(result);
 
         } catch (e) {
-            return res.status(400).json({ error: "Erro ao deletar usuário" });
+            return res.status(500).json({ error: "Erro ao deletar usuário" });
         }
+    } else if (req.method == 'PATCH') {
+
+        const {password, id} = req.body;
+
+        const hashedPassword = bcrypt.hashSync(password, 10);
+
+        try {
+
+            const user = await Users.update({password: hashedPassword}, {
+                where: {id}
+            })
+
+            if(user[0] === 1) return res.status(200).json({success: "Sucesso ao atualizar senha"});
+
+            return res.status(500).json({error: "Erro ao atualizar senha"});
+
+        } catch (e) {
+            return res.status(500).json({error: "Erro ao atualizar senha"});
+        }
+
     }
 }

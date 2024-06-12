@@ -33,7 +33,7 @@ export default NextAuth({
 
                 }
 
-                throw new Error("Usuário não encontrado não encontrado");
+                throw new Error("Usuário não encontrado");
 
             }
         })

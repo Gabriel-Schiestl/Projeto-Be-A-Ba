@@ -46,7 +46,7 @@ export default async function handler(req, res) {
 
             if (!newModule) {
 
-                throw new Error("Erro ao criar módulo")
+                return res.status(500).json({error: "Erro ao criar módulo"});
 
             } else {
 
@@ -54,7 +54,7 @@ export default async function handler(req, res) {
 
             }
 
-            return res.status(201).json({ message: "Módulo criado com sucesso" });
+            return res.status(201).json({ success: "Módulo criado com sucesso" });
 
         } catch (e) {
 
@@ -90,10 +90,51 @@ export default async function handler(req, res) {
 
         } catch (e) {
 
-            return res.status(400).json({ error: "Erro ao obter módulos" });
+            return res.status(500).json({ error: "Erro ao obter módulos" });
 
         }
 
+    } else if (req.method == 'PUT') {
+
+        const { id } = req.query;
+        const { name, tag, description, transactions } = req.body;
+
+        try {
+
+            const result = await Modules.update(
+                { name: name, tag: tag, description: description },
+                { where: { id: id } }
+            )
+
+            const module = await Modules.findByPk(id);
+
+            await module.setTransactions(transactions);
+
+            if (!result) return res.status(500).json({ error: "Erro ao atualizar módulo" });
+
+            return res.status(200).json(result);
+
+        } catch (e) {
+            return res.status(500).json({ error: "Erro ao atualizar módulo" });
+        }
+
+    } else if (req.method == 'DELETE') {
+
+        const { id } = req.query;
+
+        try {
+
+            const result = await Modules.destroy(
+                { where: { id: id } }
+            );
+
+            if (!result) return res.status(500).json({ error: "Erro ao deletar módulo" });
+
+            return res.status(200).json(result);
+
+        } catch (e) {
+            return res.status(500).json({ error: "Erro ao deletar módulo" });
+        }
     } else {
 
         return res.status(405).json({ error: "Método não permitido" });

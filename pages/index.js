@@ -5,10 +5,15 @@ import Image from 'next/image'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/router'
 import validator from 'validator'
+import Loading from 'components/Loading'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Login() {
 
     const router = useRouter();
+
+    const [loading, setLoading] = useState(false);
 
     const [data, setData] = useState({
         email: "",
@@ -24,8 +29,8 @@ export default function Login() {
 
         e.preventDefault();
 
-        const userNameError = data.email.length < 3 || !validator.isEmail(data.email) ? "Digite um usuário válido" : "";
-        const passwordError = data.password.length < 8 || data.password.length > 20 ? "A senha deve conter entre 8 e 20 caracteres" : "";
+        const userNameError = data.email.length < 4 || !validator.isEmail(data.email) ? "Digite um usuário válido" : "";
+        const passwordError = data.password.length < 4 ? "Digite uma senha" : "";
 
         if (userNameError || passwordError) {
 
@@ -39,25 +44,29 @@ export default function Login() {
 
         try {
 
+            setLoading(true);
             const result = await signIn('credentials', {
                 redirect: false,
                 email: data.email,
                 password: data.password
             })
 
-            if (result.error) {
+            if (result.status == 401) {
 
-                console.log("Nao autorizada");
+                toast.error(result.error);
 
                 return;
             }
 
-            router.replace('/newUser');
+            toast.success("Login autorizado");
+            router.replace('/dashboard');
 
         } catch (e) {
 
-            console.log(e);
+            toast.error(e);
 
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -114,6 +123,7 @@ export default function Login() {
                 </div>
                 <footer className={styles.footer}></footer>
             </div>
+            {loading && <Loading></Loading>}
         </>
     )
 }

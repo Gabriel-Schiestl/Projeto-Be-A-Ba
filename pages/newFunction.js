@@ -7,6 +7,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import CheckAuth from 'components/CheckAuth';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 Modal.setAppElement('body');
 
@@ -40,10 +42,11 @@ export default function NewFunction({ session }) {
 
             if (result.status !== 201) {
 
-                setErrors(result.data.error);
+                toast.error(result.data.error);
 
             } else {
 
+                toast.success(result.data.success);
                 handleFunctions();
                 setModalIsOpen(false);
                 setData({ name: "", tag: "", description: "" });
@@ -52,7 +55,7 @@ export default function NewFunction({ session }) {
 
         } catch (e) {
 
-            setErrors(e.response?.data?.error || "Erro ao criar função");
+            toast.error(e.response?.data?.error || "Erro ao criar função");
 
         }
     }

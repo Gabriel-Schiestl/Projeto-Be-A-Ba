@@ -1,26 +1,59 @@
-import { useState} from 'react'
+import { useState, useEffect } from 'react'
 import styles from '../../styles/recoverPassword.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Code() {
 
     const router = useRouter();
 
     const [code, setCode] = useState("");
+    const [sentCode, setSentCode] = useState("");
 
     const [error, setError] = useState("");
+
+    useEffect(() => {
+
+        const getCode = async () => {
+
+            try {
+                const result = await axios.get('/api/CodeVerificator');
+
+                if (result.status == 200) {
+                    setSentCode(result.data.code);
+                } else {
+                    toast.error("Erro ao obter código de resgate");
+                }
+
+            } catch (e) {
+                toast.error(e);
+            }
+        }
+
+        getCode();
+
+    }, []);
 
     async function handleSubmit(e) {
 
         e.preventDefault();
 
-        if(code === "" || code.length < 5) {
-            setError("Código inválido")
+        const {id} = router.query;
+
+        if (code != sentCode) {
+            setError("Código inválido");
         } else {
-            setError("")
-            router.push('/recoveryPassword/newPassword')
+            toast.success("Código validado com sucesso");
+
+            setTimeout(() => {
+
+                router.push(`/recoveryPassword/newPassword?id=${id}`);
+
+            }, 2000);
         }
 
     }
@@ -39,7 +72,7 @@ export default function Code() {
                     </div>
                     {error && <div className={styles.flash}>{error}</div>}
                     <button onClick={handleSubmit}>Confirmar</button>
-                    <Link className={styles.link} style={{marginLeft: '27.8%'}} href='/'>Não recebeu o email?<span style={{marginLeft: '2%', color: '#0000EE'}}>Reenviar</span></Link>
+                    <Link className={styles.link} style={{ marginLeft: '27.8%' }} href='/'>Não recebeu o email?<span style={{ marginLeft: '2%', color: '#0000EE' }}>Reenviar</span></Link>
                 </form>
             </div>
             <footer className={styles.footer}></footer>

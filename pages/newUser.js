@@ -9,6 +9,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import CheckAuth from "components/CheckAuth";
 import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 Modal.setAppElement('body');
 
@@ -31,7 +33,7 @@ export default function NewUser() {
 
         } catch (e) {
 
-            setErrors(e.message);
+            toast.error(e.message);
 
         }
     }
@@ -58,7 +60,7 @@ export default function NewUser() {
 
             } catch (e) {
 
-                setErrors(e.message);
+                toast.error(e.message);
 
             }
         }
@@ -82,10 +84,11 @@ export default function NewUser() {
 
                 if (result.status !== 201) {
 
-                    setErrors(result.data.error);
+                    toast.error(result.data.error);
 
                 } else {
 
+                    toast.success(result.data.success);
                     handleUsers();
                     setModalIsOpen(false);
                     setFormData({ name: "", email: "", register: "", password: "", profile: [] });
@@ -94,7 +97,7 @@ export default function NewUser() {
 
             } catch (e) {
 
-                setErrors(e.response?.data?.error || "Erro ao criar usuário");
+                toast.error(e.response?.data?.error || "Erro ao criar usuário");
 
             }
         }

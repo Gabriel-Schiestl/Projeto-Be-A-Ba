@@ -8,6 +8,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import CheckAuth from "components/CheckAuth";
 import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 Modal.setAppElement('body');
 
@@ -30,11 +32,13 @@ export default function NewModule() {
 
                 if (getModules) setModules(getModules.data);
 
+                if(getModules.status == 200) toast.error("Erro ao obter módulos");
+
                 const response = await axios.get('/api/TransactionAPI');
 
                 if (response.status != 200) {
 
-                    setErrors("Erro ao carregar transações");
+                    toast.error("Erro ao carregar transações");
 
                 } else {
 
@@ -49,7 +53,7 @@ export default function NewModule() {
 
             } catch (e) {
 
-                setErrors("Erro ao carregar transações");
+                toast.error("Erro ao carregar transações");
 
             }
         }
@@ -67,7 +71,7 @@ export default function NewModule() {
             if(result) setModules(result.data);
 
         } catch (e) {
-            console.log(e);
+            toast.error(e);
         }
 
     }
@@ -80,10 +84,11 @@ export default function NewModule() {
 
             if (result.status !== 201) {
 
-                setErrors(result.data.error);
+                toast.error(result.data.error);
 
             } else {
 
+                toast.success(result.data.success);
                 handleModules();
                 setModalIsOpen(false);
                 setData({ name: "", tag: "", description: "", transactions: [] });
@@ -92,7 +97,7 @@ export default function NewModule() {
 
         } catch (e) {
 
-            setErrors(e.response?.data?.error || "Erro ao criar módulo");
+            toast.error(e.response?.data?.error || "Erro ao criar módulo");
 
         }
     }

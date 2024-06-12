@@ -39,13 +39,13 @@ export default async function TransactionHandler(req, res) {
                 description: description,
             })
 
-            if (!newTransaction) return res.status(400).json({ error: "Erro ao criar transação" });
+            if (!newTransaction) return res.status(500).json({ error: "Erro ao criar transação" });
 
-            return res.status(201).json({ message: "Sucesso ao criar transação" });
+            return res.status(201).json({ success: "Sucesso ao criar transação" });
 
         } catch (e) {
 
-            return res.status(400).json({ error: e.message || "Erro ao criar transação" });
+            return res.status(500).json({ error: e.message || "Erro ao criar transação" });
 
         }
 
@@ -75,7 +75,7 @@ export default async function TransactionHandler(req, res) {
 
         } catch (e) {
 
-            return res.status(400).json({ error: "Erro ao obter transações" });
+            return res.status(500).json({ error: "Erro ao obter transações" });
 
         }
     } else if (req.method == 'PUT') {
@@ -90,12 +90,12 @@ export default async function TransactionHandler(req, res) {
                 {where: {id: id}}
             )
 
-            if(!result) return res.status(400).json({error: "Erro ao atualizar transação"});
+            if(!result) return res.status(500).json({error: "Erro ao atualizar transação"});
 
             return res.status(200).json(result);
 
         } catch (e) {
-            return res.status(400).json({error: "Erro ao atualizar transação"});
+            return res.status(500).json({error: "Erro ao atualizar transação"});
         }
 
     } else if (req.method == 'DELETE') {
@@ -108,12 +108,12 @@ export default async function TransactionHandler(req, res) {
                 {where: {id: id}}
             );
 
-            if(!result) return res.status(400).json({error: "Erro ao deletar transação"});
+            if(!result) return res.status(500).json({error: "Erro ao deletar transação"});
 
             return res.status(200).json(result);
 
         }catch(e) {
-            return res.status(400).json({error: "Erro ao deletar transação"});
+            return res.status(500).json({error: "Erro ao deletar transação"});
         }
     }
 }

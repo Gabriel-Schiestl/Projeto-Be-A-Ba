@@ -39,13 +39,13 @@ export default async function handler(req, res) {
                 description: description,
             });
 
-            if(!newFunction) throw new Error("Erro ao criar função");
+            if(!newFunction) return res.status(500).json({error: "Erro ao criar função"});
 
-            return res.status(201).json({ message: "Sucesso ao criar função" });
+            return res.status(201).json({ success: "Sucesso ao criar função" });
 
         } catch (e) {
 
-            res.status(400).json({ error: e.message || "Erro ao criar função" });
+            res.status(500).json({ error: e.message || "Erro ao criar função" });
 
         }
 
@@ -75,7 +75,7 @@ export default async function handler(req, res) {
 
         } catch (e) {
 
-            return res.status(400).json({ error: "Erro ao obter funções" });
+            return res.status(500).json({ error: "Erro ao obter funções" });
 
         }
 
@@ -91,12 +91,12 @@ export default async function handler(req, res) {
                 {where: {id: id}}
             )
 
-            if(!result) return res.status(400).json({error: "Erro ao atualizar função"});
+            if(!result) return res.status(500).json({error: "Erro ao atualizar função"});
 
             return res.status(200).json(result);
 
         } catch (e) {
-            return res.status(400).json({error: "Erro ao atualizar função"});
+            return res.status(500).json({error: "Erro ao atualizar função"});
         }
 
     } else if (req.method == 'DELETE') {
@@ -109,12 +109,12 @@ export default async function handler(req, res) {
                 {where: {id: id}}
             );
 
-            if(!result) return res.status(400).json({error: "Erro ao deletar função"});
+            if(!result) return res.status(500).json({error: "Erro ao deletar função"});
 
             return res.status(200).json(result);
 
         }catch(e) {
-            return res.status(400).json({error: "Erro ao deletar função"});
+            return res.status(500).json({error: "Erro ao deletar função"});
         }
     }
 }

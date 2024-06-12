@@ -8,6 +8,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
 import CheckAuth from "components/CheckAuth";
 import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 Modal.setAppElement('body');
 
@@ -34,7 +36,7 @@ export default function NewTransaction() {
         if (response) setTransactions(response.data);
 
         } catch (e) {
-            console.log(e);
+            toast.error(e);
         }
     }
 
@@ -46,10 +48,11 @@ export default function NewTransaction() {
 
             if (result.status !== 201) {
 
-                setErrors(result.data.error);
+                toast.error(result.data.error);
 
             } else {
 
+                toast.success(result.data.success);
                 handleTransactions();
                 setModalIsOpen(false);
                 setData({ name: "", tag: "", description: "" });
@@ -58,7 +61,7 @@ export default function NewTransaction() {
 
         } catch (e) {
 
-            setErrors(e.response?.data?.error || "Erro ao criar transação");
+            toast.error(e.response?.data?.error || "Erro ao criar transação");
 
         }
     }

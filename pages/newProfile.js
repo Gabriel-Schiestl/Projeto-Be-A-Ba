@@ -6,9 +6,10 @@ import Sidebar from 'components/Sidebar';
 import { TextField, Autocomplete, InputAdornment } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import axios from 'axios';
-import { toast } from 'react-toastify';
 import CheckAuth from "components/CheckAuth";
 import { useRouter } from 'next/router';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const options = [
     { value: 'Caixa VC', label: 'Caixa VC' },
@@ -64,7 +65,7 @@ export default function NewProfile() {
 
             } catch (e) {
 
-                setErrors("Erro ao carregar dados iniciais");
+                toast.error("Erro ao carregar dados iniciais");
 
             }
         };
@@ -79,10 +80,15 @@ export default function NewProfile() {
 
             const result = await axios.get('/api/ProfileAPI');
 
-            if(result) setProfiles(result.data);
+            if(result) {
+                setProfiles(result.data) 
+                return;
+            }
+
+            toast.error(result.data.error);
 
         } catch (e) {
-            console.log(e);
+            toast.error(e);
         }
     }
 
@@ -94,10 +100,11 @@ export default function NewProfile() {
 
             if (result.status !== 201) {
 
-                setErrors(result.data.error);
+                toast.error(result.data.error);
 
             } else {
 
+                toast.success(result.data.success);
                 handleProfiles();
                 setModalIsOpen(false);
                 setData({ name: "", modules: [], transactions: [], functions: [] });
@@ -106,7 +113,7 @@ export default function NewProfile() {
 
         } catch (e) {
 
-            setErrors(e.response?.data?.error || "Erro ao criar perfil");
+            toast.error(e.response?.data?.error || "Erro ao criar perfil");
 
         }
     }

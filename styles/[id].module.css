@@ -91,39 +91,33 @@
     font-size: 1.2em;
 }
 
-@media screen and (max-width: 585px) {
-    .table h2, .table p {
-        font-size: 1em;
-    }
-}
-
-@media screen and (max-width: 476px) {
-    .table h2, .table p {
-        font-size: 0.8em;
-    }
-}
-
 .btns {
     margin-top: 1%;
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     height: 5%;
+    gap: 3%;
 }
 
 .btns button:hover {
     cursor: pointer;
 }
 
+.editBtn {
+    background-color: var(--default-green);
+    color: white;
+}
+
 .editBtn:hover {
-    background-color: #d5d6d8;
+    background-color: #035c37;
 }
 
 .btns button {
     height: 100%;
     border-radius: 12px;
     border: none;
-    width: 10%;
+    width: 13%;
     font-size: 1.2em;
 }
 
@@ -318,6 +312,14 @@
     background-color: #035c37;
 }
 
+.form .cancelBtn:hover {
+    background-color: #dfdfe0;
+}
+
+.form .cancelBtn {
+    background-color: #FDFDFB;
+}
+
 .form textarea {
     width: 100%;
     font-family: "Inter", sans-serif;
@@ -328,10 +330,6 @@
     opacity: 80%;
     font-size: 1.2em;
     padding-top: 2%;
-}
-
-.cancel:hover {
-    background-color: #dfdfe0;
 }
 
 .profiles .select {
@@ -365,6 +363,45 @@
     margin-bottom: 3%;
 }
 
+.modulePage {
+    display: flex;
+    justify-content: space-around;
+    height: 35%;
+    width: 100%;
+    border-radius: 14px;
+    margin-bottom: 3%;
+}
+
+.modulePage div {
+    display: flex;
+    justify-content: center;
+    background-color: #FBFBFD;
+    width: 50%;
+    height: 100%;
+    border-radius: 14px;
+}
+
+.moduleBtns {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 3%;
+    height: 5%;
+    margin-right: 5%;
+}
+
+.moduleBtns button {
+    height: 100%;
+    border-radius: 12px;
+    border: none;
+    width: 13%;
+    font-size: 1.2em;
+}
+
+.moduleBtns button:hover {
+    cursor: pointer;
+}
+
 @media screen and (max-width: 1024px) {
 
     .modal {
@@ -392,6 +429,62 @@
     .modal {
         width: 90%;
     }
+
+    .center {
+        width: 90%;
+    }
 }
+
+@media screen and (max-width: 1299px) {
+    .modulePage, .profilePage {
+        font-size: 0.9em;
+    }
+}
+
+@media screen and (max-width: 1150px) {
+    .modulePage, .profilePage {
+        font-size: 0.8em;
+    }
+}
+
+@media screen and (max-width: 850px) {
+    .modulePage, .profilePage {
+        font-size: 0.7em;
+    }
+}
+
+
+@media screen and (max-width: 600px) {
+    .modulePage, .profilePage {
+        font-size: 0.6em;
+    }
+
+    .subpages {
+        font-size: 0.7em;
+    }
+
+    .moduleBtns, .btns {
+        font-size: 0.6em;
+    }
+}
+
+@media screen and (max-width: 515px) {
+    .modulePage, .profilePage {
+        font-size: 0.5em;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .subpages {
+        font-size: 0.6em;
+    }
+}
+
+.center i {
+    font-size: 2em;
+}
+
+
+
 
 

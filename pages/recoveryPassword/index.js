@@ -1,27 +1,66 @@
-import { useState} from 'react'
-import styles from '../../styles/recoverPassword.module.css'
-import Link from 'next/link'
-import Image from 'next/image'
-import { useRouter } from 'next/router'
+import { useState } from 'react';
+import styles from '../../styles/recoverPassword.module.css';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useRouter } from 'next/router';
+import validator from 'validator';
+import axios from 'axios';
+import Loading from 'components/Loading';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Recovery() {
 
     const router = useRouter();
 
     const [email, setEmail] = useState("");
-
     const [error, setError] = useState("");
+    const [loading, setLoading] = useState(false);
 
-    function handleSubmit(e) {
+    const handleSubmit = async (e) => {
 
         e.preventDefault();
 
-        //router.push("/recoveryPassword/codeVerificator");
-
-        if (email === "" || email.length < 10) {
+        if (!validator.isEmail(email)) {
             setError("Digite um e-mail válido");
         } else {
-            router.push("/recoveryPassword/codeVerificator");
+
+            try {
+
+                const emailExists = await axios.get(`/api/UserAPI?email=${email}`);
+
+                if (emailExists.status == 404) {
+                    toast.error(emailExists.data.error);
+                    return;
+                }
+
+                const userId = emailExists.data.id;
+
+                const result = await axios.post('http://127.0.0.1:5000/send-recovery-email', { email });
+
+                if (result.status == 200) {
+                    setLoading(true);
+                    const response = await axios.post('/api/CodeVerificator', {code: result.data.code});
+
+                    if (response.status == 200) {
+                        toast.success("E-mail enviado com sucesso");
+                        
+                        setTimeout(() => {
+
+                            router.push(`/recoveryPassword/codeVerificator?id=${userId}`);
+                        }, 2000);
+
+                    } else {
+                        toast.error(response.data.error);
+                    }
+                } else {
+                    toast.error("Erro ao enviar e-mail");
+                }
+            } catch (e) {
+                toast.error(e);
+            } finally {
+                setLoading(false)
+            }
         }
     }
 
@@ -35,7 +74,7 @@ export default function Recovery() {
                 <form className={styles.form} onSubmit={handleSubmit}>
                     <div className={styles.email}>
                         <label>E-mail</label>
-                        <input type="email" value={email} onChange={(e) => { setEmail(e.target.value) }}>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value) }>
                         </input>
                     </div>
                     {error && <div className={styles.flash}>{error}</div>}
@@ -59,6 +98,7 @@ export default function Recovery() {
                 height={500}>
             </Image>
         </div>
+        {loading && <Loading></Loading>}
     </>
     )
 }

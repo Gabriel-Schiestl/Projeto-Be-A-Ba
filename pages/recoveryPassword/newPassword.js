@@ -3,6 +3,9 @@ import styles from '../../styles/recoverPassword.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function newPassword() {
     
@@ -14,17 +17,31 @@ export default function newPassword() {
     const [error, setError] = useState("");
     const [differentPassword, setdifferentPassword] = useState("");
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
 
         e.preventDefault();
 
-        if(password === "" || password.length < 8 || password.length > 20){
-            setError("A senha deve conter entre 8 e 20 caracteres");
+        const {id} = router.query;
+
+        if(password === "" || password.length < 4 || password.length > 20){
+            setError("A senha deve conter entre 4 e 20 caracteres");
         } else if(confirmedPassword != password) {
             setError("");
-            setdifferentPassword("As senhas não condizem")
+            setdifferentPassword("As senhas não condizem");
         } else {
-            router.push('/recoveryPassword/success')
+
+            const result = await axios.patch('/api/UserAPI', {password, id});
+
+            if(result.status == 500) {
+                toast.error(result.data.error);
+                return;
+            }
+
+            toast.success("Senha atualizada!");
+
+            setTimeout(() => {
+                router.push('/recoveryPassword/success');
+            }, 2000);            
         }
 
     }
