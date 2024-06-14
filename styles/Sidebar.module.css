@@ -186,6 +186,10 @@
     z-index: 999;
 }
 
+.ul li .selected {
+    color: var(--default-green);
+}
+
 @media screen and (max-width: 1600px) {
 
 

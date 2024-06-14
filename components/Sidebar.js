@@ -14,6 +14,12 @@ export default function Sidebar() {
     const [signOutModalOpen, setSignOutModalOpen] = useState(false);
     const [session, setSession] = useState();
     const [name, setName] = useState("");
+    const [selected, setSelected] = useState("");
+
+    useEffect(() => {
+        const savedSelectedItem = localStorage.getItem('selectedSidebarItem');
+        if (savedSelectedItem) setSelected(savedSelectedItem);
+    }, []);
 
     const handleMenu = () => {
         setIsOpen(!isOpen);
@@ -50,7 +56,7 @@ export default function Sidebar() {
             if (session) {
 
                 const splitedName = session.user.name.split(' ');
-                
+
                 setName(splitedName[0] + " " + splitedName[splitedName.length - 1]);
             }
 
@@ -81,6 +87,11 @@ export default function Sidebar() {
 
     }
 
+    const handleItemClick = (item) => {
+        setSelected(item);
+        localStorage.setItem('selectedSidebarItem', item);
+    }
+
     return (
         <>
             <div className={styles.menu}
@@ -101,13 +112,42 @@ export default function Sidebar() {
                     </div>
                     <div className={styles.ul}>
                         <ul>
-                            <li><Link href='/dashboard' className={styles.link}><i class="bi bi-pie-chart-fill"></i>Dashboard</Link></li>
-                            <li><Link href='/profile' className={styles.link}><i class="bi bi-person-fill"></i>Perfil</Link></li>
-                            <li><Link href='/newProfile' className={styles.link}><i class="bi bi-people-fill"></i>Gerenciar perfis</Link></li>
-                            <li><Link href='/newFunction' className={styles.link}><i class="bi bi-tools"></i>Gerenciar funções</Link></li>
-                            <li><Link href='/newTransaction' className={styles.link}><i class="bi bi-gear-fill"></i>Gerenciar transações</Link></li>
-                            <li><Link href='/newModule' className={styles.link}><i class="bi bi-folder-fill"></i>Gerenciar módulos</Link></li>
-                            <li><Link href='/newUser' className={styles.link}><i class="bi bi-person-lines-fill"></i>Gerenciar usuários</Link></li>
+                            <li><Link
+                                href='/dashboard'
+                                className={`${styles.link} ${selected === 'dashboard' ? styles.selected : ''}`}
+                                onClick={() => handleItemClick('dashboard')}>
+                                <i class="bi bi-pie-chart-fill"></i>Dashboard</Link></li>
+                            <li><Link
+                                href='/profile'
+                                className={`${styles.link} ${selected === 'profile' ? styles.selected : ''}`}
+                                onClick={() => handleItemClick('profile')}>
+                                <i class="bi bi-person-fill"></i>Perfil</Link></li>
+                            <li><Link
+                            onClick={() => handleItemClick('profiles')}
+                                href='/newProfile'
+                                className={`${styles.link} ${selected === 'profiles' ? styles.selected : ''}`}
+                                >
+                                <i class="bi bi-people-fill"></i>Gerenciar perfis</Link></li>
+                            <li><Link
+                                href='/newFunction'
+                                className={`${styles.link} ${selected === 'functions' ? styles.selected : ''}`}
+                                onClick={() => handleItemClick('functions')}>
+                                <i class="bi bi-tools"></i>Gerenciar funções</Link></li>
+                            <li><Link
+                                href='/newTransaction'
+                                className={`${styles.link} ${selected === 'transactions' ? styles.selected : ''}`}
+                                onClick={() => handleItemClick('transactions')}>
+                                <i class="bi bi-gear-fill"></i>Gerenciar transações</Link></li>
+                            <li><Link
+                                href='/newModule'
+                                className={`${styles.link} ${selected === 'modules' ? styles.selected : ''}`}
+                                onClick={() => handleItemClick('modules')}>
+                                <i class="bi bi-folder-fill"></i>Gerenciar módulos</Link></li>
+                            <li><Link
+                                href='/newUser'
+                                className={`${styles.link} ${selected === 'users' ? styles.selected : ''}`}
+                                onClick={() => handleItemClick('users')}>
+                                <i class="bi bi-person-lines-fill"></i>Gerenciar usuários</Link></li>
                         </ul>
                     </div>
                 </div>

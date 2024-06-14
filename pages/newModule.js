@@ -32,7 +32,7 @@ export default function NewModule() {
 
                 if (getModules) setModules(getModules.data);
 
-                if(getModules.status == 200) toast.error("Erro ao obter módulos");
+                if(getModules.status != 200) toast.error("Erro ao obter módulos");
 
                 const response = await axios.get('/api/TransactionAPI');
 

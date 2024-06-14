@@ -1,0 +1,92 @@
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.content {
+    display: flex;
+    height: 100vh;
+    width: 80%;
+    flex-grow: 1;
+    z-index: 998;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+@media screen and (max-width: 1023px) {
+
+    .content {
+        width: 100%;
+    }
+
+}
+
+.center {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 90%;
+    margin-top: 4%;
+}
+
+.subPages {
+    display: flex;
+    justify-content: space-between;
+    height: 20%;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 1%;
+}
+
+.subPages div {
+    background-color: #FBFBFD;
+    border-radius: 14px;
+    width: 200px;
+    height: 100%;
+    margin-bottom: 2%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.subPages div h1 {
+    font-size: 1.5em;
+}
+
+.centerContent {
+    height: 60%;
+    width: 100%;
+    margin-top: 3%;
+    margin-bottom: 2%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.page, .graph {
+    display: flex;
+    height: 100%;
+    width: 45%;
+    background-color: #FBFBFD;
+    border-radius: 14px;
+}
+
+.page {
+    overflow-y: scroll;
+}
+
+.btns {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    height: 5%;
+}
+
+.page .table {
+    width: 100%;
+    text-align: center;
+    padding-top: 5%;
+    font-size: 1.4em;
+}
