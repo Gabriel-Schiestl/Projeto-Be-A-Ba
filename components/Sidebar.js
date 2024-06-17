@@ -8,6 +8,7 @@ import { getSession } from "next-auth/react";
 
 export default function Sidebar() {
 
+
     const [isOpen, setIsOpen] = useState(false);
     const sidebarRef = useRef(null);
     const menuRef = useRef(null);

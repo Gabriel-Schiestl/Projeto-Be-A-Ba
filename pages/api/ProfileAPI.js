@@ -1,6 +1,7 @@
 import models from 'models'
+import sequelize from 'utils/db';
 
-const { Profiles, Functions, Transactions, Modules } = models;
+const { Profiles, Functions, Transactions, Modules, ProfilesModules, ModulesTransactionsProfiles } = models;
 
 export default async function handler(req, res) {
 
@@ -8,7 +9,7 @@ export default async function handler(req, res) {
 
         try {
 
-            const { name, modules, transactions, functions } = req.body;
+            const { name, functions, modulesTransactions } = req.body;
 
             const exists = await Profiles.findOne({ where: { name: name } });
 
@@ -18,23 +19,26 @@ export default async function handler(req, res) {
 
             }
 
-            const newProfile = await Profiles.create({
+            const newProfile = await Profiles.create({ name: name })
 
-                name: name,
+            for (const moduleTransaction of modulesTransactions) {
+                const { module, transactions } = moduleTransaction;
 
-            })
+                await ProfilesModules.create({ profileId: newProfile.id, moduleId: module });
 
-            if (!newProfile) {
-
-                return res.status(500).json({ error: "Erro ao criar perfil" });
-
-            } else {
-
-                await newProfile.addFunctions(functions);
-                await newProfile.addTransactions(transactions);
-                await newProfile.addModules(modules);
-
+                for (const transactionId of transactions) {
+                    await ModulesTransactionsProfiles.create({
+                        moduleId: module,
+                        transactionId: transactionId,
+                        profileId: newProfile.id
+                    });
+                }
             }
+
+            await newProfile.addFunctions(functions);
+
+            if (!newProfile) return res.status(500).json({ error: "Erro ao criar perfil" });
+
 
             return res.status(201).json({ success: "Sucesso ao criar perfil" });
 
@@ -53,7 +57,13 @@ export default async function handler(req, res) {
             if (id) {
 
                 const profile = await Profiles.findByPk(id, {
-                    include: [Functions, Transactions, Modules]
+                    include: [
+                        { model: Functions },
+                        {
+                            model: Modules,
+                            include: [Transactions]
+                        }
+                    ]
                 });
 
                 if (!profile) return res.status(404).json({ error: "Perfil não encontrado" });
@@ -62,7 +72,15 @@ export default async function handler(req, res) {
 
             } else {
 
-                const profiles = await Profiles.findAll();
+                const profiles = await Profiles.findAll({
+                    include: [
+                        { model: Functions },
+                        {
+                            model: Modules,
+                            include: [Transactions]
+                        }
+                    ]
+                });
 
                 if (!profiles) return res.status(404).json({ error: "Perfis não encontrados" });
 
@@ -79,7 +97,7 @@ export default async function handler(req, res) {
     } else if (req.method == 'PUT') {
 
         const { id } = req.query;
-        let { name, modules, functions, transactions } = req.body;
+        const { name, functions, modulesTransactions } = req.body;
 
         try {
 
@@ -90,11 +108,26 @@ export default async function handler(req, res) {
 
             if (!result) return res.status(500).json({ error: "Erro ao atualizar perfil" });
 
+            await ProfilesModules.destroy({ where: { profileId: id } });
+
+            for (const moduleTransaction of modulesTransactions) {
+                const { module, transactions } = moduleTransaction;
+
+                await ProfilesModules.create({ profileId: id, moduleId: module });
+                await ModulesTransactionsProfiles.destroy({ where: { moduleId: module } });
+
+                for (const transactionId of transactions) {
+
+                    await ModulesTransactionsProfiles.create({
+                        moduleId: module,
+                        transactionId: transactionId,
+                    });
+                }
+            }
+
             const profile = await Profiles.findByPk(id);
 
-            await profile.setModules(modules);
             await profile.setFunctions(functions);
-            await profile.setTransactions(transactions);
 
             return res.status(200).json(result);
 

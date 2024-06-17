@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import sequelize from "utils/db";
 import models from 'models'
 
-const { Transactions, Modules } = models;
+const { Transactions, Modules, ModulesTransactions } = models;
 
 export default async function handler(req, res) {
 
@@ -46,7 +46,7 @@ export default async function handler(req, res) {
 
             if (!newModule) {
 
-                return res.status(500).json({error: "Erro ao criar módulo"});
+                return res.status(500).json({ error: "Erro ao criar módulo" });
 
             } else {
 
@@ -71,7 +71,7 @@ export default async function handler(req, res) {
             if (id) {
 
                 const module = await Modules.findByPk(id, {
-                    include: Transactions
+                    include: Transactions,
                 });
 
                 if (!module) return res.status(404).json({ error: "Módulo não encontrado" });
@@ -80,7 +80,14 @@ export default async function handler(req, res) {
 
             } else {
 
-                const modules = await Modules.findAll({ include: Transactions });
+                const modules = await Modules.findAll({
+                    include: {
+                        model: Transactions,
+                        through: {
+                            model: ModulesTransactions
+                        }
+                    }
+                });
 
                 if (!modules) return res.status(404).json({ error: "Módulos não encontrados" });
 

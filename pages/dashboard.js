@@ -11,6 +11,7 @@ export default function Dashboard() {
     const [option, setOption] = useState([]);
 
     useEffect(() => {
+        localStorage.setItem('selectedSidebarItem', 'dashboard');
         const handleInit = async () => {
             const [profilesRes, usersRes, modulesRes, transactionsRes, functionsRes] = await Promise.all([
                 axios.get('/api/ProfileAPI'),
@@ -63,6 +64,7 @@ export default function Dashboard() {
                             <div className={styles.page}>
                                 {data && option && (
                                     <table className={styles.table}>
+                                        <h1>Listagem:</h1>
                                         {option.map(option => <tr>{option.name}</tr>)}
                                     </table>
                                 )}

@@ -42,9 +42,10 @@ export default function Login() {
             return;
         }
 
+        setLoading(true);
+
         try {
 
-            setLoading(true);
             const result = await signIn('credentials', {
                 redirect: false,
                 email: data.email,
@@ -65,9 +66,7 @@ export default function Login() {
 
             toast.error(e);
 
-        } finally {
-            setLoading(false);
-        }
+        } 
     }
 
     return (

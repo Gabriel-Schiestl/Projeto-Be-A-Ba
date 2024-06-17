@@ -6,10 +6,12 @@ import { useRouter } from 'next/router'
 import axios from 'axios'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Loading from 'components/Loading'
 
 export default function newPassword() {
     
     const router = useRouter()
+    const [loading, setLoading] = useState(false);
 
     const [password, setPassword] = useState("");
     const [confirmedPassword, setConfirmedPassword] = useState("");
@@ -22,6 +24,8 @@ export default function newPassword() {
         e.preventDefault();
 
         const {id} = router.query;
+
+        setLoading(true);
 
         if(password === "" || password.length < 4 || password.length > 20){
             setError("A senha deve conter entre 4 e 20 caracteres");
@@ -85,6 +89,7 @@ export default function newPassword() {
                 height={500}>
             </Image>
         </div>
+        {loading && <Loading></Loading>}
     </>
     )
 }

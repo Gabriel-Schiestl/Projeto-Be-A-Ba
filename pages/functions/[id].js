@@ -7,6 +7,8 @@ import Modal from 'react-modal';
 import CheckAuth from "components/CheckAuth";
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 Modal.setAppElement('body');
 
@@ -117,7 +119,7 @@ export default function aFunction() {
                                     <tr><h2>Nome da função:</h2><p>{aFunction.name}</p></tr>
                                     <tr><h2>TAG da função:</h2><p>{aFunction.tag}</p></tr>
                                     <tr><h2>Descrição da função:</h2><p>{aFunction.description}</p></tr>
-                                    <tr><h2>Data de criação:</h2><p>{aFunction.createdAt}</p></tr>
+                                    <tr><h2>Data de criação:</h2><p>{format(new Date(aFunction.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
                                 </td>
                             </table>
                         </div>

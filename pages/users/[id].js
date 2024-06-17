@@ -8,6 +8,8 @@ import Select from 'react-select';
 import CheckAuth from "components/CheckAuth";
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 Modal.setAppElement('body');
 
@@ -179,7 +181,7 @@ export default function User() {
                                     <tr><h2>E-mail:</h2><p>{user.email}</p></tr>
                                     <tr><h2>Matrícula:</h2><p>{user.register}</p></tr>
                                     <tr><h2>Perfil associado:</h2><p>{user.profile.name}</p></tr>
-                                    <tr><h2>Data de criação:</h2><p>{user.createdAt}</p></tr>
+                                    <tr><h2>Data de criação:</h2><p>{format(new Date(user.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
                                 </td>
                             </table>
                         </div>

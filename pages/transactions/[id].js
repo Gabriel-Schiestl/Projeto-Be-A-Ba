@@ -7,6 +7,8 @@ import Modal from 'react-modal';
 import CheckAuth from "components/CheckAuth";
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 Modal.setAppElement('body');
 
@@ -117,7 +119,7 @@ export default function Transaction() {
                                     <tr><h2>Nome da transação:</h2><p>{transaction.name}</p></tr>
                                     <tr><h2>TAG da transação:</h2><p>{transaction.tag}</p></tr>
                                     <tr><h2>Descrição da transação:</h2><p>{transaction.description}</p></tr>
-                                    <tr><h2>Data de criação:</h2><p>{transaction.createdAt}</p></tr>
+                                    <tr><h2>Data de criação:</h2><p>{format(new Date(transaction.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
                                 </td>
                             </table>
                         </div>

@@ -86,7 +86,15 @@
 
 .page .table {
     width: 100%;
-    text-align: center;
-    padding-top: 5%;
     font-size: 1.4em;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9%;
+}
+
+.table h1 {
+    font-size: 1.3em;
+    margin-bottom: 0;
 }

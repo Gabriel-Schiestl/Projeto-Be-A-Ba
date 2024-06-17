@@ -332,6 +332,14 @@
     padding-top: 2%;
 }
 
+.profiles {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2%;
+    max-height: 20%;
+    width: 55%;
+}
+
 .profiles .select {
     padding-left: 5%;
 }
@@ -347,7 +355,7 @@
 .subpages div {
     background-color: #FBFBFD;
     border-radius: 14px;
-    width: 30%;
+    width: 45%;
     height: 100%;
     display: flex;
     justify-content: center;

@@ -8,6 +8,8 @@ import Select from 'react-select';
 import CheckAuth from "components/CheckAuth";
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 Modal.setAppElement('body');
 
@@ -185,7 +187,7 @@ export default function User() {
                                         <tr><h2>Nome do módulo:</h2><p>{module.name}</p></tr>
                                         <tr><h2>TAG:</h2><p>{module.tag}</p></tr>
                                         <tr><h2>Descrição:</h2><p>{module.description}</p></tr>
-                                        <tr><h2>Data de criação:</h2><p>{module.createdAt}</p></tr>
+                                        <tr><h2>Data de criação:</h2><p>{format(new Date(module.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
                                     </td>
                                 </table>
                             </div>

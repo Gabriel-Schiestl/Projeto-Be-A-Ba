@@ -25,6 +25,7 @@ export default function Recovery() {
             setError("Digite um e-mail válido");
         } else {
 
+            setLoading(true);
             try {
 
                 const emailExists = await axios.get(`/api/UserAPI?email=${email}`);
@@ -39,7 +40,6 @@ export default function Recovery() {
                 const result = await axios.post('http://127.0.0.1:5000/send-recovery-email', { email });
 
                 if (result.status == 200) {
-                    setLoading(true);
                     const response = await axios.post('/api/CodeVerificator', {code: result.data.code});
 
                     if (response.status == 200) {
@@ -58,8 +58,6 @@ export default function Recovery() {
                 }
             } catch (e) {
                 toast.error(e);
-            } finally {
-                setLoading(false)
             }
         }
     }

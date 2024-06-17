@@ -1,35 +1,76 @@
-import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import axios from "axios";
-import styles from 'styles/[id].module.css'
-import Sidebar from "components/Sidebar";
-import Modal from 'react-modal';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
+import Modal from 'react-modal';
+import styles from 'styles/[id].module.css'
+import Sidebar from 'components/Sidebar';
+import axios from 'axios';
 import CheckAuth from "components/CheckAuth";
+import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import { format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+
+const options = [
+    { value: 'Caixa VC', label: 'Caixa VC' },
+    { value: 'Estabelecimento', label: 'Estabelecimento' },
+];
 
 Modal.setAppElement('body');
 
-export default function User() {
+export default function NewProfile() {
 
     const router = useRouter();
     const { id } = router.query;
-    const [profile, setProfile] = useState("");
+    const [data, setData] = useState({ name: "", functions: [], modules: [] });
+    const [newData, setNewData] = useState({ name: "", functions: [], modulesTransactions: [] });
     const [isOpen, setOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const [data, setData] = useState({ name: "", modules: [], transactions: [], functions: [] });
     const [isLoading, setIsLoading] = useState(true);
-    const [modules, setModules] = useState([]);
+    const [profile, setProfile] = useState([]);
+    const [modulesFiltered, setModulesFiltered] = useState([]);
     const [transactions, setTransactions] = useState([]);
+    const [transactionsFiltered, setTransactionsFiltered] = useState([]);
     const [functions, setFunctions] = useState([]);
+    const [selectedModule, setSelectedModule] = useState(null);
+    const [selectedTransactions, setSelectedTransactions] = useState([]);
+    const [modules, setModules] = useState([]);
 
     useEffect(() => {
 
-        getProfile();
-        getData();
+        const handleInit = async () => {
+            try {
 
-    }, [id]);
+                const [modulesRes, functionsRes, transactionsRes] = await Promise.all([
+                    axios.get('/api/ModuleAPI'),
+                    axios.get('/api/FunctionAPI'),
+                    axios.get('/api/TransactionAPI'),
+                ]);
+
+                setModules(modulesRes.data);
+                setTransactions(transactionsRes.data);
+
+                const modulesOptions = modulesRes.data.map(module => ({
+                    value: module.id,
+                    label: module.name
+                }));
+
+                const functionsOptions = functionsRes.data.map(aFunction => ({
+                    value: aFunction.id,
+                    label: aFunction.name
+                }));
+
+                setModulesFiltered(modulesOptions);
+                setFunctions(functionsOptions);
+
+            } catch (e) {
+                toast.error("Erro ao carregar dados iniciais");
+            }
+        };
+
+        handleInit();
+        getProfile();
+    }, []);
 
     const getProfile = async () => {
 
@@ -42,10 +83,9 @@ export default function User() {
             if (result.status == 200) {
                 setProfile(result.data);
                 const profileModules = result.data.modules.map(module => module.id);
-                const profileTransactions = result.data.transactions.map(transaction => transaction.id);
                 const profileFunctions = result.data.functions.map(aFunction => aFunction.id);
 
-                setData({ name: result.data.name, modules: profileModules, functions: profileFunctions, transactions: profileTransactions });
+                setData({ name: result.data.name, modules: profileModules, functions: profileFunctions });
             } else {
                 toast.error("Erro ao obter perfil");
             }
@@ -57,76 +97,67 @@ export default function User() {
         }
     }
 
-    const getData = async () => {
+    const editProfile = async () => {
+
         try {
 
-            const [modulesResponse, functionsResponse, transactionsResponse] = await Promise.all([
-                axios.get('/api/ModuleAPI'),
-                axios.get('/api/FunctionAPI'),
-                axios.get('/api/TransactionAPI'),
-            ])
+            const result = await axios.put(`/api/ProfileAPI?id=${id}`, newData);
 
-            const modules = modulesResponse.data.map(module => ({ value: module.id, label: module.name }));
-            const functions = functionsResponse.data.map(aFunction => ({ value: aFunction.id, label: aFunction.name }));
-            const transactions = transactionsResponse.data.map(transaction => ({ value: transaction.id, label: transaction.name }));
+            if (result.status !== 200) {
 
-            setModules(modules);
-            setTransactions(transactions);
-            setFunctions(functions);
+                toast.error(result.data.error);
+
+            } else {
+
+                toast.success(result.data.success);
+                setModulesFiltered(modules.map(module => ({
+                    value: module.id,
+                    label: module.name
+                })));
+                getProfile();
+                setModalIsOpen(false);
+                setData({ name: "", functions: [], modulesTransactions: [] });
+
+            }
 
         } catch (e) {
-            toast.error(e);
+
+            toast.error(e.response?.data?.error || "Erro ao editar perfil");
+
         }
-    };
-
-    const handleBack = () => {
-        router.back();
     }
-
-    const arraysAreEqual = (array1, array2) => {
-        if (array1.length !== array2.length) return false;
-        const sortedArray1 = [...array1].sort();
-        const sortedArray2 = [...array2].sort();
-        return sortedArray1.every((value, index) => value === sortedArray2[index]);
-    };
 
     const handleEdit = async (e) => {
 
         e.preventDefault();
 
-        const idModules = profile.modules.map(module => module.id);
-        const idTransactions = profile.transactions.map(transaction => transaction.id);
-        const idFunctions = profile.functions.map(aFunction => aFunction.id);
+        await editProfile();
+    };
 
-        const modulesAreEqual = arraysAreEqual(data.modules, idModules);
-        const transactionsAreEqual = arraysAreEqual(data.transactions, idTransactions);
-        const functionsAreEqual = arraysAreEqual(data.functions, idFunctions);
+    const handleSelected = () => {
 
-        if (data.name != profile.name || !modulesAreEqual
-            || !transactionsAreEqual || !functionsAreEqual) {
+        if (selectedModule && selectedTransactions.length > 0) {
+            const moduleTransactions = {
+                module: selectedModule,
+                transactions: selectedTransactions,
+            };
 
-            try {
-
-                const result = await axios.put(`/api/ProfileAPI?id=${id}`, data);
-
-                if (result.status != 200) {
-
-                    toast.error(result.data.error);
-                    return;
-
-                }
-
-                toast.success("Sucesso ao editar perfil");
-                getProfile();
-                setOpen(false);
-
-            } catch (e) {
-                toast.error(e);
+            if (newData.modulesTransactions.some(mt => mt.module === selectedModule)) {
+                toast.error("Módulo já editado");
+                return;
             }
-        } else {
-            setOpen(false);
+
+            const updatedModulesTransactions = [...newData.modulesTransactions, moduleTransactions];
+
+            setNewData(prevData => ({
+                ...prevData,
+                modulesTransactions: updatedModulesTransactions
+            }));
+            setSelectedModule(null);
+            setSelectedTransactions([]);
+            setModulesFiltered(prevModulesFiltered => prevModulesFiltered.filter(module => module.value !== selectedModule));
         }
-    }
+    };
 
     const deleteUser = async () => {
 
@@ -146,40 +177,11 @@ export default function User() {
         } catch (e) {
             toast.error(e);
         }
-
     }
 
-    const customStyles = {
-        control: (provided) => ({
-            ...provided,
-            marginTop: '4%',
-            minHeight: '100%',
-            boxShadow: 'none',
-            border: '1px solid'
-        }),
-        valueContainer: (provided) => ({
-            ...provided,
-            height: 'auto',
-            padding: '0 3%',
-            display: 'flex',
-            flexWrap: 'wrap'
-        }),
-        multiValue: (provided) => ({
-            ...provided,
-            margin: '2px'
-        }),
-        input: (provided) => ({
-            ...provided,
-            margin: '0px',
-            height: '100%',
-        }),
-        placeholder: (provided) => ({
-            ...provided,
-            margin: '0px',
-            fontSize: '1em',
-            fontWeight: '525'
-        }),
-    };
+    const handleBack = () => {
+        router.back();
+    }
 
     if (isLoading) {
         return <div>Carregando...</div>;
@@ -196,7 +198,7 @@ export default function User() {
                             <table className={styles.table}>
                                 <td>
                                     <tr><h2>Nome do perfil:</h2><p>{profile.name}</p></tr>
-                                    <tr><h2>Data de criação:</h2><p>{profile.createdAt}</p></tr>
+                                    <tr><h2>Data de criação:</h2><p>{format(new Date(profile.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
                                 </td>
                             </table>
                         </div>
@@ -209,18 +211,6 @@ export default function User() {
                                     <tbody>
                                         {profile.modules.map(module => (
                                             <tr key={module.id}>{module.name}</tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div>
-                                <table>
-                                    <thead>
-                                        <tr><h2>Transações:</h2></tr>
-                                    </thead>
-                                    <tbody>
-                                        {profile.transactions.map(transaction => (
-                                            <tr key={transaction.id}>{transaction.name}</tr>
                                         ))}
                                     </tbody>
                                 </table>
@@ -279,38 +269,9 @@ export default function User() {
                         </div>
                         <div className={styles.profiles}>
                             <Select
-                                required
                                 className={styles.select}
+                                styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
                                 isMulti
-                                styles={customStyles}
-                                value={modules.filter(module => data.modules.includes(module.value))}
-                                onChange={(selectedOptions) => {
-                                    const selectedValues = selectedOptions.map(option => option.value);
-                                    setData({ ...data, modules: selectedValues });
-                                }}
-                                options={modules}
-                                placeholder='Módulos'
-                            />
-                        </div>
-                        <div className={styles.profiles}>
-                            <Select
-                                className={styles.select}
-                                isMulti
-                                styles={customStyles}
-                                value={transactions.filter(transaction => data.transactions.includes(transaction.value))}
-                                onChange={(selectedOptions) => {
-                                    const selectedValues = selectedOptions.map(option => option.value);
-                                    setData({ ...data, transactions: selectedValues });
-                                }}
-                                options={transactions}
-                                placeholder='Transações'
-                            />
-                        </div>
-                        <div className={styles.profiles}>
-                            <Select
-                                className={styles.select}
-                                isMulti
-                                styles={customStyles}
                                 value={functions.filter(aFunction => data.functions.includes(aFunction.value))}
                                 onChange={(selectedOptions) => {
                                     const selectedValues = selectedOptions.map(option => option.value);
@@ -320,11 +281,46 @@ export default function User() {
                                 placeholder='Funções'
                             />
                         </div>
+                        <div className={styles.profiles}>
+                            <Select
+                                required
+                                className={styles.select}
+                                styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
+                                value={modules.find(option => option.value === selectedModule)}
+                                onChange={(selectedOption) => {
+                                    setTransactionsFiltered([]);
+                                    const moduleID = selectedOption.value;
+                                    setSelectedModule(moduleID);
+                                    const findModule = modules.find(module => module.id == moduleID);
+                                    const findTransactions = findModule.transactions;
+                                    const transactionsOptions = findTransactions.map(transaction => (
+                                        { value: transaction.id, label: transaction.name }))
+                                    setTransactionsFiltered(transactionsOptions);
+                                }}
+                                options={modulesFiltered}
+                                placeholder='Módulos'
+                            />
+                        </div>
+                        <div className={styles.profiles}>
+                            <Select
+                                className={styles.select}
+                                isMulti
+                                styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
+                                value={transactionsFiltered.filter(option => selectedTransactions.includes(option.value))}
+                                onChange={(selectedOptions) => {
+                                    const selectedValues = selectedOptions.map(option => option.value);
+                                    setSelectedTransactions(selectedValues);
+                                }}
+                                options={transactionsFiltered}
+                                placeholder='Transações'
+                            />
+                        </div>
+                        <button className={styles.registerBtn} type='button' onClick={handleSelected}>Adicionar</button>
                         <button className={styles.registerBtn} type="submit">Salvar</button>
                         <button type="button" onClick={() => setOpen(false)}>Cancelar</button>
                     </form>
                 </Modal>
             </div>
         </CheckAuth>
-    )
+    );
 }
