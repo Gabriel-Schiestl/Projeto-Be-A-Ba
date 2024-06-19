@@ -64,7 +64,7 @@ export default function NewProfile() {
                 setFunctions(functionsOptions);
 
             } catch (e) {
-                toast.error("Erro ao carregar dados iniciais");
+                console.log(e)
             }
         };
 

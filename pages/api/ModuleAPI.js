@@ -44,15 +44,11 @@ export default async function handler(req, res) {
                 description: description,
             });
 
-            if (!newModule) {
+            if (!newModule) return res.status(500).json({ error: "Erro ao criar módulo" });
 
-                return res.status(500).json({ error: "Erro ao criar módulo" });
-
-            } else {
-
-                await newModule.addTransactions(transactions);
-
-            }
+            await newModule.addTransactions(transactions, {
+                through: {ModulesTransactions}
+            });
 
             return res.status(201).json({ success: "Módulo criado com sucesso" });
 

@@ -1,53 +1,47 @@
 import models from 'models'
 import sequelize from 'utils/db';
 
-const { Profiles, Functions, Transactions, Modules, ProfilesModules, ModulesTransactionsProfiles } = models;
+const { Profiles, Functions, Transactions, Modules, ProfilesModules, ProfilesModulesTransactions } = models;
 
 export default async function handler(req, res) {
 
-    if (req.method == 'POST') {
+    if (req.method === 'POST') {
+        const { name, functions, modulesTransactions } = req.body;
 
         try {
 
-            const { name, functions, modulesTransactions } = req.body;
+            const existingProfile = await Profiles.findOne({ where: { name } });
 
-            const exists = await Profiles.findOne({ where: { name: name } });
-
-            if (exists) {
-
+            if (existingProfile) {
                 return res.status(400).json({ error: "Já existe outro perfil com este nome" });
-
             }
 
-            const newProfile = await Profiles.create({ name: name })
+            const newProfile = await Profiles.create({ name });
+
+            if (!newProfile) return res.status(500).json({ error: "Erro ao criar perfil" });
 
             for (const moduleTransaction of modulesTransactions) {
                 const { module, transactions } = moduleTransaction;
 
-                await ProfilesModules.create({ profileId: newProfile.id, moduleId: module });
+                await newProfile.addModules(module);
 
-                for (const transactionId of transactions) {
-                    await ModulesTransactionsProfiles.create({
-                        moduleId: module,
-                        transactionId: transactionId,
-                        profileId: newProfile.id
-                    });
-                }
+                const profileModule = await ProfilesModules.findOne({
+                    where: {
+                        profileId: newProfile.id,
+                        moduleId: module
+                    }
+                });
+
+                await profileModule.addTransactions(transactions);
+
             }
 
             await newProfile.addFunctions(functions);
 
-            if (!newProfile) return res.status(500).json({ error: "Erro ao criar perfil" });
-
-
             return res.status(201).json({ success: "Sucesso ao criar perfil" });
-
-        } catch (e) {
-
-            return res.status(500).json({ error: e.message || "Erro ao criar perfil" });
-
+        } catch (error) {
+            return res.status(500).json({ error: error.message || "Erro ao criar perfil" });
         }
-
     } else if (req.method == 'GET') {
 
         try {
@@ -58,10 +52,11 @@ export default async function handler(req, res) {
 
                 const profile = await Profiles.findByPk(id, {
                     include: [
-                        { model: Functions },
                         {
-                            model: Modules,
-                            include: [Transactions]
+                            model: Functions
+                        },
+                        {
+                            model: Modules
                         }
                     ]
                 });
@@ -72,15 +67,8 @@ export default async function handler(req, res) {
 
             } else {
 
-                const profiles = await Profiles.findAll({
-                    include: [
-                        { model: Functions },
-                        {
-                            model: Modules,
-                            include: [Transactions]
-                        }
-                    ]
-                });
+                const profiles = await Profiles.findAll();
+
 
                 if (!profiles) return res.status(404).json({ error: "Perfis não encontrados" });
 
@@ -98,38 +86,53 @@ export default async function handler(req, res) {
 
         const { id } = req.query;
         const { name, functions, modulesTransactions } = req.body;
+        console.log('Recebido PUT request');
+        console.log('ID:', id);
+        console.log('Dados recebidos:', { name, functions, modulesTransactions });
 
         try {
+            console.log('Iniciando atualização de perfil');
 
-            const result = await Profiles.update(
-                { name: name },
-                { where: { id: id } }
-            )
+            const profile = await Profiles.findByPk(id);
 
-            if (!result) return res.status(500).json({ error: "Erro ao atualizar perfil" });
+            if (profile.name != name) {
 
-            await ProfilesModules.destroy({ where: { profileId: id } });
+                const result = await Profiles.update(
+                    { name: name },
+                    { where: { id: id } }
+                )
+            }
+
+            await profile.setFunctions([]);
+
+            await profile.setFunctions(functions);
+
+            const modules = modulesTransactions.map(mt => mt.module);
+
+            await ProfilesModules.destroy({
+                where: { profileId: profile.id }
+            });
 
             for (const moduleTransaction of modulesTransactions) {
                 const { module, transactions } = moduleTransaction;
 
-                await ProfilesModules.create({ profileId: id, moduleId: module });
-                await ModulesTransactionsProfiles.destroy({ where: { moduleId: module } });
+                await ProfilesModules.create({
+                    profileId: profile.id,
+                    moduleId: module
+                });
 
-                for (const transactionId of transactions) {
+                const profileModule = await ProfilesModules.findOne({
+                    where: {
+                        profileId: profile.id,
+                        moduleId: module
+                    }
+                });
 
-                    await ModulesTransactionsProfiles.create({
-                        moduleId: module,
-                        transactionId: transactionId,
-                    });
-                }
+                await profileModule.setTransactions(transactions);
             }
 
-            const profile = await Profiles.findByPk(id);
-
-            await profile.setFunctions(functions);
-
-            return res.status(200).json(result);
+            console.log('Perfil atualizado com sucesso');
+            return res.status(200).json({success: "Perfil atualizado"});
 
         } catch (e) {
             return res.status(500).json({ error: "Erro ao atualizar perfil" });

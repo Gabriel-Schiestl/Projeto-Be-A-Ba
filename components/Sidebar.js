@@ -124,10 +124,10 @@ export default function Sidebar() {
                                 onClick={() => handleItemClick('profile')}>
                                 <i class="bi bi-person-fill"></i>Perfil</Link></li>
                             <li><Link
-                            onClick={() => handleItemClick('profiles')}
+                                onClick={() => handleItemClick('profiles')}
                                 href='/newProfile'
                                 className={`${styles.link} ${selected === 'profiles' ? styles.selected : ''}`}
-                                >
+                            >
                                 <i class="bi bi-people-fill"></i>Gerenciar perfis</Link></li>
                             <li><Link
                                 href='/newFunction'
@@ -174,13 +174,13 @@ export default function Sidebar() {
                     contentLabel="Sair da conta?"
                     className={styles.modal}
                     overlayClassName={styles.overlay}>
-                    <div className={styles.modalContent}>
+                    <div>
                         <h2>Tem certeza que deseja sair da conta?</h2>
                         <p>Esta ação fará com que seja necessário inserir novamente suas credenciais para login!</p>
-                        <div className={styles.buttonsDiv}>
-                            <button type="button" onClick={() => setSignOutModalOpen(false)}>Cancelar</button>
-                            <button className={styles.confirmBtn} type="button" onClick={handleSignOut}>Sair</button>
-                        </div>
+                    </div>
+                    <div className={styles.buttonsDiv}>
+                        <button type="button" onClick={() => setSignOutModalOpen(false)}>Cancelar</button>
+                        <button className={styles.confirmBtn} type="button" onClick={handleSignOut}>Sair</button>
                     </div>
                 </Modal>
             </div>

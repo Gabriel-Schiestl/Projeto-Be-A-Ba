@@ -188,15 +188,11 @@
     }
 }
 
-@media screen and (max-width: 930px) {
-    .userNameFlash, .passwordFlash {
-        font-size: 0.7em;
-    }
-}
+
 
 @media screen and (max-width: 820px) {
     .userNameFlash, .passwordFlash {
-        font-size: 0.6em;
+        font-size: 0.7em;
     }
 
     .keepConn input {
@@ -227,5 +223,36 @@
 @media screen and (max-width: 767px) {
     .content {
         overflow-y: scroll;
+    }
+
+    .h1 {
+        font-size: 19px;
+    }
+
+    .form button, .form label {
+        font-size: 19px;
+        margin-top: 3%;
+    }
+
+    .keepConn label, .link {
+        font-size: 0.9em;
+    }
+
+    .form input {
+        margin-bottom: 0;
+    }
+
+    .images, .michel, .logoContainer {
+        display: none;
+    }
+
+    .content {
+        width: 100%;
+    }
+}
+
+@media screen and (max-height: 700px) {
+    .link {
+        margin-bottom: 10%;
     }
 }

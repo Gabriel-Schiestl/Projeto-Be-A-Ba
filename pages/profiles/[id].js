@@ -89,7 +89,6 @@ export default function NewProfile() {
             } else {
                 toast.error("Erro ao obter perfil");
             }
-
         } catch (e) {
             toast.error(e);
         } finally {
@@ -99,32 +98,40 @@ export default function NewProfile() {
 
     const editProfile = async () => {
 
-        try {
+        const functionsIds = data.functions.map(f => f.value || f);
 
-            const result = await axios.put(`/api/ProfileAPI?id=${id}`, newData);
+        const requestBody = {
+            name: data.name,
+            functions: functionsIds,
+            modulesTransactions: newData.modulesTransactions
+        };
+
+        console.log(requestBody);
+
+        try {
+            const result = await axios.put(`/api/ProfileAPI?id=${id}`, requestBody, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
 
             if (result.status !== 200) {
-
                 toast.error(result.data.error);
-
-            } else {
-
-                toast.success(result.data.success);
-                setModulesFiltered(modules.map(module => ({
-                    value: module.id,
-                    label: module.name
-                })));
-                getProfile();
-                setModalIsOpen(false);
-                setData({ name: "", functions: [], modulesTransactions: [] });
-
+                return;
             }
 
         } catch (e) {
-
-            toast.error(e.response?.data?.error || "Erro ao editar perfil");
-
+            toast.error("Erro ao atualizar perfil");
         }
+
+        toast.success(result.data.success);
+        setModulesFiltered(modules.map(module => ({
+            value: module.id,
+            label: module.name
+        })));
+        setNewData({ name: "", functions: [], modulesTransactions: [] });
+        getProfile();
+        setModalIsOpen(false);
     }
 
     const handleEdit = async (e) => {
@@ -285,7 +292,7 @@ export default function NewProfile() {
                             <Select
                                 required
                                 className={styles.select}
-                                styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
+                                styles={{ menu: base => ({ ...base, maxHeight: '220px', overflowY: 'scroll' }) }}
                                 value={modules.find(option => option.value === selectedModule)}
                                 onChange={(selectedOption) => {
                                     setTransactionsFiltered([]);

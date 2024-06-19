@@ -40,11 +40,11 @@ export default function Recovery() {
                 const result = await axios.post('http://127.0.0.1:5000/send-recovery-email', { email });
 
                 if (result.status == 200) {
-                    const response = await axios.post('/api/CodeVerificator', {code: result.data.code});
+                    const response = await axios.post('/api/CodeVerificator', { code: result.data.code });
 
                     if (response.status == 200) {
                         toast.success("E-mail enviado com sucesso");
-                        
+
                         setTimeout(() => {
 
                             router.push(`/recoveryPassword/codeVerificator?id=${userId}`);
@@ -65,38 +65,40 @@ export default function Recovery() {
     return (<>
         <div className={styles.container}>
             <header className={styles.header}></header>
-            <div className={styles.div}>
+            <div className={styles.content}>
                 <h1 className={styles.h1}>Recuperação de senha</h1>
-                <p className={styles.p1}>Para recuperar sua senha, precisaremos que nos informe abaixo, por gentileza, seu
-                    e-mail utilizado no momento do cadastro.</p>
                 <form className={styles.form} onSubmit={handleSubmit}>
+                <p className={styles.p1}>Para recuperar sua senha, precisaremos que nos informe abaixo, por gentileza, seu
+                e-mail utilizado no momento do cadastro.</p>
                     <div className={styles.email}>
                         <label>E-mail</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value) }>
+                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}>
                         </input>
                     </div>
                     {error && <div className={styles.flash}>{error}</div>}
-                    <button onClick={handleSubmit}>Confirmar</button>
-                    <Link className={styles.link} href='/'>Voltar para a página de Login</Link>
+                    <div className={styles.divButton}><button onClick={handleSubmit}>Confirmar</button></div>
+                    <div className={styles.divLink}><Link className={styles.link} href='/'>Voltar para a página de Login</Link></div>
                 </form>
             </div>
+            <div className={styles.images}>
+                <div className={styles.logoContainer}>
+                    <Image className={styles.logo} src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg'
+                        layout='intrinsic'
+                        width={600}
+                        height={400}>
+                    </Image>
+                </div>
+                <div className={styles.michel}>
+                    <Image className={styles.img} src='/michel_card.png'
+                        layout='intrinsic'
+                        width={700}
+                        height={500}>
+                    </Image>
+                </div>
+            </div>
             <footer className={styles.footer}></footer>
+            {loading && <Loading></Loading>}
         </div>
-        <div className={styles.image}>
-            <Image className={styles.img} src='/michel_card.png'
-                layout='responsive'
-                width={700}
-                height={500}>
-            </Image>
-        </div>
-        <div className={styles.logoContainer}>
-            <Image className={styles.logo} src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg'
-                layout='responsive'
-                width={700}
-                height={500}>
-            </Image>
-        </div>
-        {loading && <Loading></Loading>}
     </>
     )
 }
