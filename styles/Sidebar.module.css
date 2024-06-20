@@ -5,6 +5,7 @@
 }
 
 .sidebar {
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -275,7 +276,7 @@
     }
 
     .ul {
-        font-size: 1em;
+        font-size: 1.2em;
     }
 
     .profile .informations {
@@ -340,7 +341,7 @@
 @media screen and (max-width: 767px) {
 
     .sidebar {
-        width: 80%;
+        width: 50%;
     }
     
     .picture {

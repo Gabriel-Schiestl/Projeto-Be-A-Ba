@@ -30,7 +30,7 @@ export default function NewFunction({ session }) {
 
         const response = await axios.get('/api/FunctionAPI');
 
-        if(response) setFunctions(response.data);
+        if (response) setFunctions(response.data);
 
     }
 
@@ -82,6 +82,11 @@ export default function NewFunction({ session }) {
                             className={styles.searchBar}
                             freeSolo
                             options={functions}
+                            renderOption={(props, option) => (
+                                <li {...props} onClick={() => openEspecificFuntion(option.id)}>
+                                    {option.name}
+                                </li>
+                            )}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}

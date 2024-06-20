@@ -17,7 +17,8 @@ export default function Login() {
 
     const [data, setData] = useState({
         email: "",
-        password: ""
+        password: "",
+        checked: false,
     })
 
     const [errors, setErrors] = useState({
@@ -49,7 +50,8 @@ export default function Login() {
             const result = await signIn('credentials', {
                 redirect: false,
                 email: data.email,
-                password: data.password
+                password: data.password,
+                keepConnected: data.checked
             })
 
             if (result.status == 401) {
@@ -66,7 +68,7 @@ export default function Login() {
 
             toast.error(e);
 
-        } 
+        }
     }
 
     return (
@@ -93,7 +95,9 @@ export default function Login() {
                         </input>
                         {errors.passwordError && <div className={styles.passwordFlash}>{errors.passwordError}</div>}
                         <div className={styles.keepConn}>
-                            <input type='checkbox'></input>
+                            <input type='checkbox'
+                                checked={data.checked}
+                                onChange={(e) => setData({ ...data, checked: e.target.checked })}></input>
                             <label>Manter-se conectado</label>
                         </div>
                         <button onClick={handleSubmit}>Login</button>

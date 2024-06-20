@@ -119,11 +119,6 @@ export default function Sidebar() {
                                 onClick={() => handleItemClick('dashboard')}>
                                 <i class="bi bi-pie-chart-fill"></i>Dashboard</Link></li>
                             <li><Link
-                                href='/profile'
-                                className={`${styles.link} ${selected === 'profile' ? styles.selected : ''}`}
-                                onClick={() => handleItemClick('profile')}>
-                                <i class="bi bi-person-fill"></i>Perfil</Link></li>
-                            <li><Link
                                 onClick={() => handleItemClick('profiles')}
                                 href='/newProfile'
                                 className={`${styles.link} ${selected === 'profiles' ? styles.selected : ''}`}

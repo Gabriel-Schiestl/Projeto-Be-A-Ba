@@ -26,8 +26,8 @@ export default function NewProfile() {
     const [newData, setNewData] = useState({ name: "", functions: [], modulesTransactions: [] });
     const [isOpen, setOpen] = useState(false);
     const [deleteOpen, setDeleteOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [profile, setProfile] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [profile, setProfile] = useState(null);
     const [modulesFiltered, setModulesFiltered] = useState([]);
     const [transactions, setTransactions] = useState([]);
     const [transactionsFiltered, setTransactionsFiltered] = useState([]);
@@ -40,7 +40,6 @@ export default function NewProfile() {
 
         const handleInit = async () => {
             try {
-
                 const [modulesRes, functionsRes, transactionsRes] = await Promise.all([
                     axios.get('/api/ModuleAPI'),
                     axios.get('/api/FunctionAPI'),
@@ -70,12 +69,12 @@ export default function NewProfile() {
 
         handleInit();
         getProfile();
-    }, []);
+    }, [id]);
 
     const getProfile = async () => {
 
         if (!id) return;
-
+        setIsLoading(true);
         try {
 
             const result = await axios.get(`/api/ProfileAPI?id=${id}`);
@@ -84,16 +83,16 @@ export default function NewProfile() {
                 setProfile(result.data);
                 const profileModules = result.data.modules.map(module => module.id);
                 const profileFunctions = result.data.functions.map(aFunction => aFunction.id);
-
+                console.log(result.data.createdAt)
                 setData({ name: result.data.name, modules: profileModules, functions: profileFunctions });
             } else {
                 toast.error("Erro ao obter perfil");
             }
         } catch (e) {
             toast.error(e);
-        } finally {
-            setIsLoading(false);
         }
+
+        setIsLoading(false);
     }
 
     const editProfile = async () => {
@@ -106,10 +105,9 @@ export default function NewProfile() {
             modulesTransactions: newData.modulesTransactions
         };
 
-        console.log(requestBody);
-
+        let result;
         try {
-            const result = await axios.put(`/api/ProfileAPI?id=${id}`, requestBody, {
+            result = await axios.put(`/api/ProfileAPI?id=${id}`, requestBody, {
                 headers: {
                     'Content-Type': 'application/json'
                 }
@@ -131,7 +129,7 @@ export default function NewProfile() {
         })));
         setNewData({ name: "", functions: [], modulesTransactions: [] });
         getProfile();
-        setModalIsOpen(false);
+        setOpen(false);
     }
 
     const handleEdit = async (e) => {
@@ -202,37 +200,43 @@ export default function NewProfile() {
                     <div className={styles.center}>
                         <i class="bi bi-arrow-left" onClick={handleBack}></i>
                         <div className={styles.profilePage}>
-                            <table className={styles.table}>
-                                <td>
-                                    <tr><h2>Nome do perfil:</h2><p>{profile.name}</p></tr>
-                                    <tr><h2>Data de criação:</h2><p>{format(new Date(profile.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
-                                </td>
-                            </table>
+                            {profile && profile.createdAt &&
+                                <table className={styles.table}>
+                                    <td>
+                                        <tr><h2>Nome do perfil:</h2><p>{profile.name}</p></tr>
+                                        <tr><h2>Data de criação:</h2><p>{format(new Date(profile.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
+                                    </td>
+                                </table>
+                            }
                         </div>
                         <div className={styles.subpages}>
                             <div>
-                                <table>
-                                    <thead>
-                                        <tr><h2>Módulos:</h2></tr>
-                                    </thead>
-                                    <tbody>
-                                        {profile.modules.map(module => (
-                                            <tr key={module.id}>{module.name}</tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                {profile && profile.modules &&
+                                    <table>
+                                        <thead>
+                                            <tr><h2>Módulos:</h2></tr>
+                                        </thead>
+                                        <tbody>
+                                            {profile.modules.map(module => (
+                                                <tr key={module.id}>{module.name}</tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                }
                             </div>
                             <div>
-                                <table>
-                                    <thead>
-                                        <tr><h2>Funções:</h2></tr>
-                                    </thead>
-                                    <tbody>
-                                        {profile.functions.map(aFunction => (
-                                            <tr key={aFunction.id}>{aFunction.name}</tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                {profile && profile.functions &&
+                                    <table>
+                                        <thead>
+                                            <tr><h2>Funções:</h2></tr>
+                                        </thead>
+                                        <tbody>
+                                            {profile.functions.map(aFunction => (
+                                                <tr key={aFunction.id}>{aFunction.name}</tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                }
                             </div>
                         </div>
                         <div className={styles.btns}>

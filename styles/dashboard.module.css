@@ -4,11 +4,21 @@
     height: 100vh;
 }
 
+.sidebar {
+    position: fixed;
+}
+
+.sidebar {
+    position: fixed;
+}
+
 .content {
+    position: relative;
+    left: 20%;
     display: flex;
     height: 100vh;
     width: 80%;
-    flex-grow: 1;
+    transition: width 0.3s ease;
     z-index: 998;
     justify-content: center;
     align-items: center;
@@ -16,11 +26,10 @@
 }
 
 @media screen and (max-width: 1023px) {
-
     .content {
         width: 100%;
+        left: 0;
     }
-
 }
 
 .center {
@@ -43,17 +52,95 @@
 .subPages div {
     background-color: #FBFBFD;
     border-radius: 14px;
-    width: 200px;
+    width: 18%;
     height: 100%;
     margin-bottom: 2%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 1150px) {
+    .subPages div {
+        flex: 1 1 auto;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    .center {
+        margin-top: 8%;
+    }
 }
 
 .subPages div h1 {
     font-size: 1.5em;
+}
+
+@media screen and (max-width: 900px) {
+    .subPages div h1 {
+        font-size: 1.3em;
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .subPages div h1 {
+        font-size: 1.1em;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .center {
+        margin-top: 10%;
+    }
+}
+
+@media screen and (max-width: 630px) {
+    .center {
+        margin-top: 12%;
+    }
+
+    .subPages div h1 {
+        font-size: 0.9em;
+    }
+}
+
+@media screen and (max-width: 530px) {
+    .center {
+        margin-top: 14%;
+        width: 95%;
+    }
+}
+
+@media screen and (max-width: 515px) {
+    .subPages div h1 {
+        font-size: 0.8em;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .subPages div h1 {
+        font-size: 0.7em;
+    }
+
+    .center{
+        width: 95%;
+        margin-top: 16%;
+    }
+}
+
+@media screen and (max-width: 370px) {
+
+    .center{
+        margin-top: 18%;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .subPages div h1 {
+        font-size: 0.6em;
+    }
 }
 
 .centerContent {
@@ -73,6 +160,22 @@
     border-radius: 14px;
 }
 
+@media screen and (max-width: 767px) {
+    .page, .graph {
+        width: 100%;
+    }
+
+    .container {
+        overflow-y: scroll;
+    }
+
+    .centerContent {
+        flex-direction: column;
+        gap: 3%;
+        height: 80%;
+    }
+}
+
 .page {
     overflow-y: scroll;
 }
@@ -82,6 +185,46 @@
     display: flex;
     justify-content: space-between;
     height: 5%;
+}
+
+@media screen and (max-width: 1023px) {
+    .btns {
+        height: 7%;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .btns button {
+        width: 17%;
+    }
+    
+    .btns {
+        margin-bottom: 2%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .btns button {
+        font-size: 0.7em;
+    }
+
+}
+
+@media screen and (max-width: 550px) {
+    
+
+}
+
+@media screen and (max-width: 400px) {
+    .btns button {
+        font-size: 0.6em;
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .btns button {
+        font-size: 0.5em;
+    }
 }
 
 .page .table {
@@ -97,4 +240,10 @@
 .table h1 {
     font-size: 1.3em;
     margin-bottom: 0;
+}
+
+@media screen and (max-width: 500px) {
+    .table h1 {
+        font-size: 1.1em;
+    }
 }
