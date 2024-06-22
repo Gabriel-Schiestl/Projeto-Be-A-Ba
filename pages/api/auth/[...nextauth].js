@@ -13,7 +13,6 @@ export default NextAuth({
             credentials: {
                 email: { label: "Email", type: "email", placeholder: "email@example.com" },
                 password: { label: "Password", type: "password" }
-
             },
 
             async authorize(credentials) {

@@ -19,6 +19,7 @@ export default function NewFunction({ session }) {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [errors, setErrors] = useState("");
     const [functions, setFunctions] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
 
     useEffect(() => {
 
@@ -78,12 +79,16 @@ export default function NewFunction({ session }) {
                 <Sidebar></Sidebar>
                 <div className={styles.content}>
                     <div className={styles.center}>
-                        <Autocomplete
+                    <Autocomplete
                             className={styles.searchBar}
                             freeSolo
                             options={functions}
+                            getOptionLabel={(option) => option.name || ''}
+                            inputValue={searchInput}
+                            onInputChange={(e, value) => setSearchInput(value)}
+                            onChange={(e, value) => openEspecificFuntion(value.id)}
                             renderOption={(props, option) => (
-                                <li {...props} onClick={() => openEspecificFuntion(option.id)}>
+                                <li {...props}>
                                     {option.name}
                                 </li>
                             )}

@@ -20,6 +20,7 @@ export default function NewTransaction() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [transactions, setTransactions] = useState([]);
     const [errors, setErrors] = useState("");
+    const [searchInput, setSearchInput] = useState('');
 
     useEffect(() => {
 
@@ -84,10 +85,14 @@ export default function NewTransaction() {
                 <Sidebar></Sidebar>
                 <div className={styles.content}>
                     <div className={styles.center}>
-                        <Autocomplete
+                    <Autocomplete
                             className={styles.searchBar}
                             freeSolo
                             options={transactions}
+                            inputValue={searchInput}
+                            getOptionLabel={(option) => option.name || ''}
+                            onInputChange={(e, value) => setSearchInput(value)}
+                            onChange={(e, value) => openEspecifictransaction(value.id)}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}

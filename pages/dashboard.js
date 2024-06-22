@@ -4,11 +4,15 @@ import { useEffect, useState } from "react";
 import styles from 'styles/dashboard.module.css'
 import axios from "axios";
 import Button from "components/filterButton";
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
+import Image from "next/image";
 
 export default function Dashboard() {
 
     const [data, setData] = useState({ profiles: [], users: [], modules: [], transactions: [], functions: [] });
     const [option, setOption] = useState([]);
+    const [imageSrc, setImageSrc] = useState('');
 
     useEffect(() => {
         localStorage.setItem('selectedSidebarItem', 'dashboard');
@@ -21,11 +25,35 @@ export default function Dashboard() {
                 axios.get('/api/FunctionAPI'),
             ]);
 
+            const graphData = {
+                profiles: profilesRes.data.length,
+                users: usersRes.data.length,
+                modules: modulesRes.data.length,
+                transactions: transactionsRes.data.length,
+                functions: functionsRes.data.length
+            }
+
+            await getGraph(graphData);
+
             setData({ profiles: profilesRes.data, users: usersRes.data, modules: modulesRes.data, transactions: transactionsRes.data, functions: functionsRes.data });
         }
 
         handleInit();
     }, []);
+
+    const getGraph = async (graphData) => {
+        try {
+            const res = await axios.post('http://127.0.0.1:5000/graph', graphData, { responseType: 'blob' });
+
+            if(res.status === 200) {
+                const imageBlob = res.data;
+                const imageObjectURL = URL.createObjectURL(imageBlob);
+                setImageSrc(imageObjectURL);
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     const handleFilter = (option) => {
         switch (option) {
@@ -70,7 +98,7 @@ export default function Dashboard() {
                                 )}
                             </div>
                             <div className={styles.graph}>
-                                <h1>Gráfico:</h1>
+                            {imageSrc ? <div className={styles.graphImg}><Image src={imageSrc} alt="Graph" width={600} height={600} layout="Intrinsic"></Image></div> : ""}
                             </div>
                         </div>
                         <div className={styles.btns}>

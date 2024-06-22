@@ -22,6 +22,7 @@ export default function NewUser() {
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [errors, setErrors] = useState("");
     const [profiles, setProfiles] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
 
     const handleUsers = async () => {
 
@@ -29,7 +30,9 @@ export default function NewUser() {
 
             const users = await axios.get('/api/UserAPI');
 
-            setData(users.data);
+            const usersFiltered = users.data.map(user => ({value: user.id, label: user.name}));
+
+            setData(usersFiltered);
 
         } catch (e) {
 
@@ -153,6 +156,10 @@ export default function NewUser() {
                             className={styles.searchBar}
                             freeSolo
                             options={data}
+                            inputValue={searchInput}
+                            getOptionLabel={(option) => option.name || ''}
+                            onInputChange={(e, value) => setSearchInput(value)}
+                            onChange={(e, value) => openEspecificUser(value.id)}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}

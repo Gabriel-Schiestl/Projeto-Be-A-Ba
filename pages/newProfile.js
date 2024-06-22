@@ -33,6 +33,7 @@ export default function NewProfile() {
     const [selectedModule, setSelectedModule] = useState(null);
     const [selectedTransactions, setSelectedTransactions] = useState([]);
     const [modules, setModules] = useState([]);
+    const [searchInput, setSearchInput] = useState('');
 
     useEffect(() => {
 
@@ -163,10 +164,14 @@ export default function NewProfile() {
                 <Sidebar></Sidebar>
                 <div className={styles.content}>
                     <div className={styles.center}>
-                        <Autocomplete
+                    <Autocomplete
                             className={styles.searchBar}
                             freeSolo
-                            options={options}
+                            options={profiles}
+                            inputValue={searchInput}
+                            getOptionLabel={(option) => option.name || ''}
+                            onInputChange={(e, value) => setSearchInput(value)}
+                            onChange={(e, value) => openEspecificProfile(value.id)}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}

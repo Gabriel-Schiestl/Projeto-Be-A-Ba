@@ -16,6 +16,7 @@ export default function Sidebar() {
     const [session, setSession] = useState();
     const [name, setName] = useState("");
     const [selected, setSelected] = useState("");
+    const [initials, setInitials] = useState('');
 
     useEffect(() => {
         const savedSelectedItem = localStorage.getItem('selectedSidebarItem');
@@ -59,6 +60,8 @@ export default function Sidebar() {
                 const splitedName = session.user.name.split(' ');
 
                 setName(splitedName[0] + " " + splitedName[splitedName.length - 1]);
+
+                setInitials(splitedName[0][0] + splitedName[splitedName.length - 1][0])
             }
 
         }
@@ -149,7 +152,7 @@ export default function Sidebar() {
                 </div>
                 <div>
                     <div className={styles.profile}>
-                        <div className={styles.picture}>GS</div>
+                        <div className={styles.picture}>{initials}</div>
                         <div className={styles.informations}>
                             {session && (
                                 <>

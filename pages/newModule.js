@@ -21,6 +21,7 @@ export default function NewModule() {
     const [transactions, setTransactions] = useState([]);
     const [modules, setModules] = useState([]);
     const [errors, setErrors] = useState("");
+    const [searchInput, setSearchInput] = useState('');
 
     useEffect(() => {
 
@@ -146,10 +147,14 @@ export default function NewModule() {
                 <Sidebar></Sidebar>
                 <div className={styles.content}>
                     <div className={styles.center}>
-                        <Autocomplete
+                    <Autocomplete
                             className={styles.searchBar}
                             freeSolo
                             options={modules}
+                            inputValue={searchInput}
+                            getOptionLabel={(option) => option.name || ''}
+                            onInputChange={(e, value) => setSearchInput(value)}
+                            onChange={(e, value) => openEspecificModule(value.id)}
                             renderInput={(params) => (
                                 <TextField
                                     {...params}

@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_mail import Mail, Message
 import random
 import os
 from dotenv import load_dotenv
 from flask_cors import CORS
+import matplotlib.pyplot as plt
+import io
 
 load_dotenv()
 
@@ -35,6 +37,23 @@ def send_email():
     mail.send(msg)
 
     return jsonify({"code": code}), 200
+
+@app.route('/graph', methods=['POST'])
+def send_graph():
+    data = request.get_json()
+    columns = ['Perfis', 'Usuários', 'Módulos', 'Transações', 'Funções']
+    sizes = [data['profiles'], data['users'], data['modules'], data['transactions'], data['functions']]
+
+    plt.figure(figsize=(8, 8))
+    plt.pie(sizes, labels=columns, autopct='%1.1f%%', startangle=140)
+    plt.axis('equal')
+
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plt.close()
+
+    return send_file(img, mimetype='image/png'), 200
 
 
 if __name__ == '__main__':
