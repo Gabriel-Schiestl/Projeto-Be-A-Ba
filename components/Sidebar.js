@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from "react";
 import { signOut } from "next-auth/react";
 import Modal from 'react-modal';
 import { getSession } from "next-auth/react";
+import Loading from "./Loading";
 
 export default function Sidebar() {
 
@@ -17,6 +18,7 @@ export default function Sidebar() {
     const [name, setName] = useState("");
     const [selected, setSelected] = useState("");
     const [initials, setInitials] = useState('');
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const savedSelectedItem = localStorage.getItem('selectedSidebarItem');
@@ -85,9 +87,10 @@ export default function Sidebar() {
 
     }, [isOpen]);
 
-    const handleSignOut = () => {
+    const handleSignOut = async () => {
 
-        signOut();
+        setLoading(true);
+        await signOut();
 
     }
 
@@ -150,7 +153,7 @@ export default function Sidebar() {
                         </ul>
                     </div>
                 </div>
-                <div>
+                <div className={styles.profileInformations}>
                     <div className={styles.profile}>
                         <div className={styles.picture}>{initials}</div>
                         <div className={styles.informations}>
@@ -182,6 +185,9 @@ export default function Sidebar() {
                     </div>
                 </Modal>
             </div>
+            {loading && 
+                <Loading></Loading>
+            }
         </>
     )
 

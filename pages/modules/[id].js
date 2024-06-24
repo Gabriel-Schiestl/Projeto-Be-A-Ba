@@ -10,6 +10,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import Head from "next/head";
 
 Modal.setAppElement('body');
 
@@ -174,6 +175,11 @@ export default function User() {
     }
 
     return (
+        <>
+            <Head>
+                <title>{module.name}</title>
+                <meta name="module" content="Dashboard para gerenciar módulo" />
+            </Head>
         <CheckAuth>
             <div className={styles.container}>
                 <Sidebar></Sidebar>
@@ -285,5 +291,6 @@ export default function User() {
                 </Modal>
             </div>
         </CheckAuth>
+        </>
     )
 }

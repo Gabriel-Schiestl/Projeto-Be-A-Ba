@@ -8,6 +8,7 @@ import validator from 'validator'
 import Loading from 'components/Loading'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import Head from 'next/head'
 
 export default function Login() {
 
@@ -18,7 +19,6 @@ export default function Login() {
     const [data, setData] = useState({
         email: "",
         password: "",
-        checked: false,
     })
 
     const [errors, setErrors] = useState({
@@ -51,7 +51,6 @@ export default function Login() {
                 redirect: false,
                 email: data.email,
                 password: data.password,
-                keepConnected: data.checked
             })
 
             if (result.status == 401) {
@@ -66,13 +65,17 @@ export default function Login() {
 
         } catch (e) {
 
-            toast.error(e);
+            toast.error("Acesso não autorizado");
 
         }
     }
 
     return (
         <>
+            <Head>
+                <title>Login</title>
+                <meta name="login" content="Login" />
+            </Head>
             <div className={styles.container}>
                 <header className={styles.header}></header>
                 <div className={styles.content}>
@@ -94,12 +97,6 @@ export default function Login() {
                             onChange={(e) => { setData({ ...data, password: e.target.value }) }}>
                         </input>
                         {errors.passwordError && <div className={styles.passwordFlash}>{errors.passwordError}</div>}
-                        <div className={styles.keepConn}>
-                            <input type='checkbox'
-                                checked={data.checked}
-                                onChange={(e) => setData({ ...data, checked: e.target.checked })}></input>
-                            <label>Manter-se conectado</label>
-                        </div>
                         <button onClick={handleSubmit}>Login</button>
                         <Link className={styles.link} href='/recoveryPassword'>Esqueceu a senha?</Link>
                     </form>

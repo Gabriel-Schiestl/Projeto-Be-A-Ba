@@ -10,6 +10,7 @@ import CheckAuth from "components/CheckAuth";
 import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import Head from 'next/head';
 
 Modal.setAppElement('body');
 
@@ -33,7 +34,7 @@ export default function NewModule() {
 
                 if (getModules) setModules(getModules.data);
 
-                if(getModules.status != 200) toast.error("Erro ao obter módulos");
+                if (getModules.status != 200) toast.error("Erro ao obter módulos");
 
                 const response = await axios.get('/api/TransactionAPI');
 
@@ -69,7 +70,7 @@ export default function NewModule() {
 
             const result = await axios.get('/api/ModuleAPI');
 
-            if(result) setModules(result.data);
+            if (result) setModules(result.data);
 
         } catch (e) {
             toast.error(e);
@@ -115,7 +116,7 @@ export default function NewModule() {
             ...provided,
             minHeight: '100%',
             boxShadow: 'none',
-            border: '1px solid'
+            border: '1px solid rgba(0, 0, 0, 0.7)'
         }),
         valueContainer: (provided) => ({
             ...provided,
@@ -131,7 +132,9 @@ export default function NewModule() {
             ...provided,
             margin: '0px',
             fontSize: '1em',
-            fontWeight: '525'
+            fontWeight: '500',
+            opacity: '0.7',
+            padding: '0 3%'
         }),
     };
 
@@ -142,114 +145,120 @@ export default function NewModule() {
     }
 
     return (
-        <CheckAuth>
-            <div className={styles.container}>
-                <Sidebar></Sidebar>
-                <div className={styles.content}>
-                    <div className={styles.center}>
-                    <Autocomplete
-                            className={styles.searchBar}
-                            freeSolo
-                            options={modules}
-                            inputValue={searchInput}
-                            getOptionLabel={(option) => option.name || ''}
-                            onInputChange={(e, value) => setSearchInput(value)}
-                            onChange={(e, value) => openEspecificModule(value.id)}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Pesquisar"
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        startAdornment: (
-                                            <InputAdornment position="end">
-                                                <SearchIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            )}
-                        />
-                        <div className={styles.button}>
-                            <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Novo módulo</button>
-                        </div>
-                        <div className={styles.page}>
-                            <table className={styles.table}>
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>TAG</th>
-                                        <th>Descrição</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {modules.map(module => (
-                                        <tr key={module.id} onClick={() => openEspecificModule(module.id)}>
-                                            <td>{module.name}</td>
-                                            <td>{module.tag}</td>
-                                            <td>{module.description}</td>
+        <>
+            <Head>
+                <title>Módulos</title>
+                <meta name="modules" content="Dashboard para gerenciar módulos" />
+            </Head>
+            <CheckAuth>
+                <div className={styles.container}>
+                    <Sidebar></Sidebar>
+                    <div className={styles.content}>
+                        <div className={styles.center}>
+                            <Autocomplete
+                                className={styles.searchBar}
+                                freeSolo
+                                options={modules}
+                                inputValue={searchInput}
+                                getOptionLabel={(option) => option.name || ''}
+                                onInputChange={(e, value) => setSearchInput(value)}
+                                onChange={(e, value) => openEspecificModule(value.id)}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Pesquisar"
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            startAdornment: (
+                                                <InputAdornment position="end">
+                                                    <SearchIcon />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                )}
+                            />
+                            <div className={styles.button}>
+                                <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Novo módulo</button>
+                            </div>
+                            <div className={styles.page}>
+                                <table className={styles.table}>
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>TAG</th>
+                                            <th>Descrição</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {modules.map(module => (
+                                            <tr key={module.id} onClick={() => openEspecificModule(module.id)}>
+                                                <td>{module.name}</td>
+                                                <td>{module.tag}</td>
+                                                <td>{module.description}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={() => setModalIsOpen(false)}
+                        contentLabel="Cadastro de Novo Módulo"
+                        className={styles.modal}
+                        overlayClassName={styles.overlay}>
+                        <form className={styles.form} onSubmit={handleSubmit}>
+                            <h1>Cadastro de Módulo</h1>
+                            <div className={styles.moduleName}>
+                                <input
+                                    className={styles.input}
+                                    required
+                                    type="text"
+                                    value={data.name}
+                                    placeholder="Nome do módulo"
+                                    onChange={(e) => setData({ ...data, name: e.target.value })}
+                                />
+                            </div>
+                            <div className={styles.tag}>
+                                <input
+                                    className={styles.input}
+                                    required
+                                    type="text"
+                                    value={data.tag}
+                                    placeholder="TAG"
+                                    onChange={(e) => setData({ ...data, tag: e.target.value })}
+                                />
+                            </div>
+                            <div className={styles.description}>
+                                <textarea rows={5} cols={40}
+                                    value={data.description}
+                                    placeholder='Descrição'
+                                    onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
+                                </textarea>
+                            </div>
+                            <div className={styles.profiles} style={{ marginTop: '0' }}>
+                                <Select
+                                    required
+                                    className={styles.select}
+                                    isMulti
+                                    styles={customStyles}
+                                    value={transactions.filter(transaction => data.transactions.includes(transaction.value))}
+                                    onChange={(selectedOptions) => {
+                                        const selectedValues = selectedOptions.map(option => option.value);
+                                        setData({ ...data, transactions: selectedValues });
+                                    }}
+                                    options={transactions}
+                                    placeholder='Transações'
+                                />
+                            </div>
+                            <button className={styles.registerBtn} type="submit">Cadastrar</button>
+                            <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
+                        </form>
+                    </Modal>
                 </div>
-                <Modal
-                    isOpen={modalIsOpen}
-                    onRequestClose={() => setModalIsOpen(false)}
-                    contentLabel="Cadastro de Novo Módulo"
-                    className={styles.modal}
-                    overlayClassName={styles.overlay}>
-                    <form className={styles.form} onSubmit={handleSubmit}>
-                        <h1>Cadastro de Módulo</h1>
-                        <div className={styles.moduleName}>
-                            <input
-                                className={styles.input}
-                                required
-                                type="text"
-                                value={data.name}
-                                placeholder="Nome do módulo"
-                                onChange={(e) => setData({ ...data, name: e.target.value })}
-                            />
-                        </div>
-                        <div className={styles.tag}>
-                            <input
-                                className={styles.input}
-                                required
-                                type="text"
-                                value={data.tag}
-                                placeholder="TAG"
-                                onChange={(e) => setData({ ...data, tag: e.target.value })}
-                            />
-                        </div>
-                        <div className={styles.description}>
-                            <textarea rows={5} cols={40}
-                                value={data.description}
-                                placeholder='Descrição'
-                                onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
-                            </textarea>
-                        </div>
-                        <div className={styles.profiles}>
-                            <Select
-                                required
-                                className={styles.select}
-                                isMulti
-                                styles={customStyles}
-                                value={transactions.filter(transaction => data.transactions.includes(transaction.value))}
-                                onChange={(selectedOptions) => {
-                                    const selectedValues = selectedOptions.map(option => option.value);
-                                    setData({ ...data, transactions: selectedValues });
-                                }}
-                                options={transactions}
-                                placeholder='Transações'
-                            />
-                        </div>
-                        <button className={styles.registerBtn} type="submit">Cadastrar</button>
-                        <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
-                    </form>
-                </Modal>
-            </div>
-       </CheckAuth>
+            </CheckAuth>
+        </>
     );
 }

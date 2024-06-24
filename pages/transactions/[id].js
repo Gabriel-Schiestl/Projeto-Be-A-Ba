@@ -9,6 +9,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
+import Head from "next/head";
 
 Modal.setAppElement('body');
 
@@ -107,6 +108,11 @@ export default function Transaction() {
     }
 
     return (
+        <>
+            <Head>
+                <title>{transaction.name}</title>
+                <meta name="transaction" content="Dashboard para gerenciar transação" />
+            </Head>
         <CheckAuth>
             <div className={styles.container}>
                 <Sidebar></Sidebar>
@@ -188,5 +194,6 @@ export default function Transaction() {
                 </Modal>
             </div>
         </CheckAuth>
+        </>
     )
 }

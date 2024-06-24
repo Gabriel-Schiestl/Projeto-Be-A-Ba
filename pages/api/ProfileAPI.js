@@ -1,9 +1,14 @@
 import models from 'models'
 import sequelize from 'utils/db';
+import { getSession } from 'next-auth/react';
 
 const { Profiles, Functions, Transactions, Modules, ProfilesModules, ProfilesModulesTransactions } = models;
 
 export default async function handler(req, res) {
+
+    const session = await getSession({ req });
+
+    if (!session) return res.status(401).json({ error: "Não autorizado" });
 
     if (req.method === 'POST') {
         const { name, functions, modulesTransactions } = req.body;

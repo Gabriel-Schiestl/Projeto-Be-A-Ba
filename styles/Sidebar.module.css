@@ -120,6 +120,7 @@
     padding: 1%;
     border: none;
     flex-direction: column;
+    animation: modalOpen 0.3s ease-out forwards;
 }
 
 .modal h2 {
@@ -130,6 +131,95 @@
     opacity: 0.7;
     font-size: 0.9em;
     margin-bottom: 0%;
+}
+
+@keyframes modalOpen {
+    from {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    to {
+        opacity: 1;
+        width: 45%;
+        height: 20%;
+    }
+}
+
+@media screen and (max-width: 1023px) {
+    @keyframes modalOpenTablet {
+        from {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        to {
+            opacity: 1;
+            width: 55%;
+            height: 25%;
+        }
+    }
+
+    .modal {
+        animation: modalOpenTablet .3s ease-out forwards;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    @keyframes modalOpenCelular {
+        from {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        to {
+            opacity: 1;
+            width: 60%;
+            height: 28%;
+        }
+    }
+
+    .modal {
+        animation: modalOpenCelular .3s ease-out forwards;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    @keyframes modalOpenCelularSM {
+        from {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        to {
+            opacity: 1;
+            width: 70%;
+            height: 30%;
+        }
+    }
+
+    .modal {
+        animation: modalOpenCelularSM .3s ease-out forwards;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    @keyframes modalOpenCelularXSM {
+        from {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        to {
+            opacity: 1;
+            width: 90%;
+            height: 30%;
+        }
+    }
+
+    .modal {
+        animation: modalOpenCelularXSM .3s ease-out forwards;
+    }
 }
 
 .buttonsDiv {
@@ -367,39 +457,9 @@
 }
 
 @media screen and (max-width: 500px) {
-    
-    .picture {
-        width: 23px;
-        height: 23px;
-        font-size: 0.8em;
-    }
 
-    .profile .informations {
-        font-size: 0.7em;
-    }
-    
-    .profile i {
-        font-size: 1.4em;
-        opacity: 50%;
-    }
-
-}
-
-@media screen and (max-width: 500px) {
-    
-    .picture {
-        width: 21px;
-        height: 21px;
-        font-size: 0.7em;
-    }
-
-    .profile .informations {
-        font-size: 0.6em;
-    }
-    
-    .profile i {
-        font-size: 1.2em;
-        opacity: 50%;
+    .profileInformations {
+        height: 8%;
     }
 
 }

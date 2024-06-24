@@ -1,10 +1,15 @@
 import { Op } from "sequelize";
 import bcrypt from 'bcryptjs';
 import models from 'models'
+import { getSession } from "next-auth/react";
 
 const { Users, Profiles, Modules, Transactions, Functions } = models;
 
 export default async function handler(req, res) {
+
+    const session = await getSession({ req });
+
+    if (!session) return res.status(401).json({ error: "Não autorizado" });
 
     if (req.method == 'POST') {
 

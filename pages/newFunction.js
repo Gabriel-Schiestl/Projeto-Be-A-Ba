@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import Head from 'next/head';
 
 Modal.setAppElement('body');
 
@@ -74,104 +75,110 @@ export default function NewFunction({ session }) {
     }
 
     return (
-        <CheckAuth>
-            <div className={styles.container}>
-                <Sidebar></Sidebar>
-                <div className={styles.content}>
-                    <div className={styles.center}>
-                    <Autocomplete
-                            className={styles.searchBar}
-                            freeSolo
-                            options={functions}
-                            getOptionLabel={(option) => option.name || ''}
-                            inputValue={searchInput}
-                            onInputChange={(e, value) => setSearchInput(value)}
-                            onChange={(e, value) => openEspecificFuntion(value.id)}
-                            renderOption={(props, option) => (
-                                <li {...props}>
-                                    {option.name}
-                                </li>
-                            )}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Pesquisar"
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        startAdornment: (
-                                            <InputAdornment position="end">
-                                                <SearchIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            )}
-                        />
-                        <div className={styles.button}>
-                            <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Nova função</button>
-                        </div>
-                        <div className={styles.page}>
-                            <table className={styles.table}>
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>TAG</th>
-                                        <th>Descrição</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {functions.map(func => (
-                                        <tr key={func.id} onClick={() => openEspecificFuntion(func.id)}>
-                                            <td>{func.name}</td>
-                                            <td>{func.tag}</td>
-                                            <td>{func.description}</td>
+        <>
+            <Head>
+                <title>Funções</title>
+                <meta name="functions" content="Dashboard para gerenciar funções" />
+            </Head>
+            <CheckAuth>
+                <div className={styles.container}>
+                    <Sidebar></Sidebar>
+                    <div className={styles.content}>
+                        <div className={styles.center}>
+                            <Autocomplete
+                                className={styles.searchBar}
+                                freeSolo
+                                options={functions}
+                                getOptionLabel={(option) => option.name || ''}
+                                inputValue={searchInput}
+                                onInputChange={(e, value) => setSearchInput(value)}
+                                onChange={(e, value) => openEspecificFuntion(value.id)}
+                                renderOption={(props, option) => (
+                                    <li {...props}>
+                                        {option.name}
+                                    </li>
+                                )}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Pesquisar"
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            startAdornment: (
+                                                <InputAdornment position="end">
+                                                    <SearchIcon />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                )}
+                            />
+                            <div className={styles.button}>
+                                <button className={styles.newButton} onClick={() => setModalIsOpen(true)}><i class="bi bi-plus"></i>Nova função</button>
+                            </div>
+                            <div className={styles.page}>
+                                <table className={styles.table}>
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>TAG</th>
+                                            <th>Descrição</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {functions.map(func => (
+                                            <tr key={func.id} onClick={() => openEspecificFuntion(func.id)}>
+                                                <td>{func.name}</td>
+                                                <td>{func.tag}</td>
+                                                <td>{func.description}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={() => setModalIsOpen(false)}
+                        contentLabel="Cadastro de Nova Função"
+                        className={styles.modal}
+                        overlayClassName={styles.overlay}>
+                        <form className={styles.form} onSubmit={handleSubmit}>
+                            <h1>Cadastro de Função</h1>
+                            <div className={styles.functionName}>
+                                <input
+                                    className={styles.input}
+                                    required
+                                    type="text"
+                                    value={data.name}
+                                    placeholder='Nome da Função'
+                                    onChange={(e) => { setData({ ...data, name: e.target.value }) }}>
+                                </input>
+                            </div>
+                            <div className={styles.tag}>
+                                <input
+                                    className={styles.input}
+                                    type="text"
+                                    required
+                                    value={data.tag}
+                                    placeholder='TAG'
+                                    onChange={(e) => { setData({ ...data, tag: e.target.value }) }}>
+                                </input>
+                            </div>
+                            <div className={styles.description}>
+                                <textarea rows={5} cols={40}
+                                    value={data.description}
+                                    placeholder='Descrição'
+                                    onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
+                                </textarea>
+                            </div>
+                            <button className={styles.registerBtn} type="submit">Cadastrar</button>
+                            <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
+                        </form>
+                    </Modal>
                 </div>
-                <Modal
-                    isOpen={modalIsOpen}
-                    onRequestClose={() => setModalIsOpen(false)}
-                    contentLabel="Cadastro de Nova Função"
-                    className={styles.modal}
-                    overlayClassName={styles.overlay}>
-                    <form className={styles.form} onSubmit={handleSubmit}>
-                        <h1>Cadastro de Função</h1>
-                        <div className={styles.functionName}>
-                            <input
-                                className={styles.input}
-                                required
-                                type="text"
-                                value={data.name}
-                                placeholder='Nome da Função'
-                                onChange={(e) => { setData({ ...data, name: e.target.value }) }}>
-                            </input>
-                        </div>
-                        <div className={styles.tag}>
-                            <input
-                                className={styles.input}
-                                type="text"
-                                required
-                                value={data.tag}
-                                placeholder='TAG'
-                                onChange={(e) => { setData({ ...data, tag: e.target.value }) }}>
-                            </input>
-                        </div>
-                        <div className={styles.description}>
-                            <textarea rows={5} cols={40}
-                                value={data.description}
-                                placeholder='Descrição'
-                                onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
-                            </textarea>
-                        </div>
-                        <button className={styles.registerBtn} type="submit">Cadastrar</button>
-                        <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
-                    </form>
-                </Modal>
-            </div>
-        </CheckAuth>
+            </CheckAuth>
+        </>
     );
 }

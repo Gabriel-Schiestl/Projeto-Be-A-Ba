@@ -1,10 +1,16 @@
 import { Op } from "sequelize";
 import sequelize from "utils/db";
 import models from 'models'
+import { getSession } from "next-auth/react";
 
 const { Transactions, Modules, ModulesTransactions } = models;
 
 export default async function handler(req, res) {
+
+    const session = await getSession({ req });
+
+    if (!session) return res.status(401).json({ error: "Não autorizado" });
+
 
     if (req.method === 'POST') {
 
@@ -47,7 +53,7 @@ export default async function handler(req, res) {
             if (!newModule) return res.status(500).json({ error: "Erro ao criar módulo" });
 
             await newModule.addTransactions(transactions, {
-                through: {ModulesTransactions}
+                through: { ModulesTransactions }
             });
 
             return res.status(201).json({ success: "Módulo criado com sucesso" });

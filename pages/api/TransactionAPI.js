@@ -1,7 +1,12 @@
 import Transactions from "models/Transactions";
 import { Op } from "sequelize";
+import { getSession } from "next-auth/react";
 
 export default async function TransactionHandler(req, res) {
+
+    const session = await getSession({ req });
+
+    if (!session) return res.status(401).json({ error: "Não autorizado" });
 
     if (req.method == 'POST') {
 

@@ -12,7 +12,7 @@ export default NextAuth({
             name: 'Credentials',
             credentials: {
                 email: { label: "Email", type: "email", placeholder: "email@example.com" },
-                password: { label: "Password", type: "password" }
+                password: { label: "Password", type: "password" },
             },
 
             async authorize(credentials) {
@@ -29,7 +29,6 @@ export default NextAuth({
 
                     if (await bcrypt.compare(credentials.password, user.password)) return {
                         ...user.get({ plain: true }),
-                        keepConnected: credentials.keepConnected
                     };
 
                     throw new Error("Senha incorreta");
@@ -46,7 +45,6 @@ export default NextAuth({
         async jwt({ token, user }) {
             if (user) {
                 token.user = user;
-                token.keepConnected = user.keepConnected;
             }
 
             return token;
@@ -55,10 +53,7 @@ export default NextAuth({
         async session({ session, token }) {
             if (token && token.user) {
                 session.user = token.user
-                session.keepConnected = token.keepConnected;
             }
-
-            session.maxAge = session.keepConnected ? 7 * 24 * 60 * 60 : 3600;
 
             return session;
         }
@@ -66,7 +61,7 @@ export default NextAuth({
 
     session: {
         strategy: "jwt",
-        maxAge: 3600
+        maxAge: 14400
     },
 
     jwt: {

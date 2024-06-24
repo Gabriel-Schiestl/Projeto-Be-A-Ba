@@ -12,11 +12,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-
-const options = [
-    { value: 'Caixa VC', label: 'Caixa VC' },
-    { value: 'Estabelecimento', label: 'Estabelecimento' },
-];
+import Head from 'next/head';
 
 Modal.setAppElement('body');
 
@@ -158,134 +154,165 @@ export default function NewProfile() {
 
     }
 
+    const customStyles = {
+        control: (provided) => ({
+            ...provided,
+            minHeight: '100%',
+            boxShadow: 'none',
+            border: '1px solid'
+        }),
+        valueContainer: (provided) => ({
+            ...provided,
+            height: '100%',
+            padding: '0 3%',
+        }),
+        input: (provided) => ({
+            ...provided,
+            margin: '0px',
+            height: '100%'
+        }),
+        placeholder: (provided) => ({
+            ...provided,
+            margin: '0px',
+            fontSize: '1em',
+            fontWeight: '525'
+        }),
+    };
+
     return (
-        <CheckAuth>
-            <div className={styles.container}>
-                <Sidebar></Sidebar>
-                <div className={styles.content}>
-                    <div className={styles.center}>
-                    <Autocomplete
-                            className={styles.searchBar}
-                            freeSolo
-                            options={profiles}
-                            inputValue={searchInput}
-                            getOptionLabel={(option) => option.name || ''}
-                            onInputChange={(e, value) => setSearchInput(value)}
-                            onChange={(e, value) => openEspecificProfile(value.id)}
-                            renderInput={(params) => (
-                                <TextField
-                                    {...params}
-                                    label="Pesquisar"
-                                    InputProps={{
-                                        ...params.InputProps,
-                                        startAdornment: (
-                                            <InputAdornment position="end">
-                                                <SearchIcon />
-                                            </InputAdornment>
-                                        ),
-                                    }}
-                                />
-                            )}
-                        />
-                        <div className={styles.button}>
-                            <button className={styles.newButton}
-                                onClick={() => {
-                                    setModalIsOpen(true);
-                                    setData({ ...data, name: "" });
-                                }
-                                }><i class="bi bi-plus"></i>Novo perfil</button>
-                        </div>
-                        <div className={styles.page}>
-                            <table className={styles.table}>
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>Data de criação</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {profiles.map(profile => (
-                                        <tr key={profile.id} onClick={() => openEspecificProfile(profile.id)}>
-                                            <td>{profile.name}</td>
-                                            <td>{format(new Date(profile.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</td>
+        <>
+            <Head>
+                <title>Perfis</title>
+                <meta name="profiles" content="Dashboard para gerenciar perfis" />
+            </Head>
+            <CheckAuth>
+                <div className={styles.container}>
+                    <Sidebar></Sidebar>
+                    <div className={styles.content}>
+                        <div className={styles.center}>
+                            <Autocomplete
+                                className={styles.searchBar}
+                                freeSolo
+                                options={profiles}
+                                inputValue={searchInput}
+                                getOptionLabel={(option) => option.name || ''}
+                                onInputChange={(e, value) => setSearchInput(value)}
+                                onChange={(e, value) => openEspecificProfile(value.id)}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Pesquisar"
+                                        InputProps={{
+                                            ...params.InputProps,
+                                            startAdornment: (
+                                                <InputAdornment position="end">
+                                                    <SearchIcon />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                    />
+                                )}
+                            />
+                            <div className={styles.button}>
+                                <button className={styles.newButton}
+                                    onClick={() => {
+                                        setModalIsOpen(true);
+                                        setData({ ...data, name: "" });
+                                    }
+                                    }><i class="bi bi-plus"></i>Novo perfil</button>
+                            </div>
+                            <div className={styles.page}>
+                                <table className={styles.table}>
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>Data de criação</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {profiles.map(profile => (
+                                            <tr key={profile.id} onClick={() => openEspecificProfile(profile.id)}>
+                                                <td>{profile.name}</td>
+                                                <td>{format(new Date(profile.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <Modal
-                    isOpen={modalIsOpen}
-                    onRequestClose={() => setModalIsOpen(false)}
-                    contentLabel="Cadastro de Novo Perfil"
-                    className={styles.modal}
-                    overlayClassName={styles.overlay}>
-                    <form className={styles.form} onSubmit={handleSubmit}>
-                        <h1>Cadastro de Perfil</h1>
-                        <div className={styles.profileName} style={{ marginBottom: '3%' }}>
-                            <input
-                                className={styles.input}
-                                required
-                                type="text"
-                                value={data.name}
-                                placeholder="Nome do perfil"
-                                onChange={(e) => setData({ ...data, name: e.target.value })}
-                            />
-                        </div>
-                        <div className={styles.profiles}>
-                            <Select
-                                className={styles.select}
-                                isMulti
-                                value={functions.filter(option => data.functions.includes(option.value))}
-                                onChange={(selectedOptions) => {
-                                    const selectedValues = selectedOptions.map(option => option.value);
-                                    setData({ ...data, functions: selectedValues });
-                                }}
-                                options={functions}
-                                placeholder='Funções'
-                            />
-                        </div>
-                        <div className={styles.profiles}>
-                            <Select
-                                required
-                                className={styles.select}
-                                value={modules.find(option => option.value === selectedModule)}
-                                onChange={(selectedOption) => {
-                                    setTransactionsFiltered([]);
-                                    const moduleID = selectedOption.value;
-                                    setSelectedModule(moduleID);
-                                    const findModule = modules.find(module => module.id == moduleID);
-                                    const findTransactions = findModule.transactions;
-                                    const transactionsOptions = findTransactions.map(transaction => (
-                                        { value: transaction.id, label: transaction.name }))
-                                    setTransactionsFiltered(transactionsOptions);
-                                }}
-                                options={modulesFiltered}
-                                placeholder='Módulos'
-                            />
-                        </div>
-                        <div className={styles.profiles}>
-                            <Select
-                                className={styles.select}
-                                styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
-                                isMulti
-                                value={transactionsFiltered.filter(option => selectedTransactions.includes(option.value))}
-                                onChange={(selectedOptions) => {
-                                    const selectedValues = selectedOptions.map(option => option.value);
-                                    setSelectedTransactions(selectedValues);
-                                }}
-                                options={transactionsFiltered}
-                                placeholder='Transações'
-                            />
-                        </div>
+                    <Modal
+                        isOpen={modalIsOpen}
+                        onRequestClose={() => setModalIsOpen(false)}
+                        contentLabel="Cadastro de Novo Perfil"
+                        className={styles.modal}
+                        overlayClassName={styles.overlay}>
+                        <form className={styles.form} onSubmit={handleSubmit}>
+                            <h1>Cadastro de Perfil</h1>
+                            <div className={styles.profileName} style={{ marginBottom: '3%' }}>
+                                <input
+                                    className={styles.input}
+                                    required
+                                    type="text"
+                                    value={data.name}
+                                    placeholder="Nome do perfil"
+                                    onChange={(e) => setData({ ...data, name: e.target.value })}
+                                />
+                            </div>
+                            <div className={styles.profiles}>
+                                <Select
+                                    className={styles.select}
+                                    isMulti
+                                    value={functions.filter(option => data.functions.includes(option.value))}
+                                    onChange={(selectedOptions) => {
+                                        const selectedValues = selectedOptions.map(option => option.value);
+                                        setData({ ...data, functions: selectedValues });
+                                    }}
+                                    options={functions}
+                                    placeholder='Funções'
+                                />
+                            </div>
+                            <div className={styles.profiles}>
+                                <Select
+                                    required
+                                    className={styles.select}
+                                    value={modules.find(option => option.value === selectedModule)}
+                                    onChange={(selectedOption) => {
+                                        setTransactionsFiltered([]);
+                                        const moduleID = selectedOption.value;
+                                        setSelectedModule(moduleID);
+                                        const findModule = modules.find(module => module.id == moduleID);
+                                        const findTransactions = findModule.transactions;
+                                        const transactionsOptions = findTransactions.map(transaction => (
+                                            { value: transaction.id, label: transaction.name }))
+                                        setTransactionsFiltered(transactionsOptions);
+                                    }}
+                                    options={modulesFiltered}
+                                    placeholder='Módulos'
+                                />
+                            </div>
+                            <div className={styles.profiles}>
+                                <Select
+                                    className={styles.select}
+                                    styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
+                                    isMulti
+                                    value={transactionsFiltered.filter(option => selectedTransactions.includes(option.value))}
+                                    onChange={(selectedOptions) => {
+                                        const selectedValues = selectedOptions.map(option => option.value);
+                                        setSelectedTransactions(selectedValues);
+                                    }}
+                                    options={transactionsFiltered}
+                                    placeholder='Transações'
+                                />
+                            </div>
 
-                        <button className={styles.registerBtn} type='button' onClick={handleSelectedTransactions}>Adicionar</button>
-                        <button className={styles.registerBtn} type="submit">Cadastrar</button>
-                        <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
-                    </form>
-                </Modal>
-            </div>
-        </CheckAuth>
+                            <button className={styles.registerBtn} type='button' onClick={handleSelectedTransactions}>Adicionar</button>
+                            <button className={styles.registerBtn} type="submit">Cadastrar</button>
+                            <button type="button" onClick={() => setModalIsOpen(false)}>Cancelar</button>
+                        </form>
+                    </Modal>
+                </div>
+            </CheckAuth>
+        </>
     );
 }

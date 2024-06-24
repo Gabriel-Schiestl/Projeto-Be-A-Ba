@@ -1,11 +1,16 @@
 import Functions from "models/Functions";
 import { Op } from 'sequelize';
+import { getSession } from "next-auth/react";
 
 export default async function handler(req, res) {
 
+    const session = await getSession({ req });
+
+    if (!session) return res.status(401).json({ error: "Não autorizado" });
+
     if (req.method == 'POST') {
 
-        const {name, tag, description} = req.body;
+        const { name, tag, description } = req.body;
 
         try {
 
@@ -39,7 +44,7 @@ export default async function handler(req, res) {
                 description: description,
             });
 
-            if(!newFunction) return res.status(500).json({error: "Erro ao criar função"});
+            if (!newFunction) return res.status(500).json({ error: "Erro ao criar função" });
 
             return res.status(201).json({ success: "Sucesso ao criar função" });
 
@@ -53,23 +58,23 @@ export default async function handler(req, res) {
 
         try {
 
-            const {id} = req.query;
+            const { id } = req.query;
 
-            if(id) {
+            if (id) {
 
                 const aFunction = await Functions.findByPk(id);
 
-                if(!aFunction) return res.status(404).json({error: "Função não encontrada"});
+                if (!aFunction) return res.status(404).json({ error: "Função não encontrada" });
 
                 return res.status(200).json(aFunction);
 
             } else {
 
-            const functions = await Functions.findAll();
+                const functions = await Functions.findAll();
 
-            if (!functions) return res.status(404).json({ error: "Funções não encontradas" });
+                if (!functions) return res.status(404).json({ error: "Funções não encontradas" });
 
-            return res.status(200).json(functions);
+                return res.status(200).json(functions);
 
             }
 
@@ -81,40 +86,40 @@ export default async function handler(req, res) {
 
     } else if (req.method == 'PUT') {
 
-        const {id} = req.query;
-        const {name, tag, description} = req.body;
+        const { id } = req.query;
+        const { name, tag, description } = req.body;
 
         try {
 
             const result = await Functions.update(
-                {name: name, tag: tag, description: description},
-                {where: {id: id}}
+                { name: name, tag: tag, description: description },
+                { where: { id: id } }
             )
 
-            if(!result) return res.status(500).json({error: "Erro ao atualizar função"});
+            if (!result) return res.status(500).json({ error: "Erro ao atualizar função" });
 
             return res.status(200).json(result);
 
         } catch (e) {
-            return res.status(500).json({error: "Erro ao atualizar função"});
+            return res.status(500).json({ error: "Erro ao atualizar função" });
         }
 
     } else if (req.method == 'DELETE') {
 
-        const {id} = req.query;
+        const { id } = req.query;
 
         try {
 
             const result = await Functions.destroy(
-                {where: {id: id}}
+                { where: { id: id } }
             );
 
-            if(!result) return res.status(500).json({error: "Erro ao deletar função"});
+            if (!result) return res.status(500).json({ error: "Erro ao deletar função" });
 
             return res.status(200).json(result);
 
-        }catch(e) {
-            return res.status(500).json({error: "Erro ao deletar função"});
+        } catch (e) {
+            return res.status(500).json({ error: "Erro ao deletar função" });
         }
     }
 }

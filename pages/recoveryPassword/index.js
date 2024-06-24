@@ -8,6 +8,7 @@ import axios from 'axios';
 import Loading from 'components/Loading';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Head from 'next/head';
 
 export default function Recovery() {
 
@@ -62,43 +63,48 @@ export default function Recovery() {
         }
     }
 
-    return (<>
-        <div className={styles.container}>
-            <header className={styles.header}></header>
-            <div className={styles.content}>
-                <h1 className={styles.h1}>Recuperação de senha</h1>
-                <form className={styles.form} onSubmit={handleSubmit}>
-                <p className={styles.p1}>Para recuperar sua senha, precisaremos que nos informe abaixo, por gentileza, seu
-                e-mail utilizado no momento do cadastro.</p>
-                    <div className={styles.email}>
-                        <label>E-mail</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}>
-                        </input>
+    return (
+        <>
+            <Head>
+                <title>Recuperação de Senha</title>
+                <meta name="passwordRecovery" content="Inserir e-mail para alteração de senha" />
+            </Head>
+            <div className={styles.container}>
+                <header className={styles.header}></header>
+                <div className={styles.content}>
+                    <h1 className={styles.h1}>Recuperação de senha</h1>
+                    <form className={styles.form} onSubmit={handleSubmit}>
+                        <p className={styles.p1}>Para recuperar sua senha, precisaremos que nos informe abaixo, por gentileza, seu
+                            e-mail utilizado no momento do cadastro.</p>
+                        <div className={styles.email}>
+                            <label>E-mail</label>
+                            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}>
+                            </input>
+                        </div>
+                        {error && <div className={styles.flash}>{error}</div>}
+                        <div className={styles.divButton}><button onClick={handleSubmit}>Confirmar</button></div>
+                        <div className={styles.divLink}><Link className={styles.link} href='/'>Voltar para a página de Login</Link></div>
+                    </form>
+                </div>
+                <div className={styles.images}>
+                    <div className={styles.logoContainer}>
+                        <Image className={styles.logo} src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg'
+                            layout='intrinsic'
+                            width={600}
+                            height={400}>
+                        </Image>
                     </div>
-                    {error && <div className={styles.flash}>{error}</div>}
-                    <div className={styles.divButton}><button onClick={handleSubmit}>Confirmar</button></div>
-                    <div className={styles.divLink}><Link className={styles.link} href='/'>Voltar para a página de Login</Link></div>
-                </form>
-            </div>
-            <div className={styles.images}>
-                <div className={styles.logoContainer}>
-                    <Image className={styles.logo} src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg'
-                        layout='intrinsic'
-                        width={600}
-                        height={400}>
-                    </Image>
+                    <div className={styles.michel}>
+                        <Image className={styles.img} src='/michel_card.png'
+                            layout='intrinsic'
+                            width={700}
+                            height={500}>
+                        </Image>
+                    </div>
                 </div>
-                <div className={styles.michel}>
-                    <Image className={styles.img} src='/michel_card.png'
-                        layout='intrinsic'
-                        width={700}
-                        height={500}>
-                    </Image>
-                </div>
+                <footer className={styles.footer}></footer>
+                {loading && <Loading></Loading>}
             </div>
-            <footer className={styles.footer}></footer>
-            {loading && <Loading></Loading>}
-        </div>
-    </>
+        </>
     )
 }

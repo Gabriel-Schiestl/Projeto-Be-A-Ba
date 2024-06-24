@@ -10,11 +10,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-
-const options = [
-    { value: 'Caixa VC', label: 'Caixa VC' },
-    { value: 'Estabelecimento', label: 'Estabelecimento' },
-];
+import Head from 'next/head';
 
 Modal.setAppElement('body');
 
@@ -193,6 +189,11 @@ export default function NewProfile() {
     }
 
     return (
+        <>
+            <Head>
+                <title>{profile.name}</title>
+                <meta name="profile" content="Dashboard para gerenciar perfil" />
+            </Head>
         <CheckAuth>
             <div className={styles.container}>
                 <Sidebar></Sidebar>
@@ -333,5 +334,6 @@ export default function NewProfile() {
                 </Modal>
             </div>
         </CheckAuth>
+        </>
     );
 }
