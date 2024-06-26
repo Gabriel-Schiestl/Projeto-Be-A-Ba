@@ -1,10 +1,11 @@
 import Transactions from "models/Transactions";
 import { Op } from "sequelize";
-import { getSession } from "next-auth/react";
+import { authOptions } from "./auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 
 export default async function TransactionHandler(req, res) {
 
-    const session = await getSession({ req });
+    const session = await getServerSession(req, res, authOptions);
 
     if (!session) return res.status(401).json({ error: "Não autorizado" });
 
@@ -85,40 +86,40 @@ export default async function TransactionHandler(req, res) {
         }
     } else if (req.method == 'PUT') {
 
-        const {id} = req.query;
-        const {name, tag, description} = req.body;
+        const { id } = req.query;
+        const { name, tag, description } = req.body;
 
         try {
 
             const result = await Transactions.update(
-                {name: name, tag: tag, description: description},
-                {where: {id: id}}
+                { name: name, tag: tag, description: description },
+                { where: { id: id } }
             )
 
-            if(!result) return res.status(500).json({error: "Erro ao atualizar transação"});
+            if (!result) return res.status(500).json({ error: "Erro ao atualizar transação" });
 
             return res.status(200).json(result);
 
         } catch (e) {
-            return res.status(500).json({error: "Erro ao atualizar transação"});
+            return res.status(500).json({ error: "Erro ao atualizar transação" });
         }
 
     } else if (req.method == 'DELETE') {
 
-        const {id} = req.query;
+        const { id } = req.query;
 
         try {
 
             const result = await Transactions.destroy(
-                {where: {id: id}}
+                { where: { id: id } }
             );
 
-            if(!result) return res.status(500).json({error: "Erro ao deletar transação"});
+            if (!result) return res.status(500).json({ error: "Erro ao deletar transação" });
 
             return res.status(200).json(result);
 
-        }catch(e) {
-            return res.status(500).json({error: "Erro ao deletar transação"});
+        } catch (e) {
+            return res.status(500).json({ error: "Erro ao deletar transação" });
         }
     }
 }

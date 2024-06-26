@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import Head from 'next/head';
+import { getSession } from 'next-auth/react';
 
 Modal.setAppElement('body');
 
@@ -34,6 +35,14 @@ export default function NewProfile() {
     useEffect(() => {
 
         const handleInit = async () => {
+
+            const session = await getSession();
+
+            if (!session) {
+                router.push('/');
+                return;
+            }
+
             try {
 
                 const [profilesRes, modulesRes, functionsRes, transactionsRes] = await Promise.all([

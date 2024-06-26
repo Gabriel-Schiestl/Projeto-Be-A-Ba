@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import styles from '../../styles/recoverPassword.module.css'
+import styles from '../../styles/newPassword.module.css'
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -59,43 +59,43 @@ export default function newPassword() {
             </Head>
             <div className={styles.container}>
                 <header className={styles.header}></header>
-                <div className={styles.div}>
-                    <h1 className={styles.h1}>Alteração de senha</h1>
+
+                <div className={styles.content}>
                     <form className={styles.form} onSubmit={handleSubmit}>
+                        <h1 className={styles.h1}>Alteração de senha</h1>
                         <div className={styles.email}>
-                            <label>Nova senha</label>
-                            <input type="password" value={password} onChange={(e) => { setPassword(e.target.value) }}>
+                            <input type="password" placeholder='Nova senha' value={password} onChange={(e) => { setPassword(e.target.value) }}>
                             </input>
                             {error && <div className={styles.flash}>{error}</div>}
                         </div>
                         <div className={styles.email}>
-                            <label>Confirme a nova senha</label>
-                            <input type="password" value={confirmedPassword} onChange={(e) => { setConfirmedPassword(e.target.value) }}>
+                            <input type="password" placeholder='Confirme a nova senha' value={confirmedPassword} onChange={(e) => { setConfirmedPassword(e.target.value) }}>
                             </input>
                             {differentPassword && <div className={styles.flash}>{differentPassword}</div>}
                         </div>
 
-                        <button onClick={handleSubmit}>Confirmar</button>
-                        <Link className={styles.link} href='/'>Voltar para a página de Login</Link>
+                        <div className={styles.divButton}><button onClick={handleSubmit}>Confirmar</button></div>
                     </form>
                 </div>
+                <div className={styles.images}>
+                    <div className={styles.logoContainer}>
+                        <Image className={styles.logo} src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg'
+                            layout='intrinsic'
+                            width={700}
+                            height={500}>
+                        </Image>
+                    </div>
+                    <div className={styles.michel}>
+                        <Image className={styles.img} src='/michel_card.png'
+                            layout='intrinsic'
+                            width={700}
+                            height={500}>
+                        </Image>
+                    </div>
+                </div>
                 <footer className={styles.footer}></footer>
+                {loading && <Loading></Loading>}
             </div>
-            <div className={styles.image}>
-                <Image className={styles.img} src='/michel_card.png'
-                    layout='responsive'
-                    width={700}
-                    height={500}>
-                </Image>
-            </div>
-            <div className={styles.logoContainer}>
-                <Image className={styles.logo} src='https://lojaqueroquero.vtexassets.com/assets/vtex.file-manager-graphql/images/9ab2d4be-0913-4a93-bb23-0f407b34324d___95a0c9e10947f4f06c72dcbdad1cd104.svg'
-                    layout='responsive'
-                    width={700}
-                    height={500}>
-                </Image>
-            </div>
-            {loading && <Loading></Loading>}
         </>
     )
 }

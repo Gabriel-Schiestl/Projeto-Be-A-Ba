@@ -1,12 +1,13 @@
 import models from 'models'
 import sequelize from 'utils/db';
-import { getSession } from 'next-auth/react';
+import { authOptions } from './auth/[...nextauth]';
+import { getServerSession } from 'next-auth';
 
 const { Profiles, Functions, Transactions, Modules, ProfilesModules, ProfilesModulesTransactions } = models;
 
 export default async function handler(req, res) {
 
-    const session = await getSession({ req });
+    const session = await getServerSession(req, res, authOptions);
 
     if (!session) return res.status(401).json({ error: "Não autorizado" });
 
@@ -137,7 +138,7 @@ export default async function handler(req, res) {
             }
 
             console.log('Perfil atualizado com sucesso');
-            return res.status(200).json({success: "Perfil atualizado"});
+            return res.status(200).json({ success: "Perfil atualizado" });
 
         } catch (e) {
             return res.status(500).json({ error: "Erro ao atualizar perfil" });

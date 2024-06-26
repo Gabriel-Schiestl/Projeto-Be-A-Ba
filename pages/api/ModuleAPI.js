@@ -1,16 +1,16 @@
 import { Op } from "sequelize";
 import sequelize from "utils/db";
 import models from 'models'
-import { getSession } from "next-auth/react";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./auth/[...nextauth]";
 
 const { Transactions, Modules, ModulesTransactions } = models;
 
 export default async function handler(req, res) {
 
-    const session = await getSession({ req });
+    const session = await getServerSession(req, res, authOptions);
 
     if (!session) return res.status(401).json({ error: "Não autorizado" });
-
 
     if (req.method === 'POST') {
 

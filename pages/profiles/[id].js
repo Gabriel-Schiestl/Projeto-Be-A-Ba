@@ -191,149 +191,151 @@ export default function NewProfile() {
     return (
         <>
             <Head>
-                <title>{profile.name}</title>
+                {profile &&
+                    <title>{profile.name}</title>
+                }
                 <meta name="profile" content="Dashboard para gerenciar perfil" />
             </Head>
-        <CheckAuth>
-            <div className={styles.container}>
-                <Sidebar></Sidebar>
-                <div className={styles.content}>
-                    <div className={styles.center}>
-                        <i class="bi bi-arrow-left" onClick={handleBack}></i>
-                        <div className={styles.profilePage}>
-                            {profile && profile.createdAt &&
-                                <table className={styles.table}>
-                                    <td>
-                                        <tr><h2>Nome do perfil:</h2><p>{profile.name}</p></tr>
-                                        <tr><h2>Data de criação:</h2><p>{format(new Date(profile.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
-                                    </td>
-                                </table>
-                            }
-                        </div>
-                        <div className={styles.subpages}>
-                            <div>
-                                {profile && profile.modules &&
-                                    <table>
-                                        <thead>
-                                            <tr><h2>Módulos:</h2></tr>
-                                        </thead>
-                                        <tbody>
-                                            {profile.modules.map(module => (
-                                                <tr key={module.id}>{module.name}</tr>
-                                            ))}
-                                        </tbody>
+            <CheckAuth>
+                <div className={styles.container}>
+                    <Sidebar></Sidebar>
+                    <div className={styles.content}>
+                        <div className={styles.center}>
+                            <i class="bi bi-arrow-left" onClick={handleBack}></i>
+                            <div className={styles.profilePage}>
+                                {profile && profile.createdAt &&
+                                    <table className={styles.table}>
+                                        <td>
+                                            <tr><h2>Nome do perfil:</h2><p>{profile.name}</p></tr>
+                                            <tr><h2>Data de criação:</h2><p>{format(new Date(profile.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
+                                        </td>
                                     </table>
                                 }
                             </div>
-                            <div>
-                                {profile && profile.functions &&
-                                    <table>
-                                        <thead>
-                                            <tr><h2>Funções:</h2></tr>
-                                        </thead>
-                                        <tbody>
-                                            {profile.functions.map(aFunction => (
-                                                <tr key={aFunction.id}>{aFunction.name}</tr>
-                                            ))}
-                                        </tbody>
-                                    </table>
-                                }
+                            <div className={styles.subpages}>
+                                <div>
+                                    {profile && profile.modules &&
+                                        <table>
+                                            <thead>
+                                                <tr><h2>Módulos:</h2></tr>
+                                            </thead>
+                                            <tbody>
+                                                {profile.modules.map(module => (
+                                                    <tr key={module.id}>{module.name}</tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                                <div>
+                                    {profile && profile.functions &&
+                                        <table>
+                                            <thead>
+                                                <tr><h2>Funções:</h2></tr>
+                                            </thead>
+                                            <tbody>
+                                                {profile.functions.map(aFunction => (
+                                                    <tr key={aFunction.id}>{aFunction.name}</tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <div className={styles.btns}>
-                            <button className={styles.deleteBtn} onClick={() => setDeleteOpen(true)}>Excluir</button>
-                            <button className={styles.editBtn} onClick={() => setOpen(true)}>Editar</button>
+                            <div className={styles.btns}>
+                                <button className={styles.deleteBtn} onClick={() => setDeleteOpen(true)}>Excluir</button>
+                                <button className={styles.editBtn} onClick={() => setOpen(true)}>Editar</button>
+                            </div>
                         </div>
                     </div>
+                    <Modal
+                        isOpen={deleteOpen}
+                        onRequestClose={() => setDeleteOpen(false)}
+                        contentLabel="Excluir perfil?"
+                        className={styles.deleteModal}
+                        overlayClassName={styles.overlay}>
+                        <div className={styles.modalContent}>
+                            <h2>Tem certeza que deseja excluir este perfil?</h2>
+                            <p>Esta ação excluirá o perfil permanentemente!</p>
+                            <div className={styles.buttonsDiv}>
+                                <button type="button" onClick={() => setDeleteOpen(false)}>Cancelar</button>
+                                <button className={styles.confirmBtn} type="button" onClick={deleteUser}>Excluir</button>
+                            </div>
+                        </div>
+                    </Modal>
+                    <Modal
+                        isOpen={isOpen}
+                        onRequestClose={() => setOpen(false)}
+                        contentLabel="Edição de Perfil"
+                        className={styles.modal}
+                        overlayClassName={styles.overlay}>
+                        <form className={styles.form} onSubmit={handleEdit}>
+                            <h1>Edição de Perfil</h1>
+                            <div className={styles.profileName} style={{ marginBottom: '3%' }}>
+                                <input
+                                    className={styles.input}
+                                    required
+                                    type="text"
+                                    value={data.name}
+                                    placeholder="Nome do perfil"
+                                    onChange={(e) => setData({ ...data, name: e.target.value })}
+                                />
+                            </div>
+                            <div className={styles.profiles}>
+                                <Select
+                                    className={styles.select}
+                                    styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
+                                    isMulti
+                                    value={functions.filter(aFunction => data.functions.includes(aFunction.value))}
+                                    onChange={(selectedOptions) => {
+                                        const selectedValues = selectedOptions.map(option => option.value);
+                                        setData({ ...data, functions: selectedValues });
+                                    }}
+                                    options={functions}
+                                    placeholder='Funções'
+                                />
+                            </div>
+                            <div className={styles.profiles}>
+                                <Select
+                                    required
+                                    className={styles.select}
+                                    styles={{ menu: base => ({ ...base, maxHeight: '220px', overflowY: 'scroll' }) }}
+                                    value={modules.find(option => option.value === selectedModule)}
+                                    onChange={(selectedOption) => {
+                                        setTransactionsFiltered([]);
+                                        const moduleID = selectedOption.value;
+                                        setSelectedModule(moduleID);
+                                        const findModule = modules.find(module => module.id == moduleID);
+                                        const findTransactions = findModule.transactions;
+                                        const transactionsOptions = findTransactions.map(transaction => (
+                                            { value: transaction.id, label: transaction.name }))
+                                        setTransactionsFiltered(transactionsOptions);
+                                    }}
+                                    options={modulesFiltered}
+                                    placeholder='Módulos'
+                                />
+                            </div>
+                            <div className={styles.profiles}>
+                                <Select
+                                    className={styles.select}
+                                    isMulti
+                                    styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
+                                    value={transactionsFiltered.filter(option => selectedTransactions.includes(option.value))}
+                                    onChange={(selectedOptions) => {
+                                        const selectedValues = selectedOptions.map(option => option.value);
+                                        setSelectedTransactions(selectedValues);
+                                    }}
+                                    options={transactionsFiltered}
+                                    placeholder='Transações'
+                                />
+                            </div>
+                            <button className={styles.registerBtn} type='button' onClick={handleSelected}>Adicionar</button>
+                            <button className={styles.registerBtn} type="submit">Salvar</button>
+                            <button type="button" onClick={() => setOpen(false)}>Cancelar</button>
+                        </form>
+                    </Modal>
                 </div>
-                <Modal
-                    isOpen={deleteOpen}
-                    onRequestClose={() => setDeleteOpen(false)}
-                    contentLabel="Excluir perfil?"
-                    className={styles.deleteModal}
-                    overlayClassName={styles.overlay}>
-                    <div className={styles.modalContent}>
-                        <h2>Tem certeza que deseja excluir este perfil?</h2>
-                        <p>Esta ação excluirá o perfil permanentemente!</p>
-                        <div className={styles.buttonsDiv}>
-                            <button type="button" onClick={() => setDeleteOpen(false)}>Cancelar</button>
-                            <button className={styles.confirmBtn} type="button" onClick={deleteUser}>Excluir</button>
-                        </div>
-                    </div>
-                </Modal>
-                <Modal
-                    isOpen={isOpen}
-                    onRequestClose={() => setOpen(false)}
-                    contentLabel="Edição de Perfil"
-                    className={styles.modal}
-                    overlayClassName={styles.overlay}>
-                    <form className={styles.form} onSubmit={handleEdit}>
-                        <h1>Edição de Perfil</h1>
-                        <div className={styles.profileName} style={{ marginBottom: '3%' }}>
-                            <input
-                                className={styles.input}
-                                required
-                                type="text"
-                                value={data.name}
-                                placeholder="Nome do perfil"
-                                onChange={(e) => setData({ ...data, name: e.target.value })}
-                            />
-                        </div>
-                        <div className={styles.profiles}>
-                            <Select
-                                className={styles.select}
-                                styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
-                                isMulti
-                                value={functions.filter(aFunction => data.functions.includes(aFunction.value))}
-                                onChange={(selectedOptions) => {
-                                    const selectedValues = selectedOptions.map(option => option.value);
-                                    setData({ ...data, functions: selectedValues });
-                                }}
-                                options={functions}
-                                placeholder='Funções'
-                            />
-                        </div>
-                        <div className={styles.profiles}>
-                            <Select
-                                required
-                                className={styles.select}
-                                styles={{ menu: base => ({ ...base, maxHeight: '220px', overflowY: 'scroll' }) }}
-                                value={modules.find(option => option.value === selectedModule)}
-                                onChange={(selectedOption) => {
-                                    setTransactionsFiltered([]);
-                                    const moduleID = selectedOption.value;
-                                    setSelectedModule(moduleID);
-                                    const findModule = modules.find(module => module.id == moduleID);
-                                    const findTransactions = findModule.transactions;
-                                    const transactionsOptions = findTransactions.map(transaction => (
-                                        { value: transaction.id, label: transaction.name }))
-                                    setTransactionsFiltered(transactionsOptions);
-                                }}
-                                options={modulesFiltered}
-                                placeholder='Módulos'
-                            />
-                        </div>
-                        <div className={styles.profiles}>
-                            <Select
-                                className={styles.select}
-                                isMulti
-                                styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
-                                value={transactionsFiltered.filter(option => selectedTransactions.includes(option.value))}
-                                onChange={(selectedOptions) => {
-                                    const selectedValues = selectedOptions.map(option => option.value);
-                                    setSelectedTransactions(selectedValues);
-                                }}
-                                options={transactionsFiltered}
-                                placeholder='Transações'
-                            />
-                        </div>
-                        <button className={styles.registerBtn} type='button' onClick={handleSelected}>Adicionar</button>
-                        <button className={styles.registerBtn} type="submit">Salvar</button>
-                        <button type="button" onClick={() => setOpen(false)}>Cancelar</button>
-                    </form>
-                </Modal>
-            </div>
-        </CheckAuth>
+            </CheckAuth>
         </>
     );
 }

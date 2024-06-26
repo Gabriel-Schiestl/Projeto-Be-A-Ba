@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
+import { getSession } from 'next-auth/react';
 
 Modal.setAppElement('body');
 
@@ -30,6 +31,13 @@ export default function NewTransaction() {
     }, []);
 
     const handleTransactions = async () => {
+
+        const session = await getSession();
+
+        if (!session) {
+            router.push('/');
+            return;
+        }
 
         try {
 

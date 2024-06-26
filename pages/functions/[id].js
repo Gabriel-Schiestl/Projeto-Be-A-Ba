@@ -110,7 +110,9 @@ export default function aFunction() {
     return (
         <>
             <Head>
-                <title>{aFunction.name}</title>
+                {aFunction &&
+                    <title>{aFunction.name}</title>
+                }
                 <meta name="function" content="Dashboard para gerenciar função" />
             </Head>
             <CheckAuth>

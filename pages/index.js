@@ -56,7 +56,7 @@ export default function Login() {
             if (result.status == 401) {
 
                 toast.error(result.error);
-
+                setLoading(false);
                 return;
             }
 
@@ -64,9 +64,7 @@ export default function Login() {
             router.replace('/dashboard');
 
         } catch (e) {
-
             toast.error("Acesso não autorizado");
-
         }
     }
 
@@ -79,8 +77,8 @@ export default function Login() {
             <div className={styles.container}>
                 <header className={styles.header}></header>
                 <div className={styles.content}>
-                    <h1 className={styles.h1}>Iniciar sessão na VerdeCard</h1>
                     <form className={styles.form} onSubmit={handleSubmit}>
+                        <h1 className={styles.h1}>Iniciar sessão na VerdeCard</h1>
                         <div className={styles.divLabel}><label>Nome de usuário</label></div>
                         <input
                             required

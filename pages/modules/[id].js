@@ -177,120 +177,122 @@ export default function User() {
     return (
         <>
             <Head>
-                <title>{module.name}</title>
+                {module &&
+                    <title>{module.name}</title>
+                }
                 <meta name="module" content="Dashboard para gerenciar módulo" />
             </Head>
-        <CheckAuth>
-            <div className={styles.container}>
-                <Sidebar></Sidebar>
-                <div className={styles.content}>
-                    <div className={styles.center}>
-                        <i class="bi bi-arrow-left" onClick={handleBack}></i>
-                        <div className={styles.modulePage}>
-                            <div style={{width: '60%'}}>
-                                <table className={styles.table}>
-                                    <td>
-                                        <tr><h2>Nome do módulo:</h2><p>{module.name}</p></tr>
-                                        <tr><h2>TAG:</h2><p>{module.tag}</p></tr>
-                                        <tr><h2>Descrição:</h2><p>{module.description}</p></tr>
-                                        <tr><h2>Data de criação:</h2><p>{format(new Date(module.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
-                                    </td>
-                                </table>
+            <CheckAuth>
+                <div className={styles.container}>
+                    <Sidebar></Sidebar>
+                    <div className={styles.content}>
+                        <div className={styles.center}>
+                            <i class="bi bi-arrow-left" onClick={handleBack}></i>
+                            <div className={styles.modulePage}>
+                                <div style={{ width: '60%' }}>
+                                    <table className={styles.table}>
+                                        <td>
+                                            <tr><h2>Nome do módulo:</h2><p>{module.name}</p></tr>
+                                            <tr><h2>TAG:</h2><p>{module.tag}</p></tr>
+                                            <tr><h2>Descrição:</h2><p>{module.description}</p></tr>
+                                            <tr><h2>Data de criação:</h2><p>{format(new Date(module.createdAt), 'dd/MM/yyyy HH:mm:ss', { locale: ptBR })}</p></tr>
+                                        </td>
+                                    </table>
+                                </div>
+                                <div style={{ width: '35%' }}>
+                                    <table>
+                                        <thead>
+                                            <tr><h2>Transações:</h2></tr>
+                                        </thead>
+                                        <tbody>
+                                            {module.transactions.map(transaction => (
+                                                <tr key={transaction.id}>{transaction.name}</tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <div style={{width: '35%'}}>
-                                <table>
-                                    <thead>
-                                        <tr><h2>Transações:</h2></tr>
-                                    </thead>
-                                    <tbody>
-                                        {module.transactions.map(transaction => (
-                                            <tr key={transaction.id}>{transaction.name}</tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                            <div className={styles.moduleBtns}>
+                                <button className={styles.deleteBtn} onClick={() => setDeleteOpen(true)}>Excluir</button>
+                                <button className={styles.editBtn} onClick={() => setOpen(true)}>Editar</button>
                             </div>
-                        </div>
-                        <div className={styles.moduleBtns}>
-                            <button className={styles.deleteBtn} onClick={() => setDeleteOpen(true)}>Excluir</button>
-                            <button className={styles.editBtn} onClick={() => setOpen(true)}>Editar</button>
                         </div>
                     </div>
+                    <Modal
+                        isOpen={deleteOpen}
+                        onRequestClose={() => setDeleteOpen(false)}
+                        contentLabel="Excluir módulo?"
+                        className={styles.deleteModal}
+                        overlayClassName={styles.overlay}>
+                        <div className={styles.modalContent}>
+                            <h2>Tem certeza que deseja excluir este módulo?</h2>
+                            <p>Esta ação excluirá o módulo permanentemente!</p>
+                            <div className={styles.buttonsDiv}>
+                                <button type="button" onClick={() => setDeleteOpen(false)}>Cancelar</button>
+                                <button className={styles.confirmBtn} type="button" onClick={deleteModule}>Excluir</button>
+                            </div>
+                        </div>
+                    </Modal>
+                    <Modal
+                        isOpen={isOpen}
+                        onRequestClose={() => setOpen(false)}
+                        contentLabel="Edição de Módulo"
+                        className={styles.modal}
+                        overlayClassName={styles.overlay}>
+                        <form className={styles.form} onSubmit={handleEdit}>
+                            <h1>Edição de Módulo</h1>
+                            <div className={styles.moduleName}>
+                                <input
+                                    className={styles.input}
+                                    required
+                                    type="text"
+                                    value={data.name}
+                                    placeholder="Nome do módulo"
+                                    onChange={(e) => setData({ ...data, name: e.target.value })}
+                                />
+                            </div>
+                            <div className={styles.tag}>
+                                <input
+                                    className={styles.input}
+                                    required
+                                    type="text"
+                                    value={data.tag}
+                                    placeholder="TAG"
+                                    onChange={(e) => setData({ ...data, tag: e.target.value })}
+                                />
+                            </div>
+                            <div className={styles.description}>
+                                <textarea rows={5} cols={40}
+                                    value={data.description}
+                                    placeholder='Descrição'
+                                    onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
+                                </textarea>
+                            </div>
+                            <div className={styles.profiles}>
+                                <Select
+                                    required
+                                    className={styles.select}
+                                    isMulti
+                                    styles={customStyles}
+                                    value={transactions.filter(transaction => data.transactions.includes(transaction.value))}
+                                    onChange={(selectedOptions) => {
+                                        const selectedValues = selectedOptions.map(option => option.value);
+                                        setData({ ...data, transactions: selectedValues });
+                                    }}
+                                    options={transactions}
+                                    placeholder='Transações'
+                                />
+                            </div>
+                            <button
+                                style={{ marginTop: '5%' }}
+                                className={styles.registerBtn}
+                                type="submit">
+                                Salvar</button>
+                            <button className={styles.cancelBtn} type="button" onClick={() => setOpen(false)}>Cancelar</button>
+                        </form>
+                    </Modal>
                 </div>
-                <Modal
-                    isOpen={deleteOpen}
-                    onRequestClose={() => setDeleteOpen(false)}
-                    contentLabel="Excluir módulo?"
-                    className={styles.deleteModal}
-                    overlayClassName={styles.overlay}>
-                    <div className={styles.modalContent}>
-                        <h2>Tem certeza que deseja excluir este módulo?</h2>
-                        <p>Esta ação excluirá o módulo permanentemente!</p>
-                        <div className={styles.buttonsDiv}>
-                            <button type="button" onClick={() => setDeleteOpen(false)}>Cancelar</button>
-                            <button className={styles.confirmBtn} type="button" onClick={deleteModule}>Excluir</button>
-                        </div>
-                    </div>
-                </Modal>
-                <Modal
-                    isOpen={isOpen}
-                    onRequestClose={() => setOpen(false)}
-                    contentLabel="Edição de Módulo"
-                    className={styles.modal}
-                    overlayClassName={styles.overlay}>
-                    <form className={styles.form} onSubmit={handleEdit}>
-                        <h1>Edição de Módulo</h1>
-                        <div className={styles.moduleName}>
-                            <input
-                                className={styles.input}
-                                required
-                                type="text"
-                                value={data.name}
-                                placeholder="Nome do módulo"
-                                onChange={(e) => setData({ ...data, name: e.target.value })}
-                            />
-                        </div>
-                        <div className={styles.tag}>
-                            <input
-                                className={styles.input}
-                                required
-                                type="text"
-                                value={data.tag}
-                                placeholder="TAG"
-                                onChange={(e) => setData({ ...data, tag: e.target.value })}
-                            />
-                        </div>
-                        <div className={styles.description}>
-                            <textarea rows={5} cols={40}
-                                value={data.description}
-                                placeholder='Descrição'
-                                onChange={(e) => { setData({ ...data, description: e.target.value }) }}>
-                            </textarea>
-                        </div>
-                        <div className={styles.profiles}>
-                            <Select
-                                required
-                                className={styles.select}
-                                isMulti
-                                styles={customStyles}
-                                value={transactions.filter(transaction => data.transactions.includes(transaction.value))}
-                                onChange={(selectedOptions) => {
-                                    const selectedValues = selectedOptions.map(option => option.value);
-                                    setData({ ...data, transactions: selectedValues });
-                                }}
-                                options={transactions}
-                                placeholder='Transações'
-                            />
-                        </div>
-                        <button
-                            style={{ marginTop: '5%' }}
-                            className={styles.registerBtn}
-                            type="submit">
-                            Salvar</button>
-                        <button className={styles.cancelBtn} type="button" onClick={() => setOpen(false)}>Cancelar</button>
-                    </form>
-                </Modal>
-            </div>
-        </CheckAuth>
+            </CheckAuth>
         </>
     )
 }

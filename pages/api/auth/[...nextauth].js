@@ -6,7 +6,7 @@ import models from 'models'
 
 const { Users } = models;
 
-export default NextAuth({
+export const authOptions = {
     providers: [
         Credentials({
             name: 'Credentials',
@@ -27,9 +27,11 @@ export default NextAuth({
 
                 if (user) {
 
-                    if (await bcrypt.compare(credentials.password, user.password)) return {
-                        ...user.get({ plain: true }),
-                    };
+                    if (await bcrypt.compare(credentials.password, user.password)) {
+                        const userWithoutPassword = user;
+                        delete userWithoutPassword.password;
+                        return userWithoutPassword;
+                    }
 
                     throw new Error("Senha incorreta");
 
@@ -71,5 +73,7 @@ export default NextAuth({
     pages: {
         signIn: '/'
     },
-});
+};
+
+export default NextAuth(authOptions);
 

@@ -29,36 +29,45 @@ export default function Recovery() {
             setLoading(true);
             try {
 
-                const emailExists = await axios.get(`/api/UserAPI?email=${email}`);
+                const emailExists = await axios.get(`/api/EmailAPI?email=${email}`);
 
                 if (emailExists.status == 404) {
                     toast.error(emailExists.data.error);
+                    setLoading(false);
                     return;
                 }
 
                 const userId = emailExists.data.id;
 
-                const result = await axios.post('http://127.0.0.1:5000/send-recovery-email', { email });
+                try {
 
-                if (result.status == 200) {
-                    const response = await axios.post('/api/CodeVerificator', { code: result.data.code });
+                    const result = await axios.post('http://127.0.0.1:5000/send-recovery-email', { email });
 
-                    if (response.status == 200) {
-                        toast.success("E-mail enviado com sucesso");
+                    if (result.status == 200) {
 
-                        setTimeout(() => {
+                        const response = await axios.post('/api/CodeVerificator', { code: result.data.code });
 
-                            router.push(`/recoveryPassword/codeVerificator?id=${userId}`);
-                        }, 2000);
+                        if (response.status == 200) {
+                            toast.success("E-mail enviado com sucesso");
 
+                            setTimeout(() => {
+
+                                router.push(`/recoveryPassword/codeVerificator?id=${userId}`);
+                            }, 2000);
+
+                        } else {
+                            toast.error(response.data.error);
+                        }
                     } else {
-                        toast.error(response.data.error);
+                        toast.error("Erro ao enviar e-mail");
                     }
-                } else {
-                    toast.error("Erro ao enviar e-mail");
+                } catch (e) {
+                    toast.error("Erro ao enviar código");
                 }
             } catch (e) {
                 toast.error(e);
+            } finally {
+                setLoading(false);
             }
         }
     }
@@ -72,12 +81,11 @@ export default function Recovery() {
             <div className={styles.container}>
                 <header className={styles.header}></header>
                 <div className={styles.content}>
-                    <h1 className={styles.h1}>Recuperação de senha</h1>
                     <form className={styles.form} onSubmit={handleSubmit}>
+                        <h1 className={styles.h1}>Recuperação de senha</h1>
                         <p className={styles.p1}>Para recuperar sua senha, precisaremos que nos informe abaixo, por gentileza, seu
                             e-mail utilizado no momento do cadastro.</p>
                         <div className={styles.email}>
-                            <label>E-mail</label>
                             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}>
                             </input>
                         </div>

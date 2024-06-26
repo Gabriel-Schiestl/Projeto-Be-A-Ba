@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
+import { getSession } from 'next-auth/react';
 
 Modal.setAppElement('body');
 
@@ -29,6 +30,13 @@ export default function NewFunction({ session }) {
     }, []);
 
     const handleFunctions = async () => {
+
+        const session = await getSession();
+
+        if (!session) {
+            router.push('/');
+            return;
+        }
 
         const response = await axios.get('/api/FunctionAPI');
 

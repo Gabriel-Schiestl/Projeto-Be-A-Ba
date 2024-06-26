@@ -1,13 +1,36 @@
 import { Op } from "sequelize";
 import bcrypt from 'bcryptjs';
 import models from 'models'
-import { getSession } from "next-auth/react";
+import { authOptions } from "./auth/[...nextauth]";
+import { getServerSession } from "next-auth";
 
 const { Users, Profiles, Modules, Transactions, Functions } = models;
 
 export default async function handler(req, res) {
 
-    const session = await getSession({ req });
+    if (req.method == 'PATCH') {
+
+        const { password, id } = req.body;
+
+        const hashedPassword = bcrypt.hashSync(password, 10);
+
+        try {
+
+            const user = await Users.update({ password: hashedPassword }, {
+                where: { id }
+            })
+
+            if (user[0] === 1) return res.status(200).json({ success: "Sucesso ao atualizar senha" });
+
+            return res.status(500).json({ error: "Erro ao atualizar senha" });
+
+        } catch (e) {
+            return res.status(500).json({ error: "Erro ao atualizar senha" });
+        }
+
+    }
+
+    const session = await getServerSession(req, res, authOptions);
 
     if (!session) return res.status(401).json({ error: "Não autorizado" });
 
@@ -71,7 +94,7 @@ export default async function handler(req, res) {
     } else if (req.method == 'GET') {
 
         const { id } = req.query;
-        const {email} = req.query;
+        const { email } = req.query;
 
         try {
 
@@ -87,14 +110,6 @@ export default async function handler(req, res) {
                 if (!user) return res.status(404).json({ error: "Usuário não encontrado" });
 
                 return res.status(200).json(user);
-
-            } else if(email) {
-
-                const user = await Users.findOne({where: {email: email}});
-
-                if(user) return res.status(200).json({id: user.id});
-
-                return res.status(404).json({error: 'Não há usuário cadastrado com este e-mail'});
 
             } else {
 
@@ -154,25 +169,5 @@ export default async function handler(req, res) {
         } catch (e) {
             return res.status(500).json({ error: "Erro ao deletar usuário" });
         }
-    } else if (req.method == 'PATCH') {
-
-        const {password, id} = req.body;
-
-        const hashedPassword = bcrypt.hashSync(password, 10);
-
-        try {
-
-            const user = await Users.update({password: hashedPassword}, {
-                where: {id}
-            })
-
-            if(user[0] === 1) return res.status(200).json({success: "Sucesso ao atualizar senha"});
-
-            return res.status(500).json({error: "Erro ao atualizar senha"});
-
-        } catch (e) {
-            return res.status(500).json({error: "Erro ao atualizar senha"});
-        }
-
     }
 }

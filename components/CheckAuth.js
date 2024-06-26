@@ -27,7 +27,7 @@ export default function CheckAuth({ children }) {
 
         authChecker();
 
-    }, [router])
+    }, [router]);
 
     if (loading) {
         return <div>Redirecionando...</div>

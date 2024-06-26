@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Head from 'next/head';
+import { getSession } from 'next-auth/react';
 
 Modal.setAppElement('body');
 
@@ -31,9 +32,7 @@ export default function NewUser() {
 
             const users = await axios.get('/api/UserAPI');
 
-            const usersFiltered = users.data.map(user => ({ value: user.id, label: user.name }));
-
-            setData(usersFiltered);
+            setData(users.data);
 
         } catch (e) {
 
@@ -46,6 +45,13 @@ export default function NewUser() {
     useEffect(() => {
 
         const handleInit = async () => {
+
+            const session = await getSession();
+
+            if (!session) {
+                router.push('/');
+                return;
+            }
 
             try {
 
