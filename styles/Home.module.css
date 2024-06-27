@@ -79,6 +79,30 @@
     margin-bottom: 2%;
 }
 
+.passwordContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    position: relative;
+}
+
+.eyeIcon {
+    position: absolute;
+    top: 50%;
+    right: 8%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 1.5em;
+    opacity: 80%;
+}
+
+@media screen and (max-width: 767px) {
+    .eyeIcon {
+        top: 57%;
+    }
+}
+
 .form input {
     margin-top: 10px;
     width: 90%;

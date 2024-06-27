@@ -15,6 +15,7 @@ export default function Login() {
     const router = useRouter();
 
     const [loading, setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const [data, setData] = useState({
         email: "",
@@ -88,12 +89,18 @@ export default function Login() {
                         </input>
                         {errors.userNameError && <div className={styles.userNameFlash}>{errors.userNameError}</div>}
                         <div className={styles.divLabel}><label>Senha</label></div>
-                        <input
-                            required
-                            type="password"
-                            value={data.password}
-                            onChange={(e) => { setData({ ...data, password: e.target.value }) }}>
-                        </input>
+                        <div className={styles.passwordContainer}>
+                            <input
+                                required
+                                type={showPassword ? 'text' : 'password'}
+                                value={data.password}
+                                onChange={(e) => { setData({ ...data, password: e.target.value }) }}>
+                            </input>
+                            <i
+                                className={`${styles.eyeIcon} ${showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'}`}
+                                onClick={() => setShowPassword(!showPassword)}
+                            ></i>
+                        </div>
                         {errors.passwordError && <div className={styles.passwordFlash}>{errors.passwordError}</div>}
                         <button onClick={handleSubmit}>Login</button>
                         <Link className={styles.link} href='/recoveryPassword'>Esqueceu a senha?</Link>
