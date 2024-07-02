@@ -164,29 +164,22 @@ export default function NewProfile() {
     }
 
     const customStyles = {
-        control: (provided) => ({
+        multiValue: (provided) => ({
             ...provided,
-            minHeight: '100%',
-            boxShadow: 'none',
-            border: '1px solid'
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            height: '50%',
+        }),
+        menuList: (provided) => ({
+            ...provided,
+            maxHeight: '100px',
         }),
         valueContainer: (provided) => ({
             ...provided,
-            height: '100%',
-            padding: '0 3%',
+            maxHeight: '100px',
+            overflowY: 'auto',
         }),
-        input: (provided) => ({
-            ...provided,
-            margin: '0px',
-            height: '100%'
-        }),
-        placeholder: (provided) => ({
-            ...provided,
-            margin: '0px',
-            fontSize: '1em',
-            fontWeight: '525'
-        }),
-    };
+    }
 
     return (
         <>
@@ -303,7 +296,7 @@ export default function NewProfile() {
                             <div className={styles.profiles}>
                                 <Select
                                     className={styles.select}
-                                    styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
+                                    styles={customStyles}
                                     isMulti
                                     value={transactionsFiltered.filter(option => selectedTransactions.includes(option.value))}
                                     onChange={(selectedOptions) => {

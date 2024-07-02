@@ -87,6 +87,21 @@ export default function Dashboard() {
         }
     }
 
+    const handleDownload = async (attribute) => {
+        try {
+            const response = await axios.post('/api/Download', { attribute }, { responseType: 'blob' });
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', `${attribute}.xlsx`);
+            document.body.appendChild(link);
+            link.click();
+            link.parentNode.removeChild(link);
+        } catch (error) {
+            toast.error(error.message);
+        }
+    }
+
     return (
         <>
             <Head>
@@ -99,11 +114,16 @@ export default function Dashboard() {
                     <div className={styles.content}>
                         <div className={styles.center}>
                             <div className={styles.subPages}>
-                                <div><h1>Usuários:</h1><h2>{data.users.length}</h2></div>
-                                <div><h1>Perfis:</h1><h2>{data.profiles.length}</h2></div>
-                                <div><h1>Módulos:</h1><h2>{data.modules.length}</h2></div>
-                                <div><h1>Funções:</h1><h2>{data.functions.length}</h2></div>
-                                <div><h1>Transações:</h1><h2>{data.transactions.length}</h2></div>
+                                <div className={styles.div}><h1>Usuários:</h1><h2>{data.users.length}</h2>
+                                    <i class="bi bi-download" onClick={() => handleDownload('Users')}></i></div>
+                                <div className={styles.div}><h1>Perfis:</h1><h2>{data.profiles.length}</h2>
+                                    <i class="bi bi-download" onClick={() => handleDownload('Profiles')}></i></div>
+                                <div className={styles.div}><h1>Módulos:</h1><h2>{data.modules.length}</h2>
+                                    <i class="bi bi-download" onClick={() => handleDownload('Modules')}></i></div>
+                                <div className={styles.div}><h1>Funções:</h1><h2>{data.functions.length}</h2>
+                                    <i class="bi bi-download" onClick={() => handleDownload('Functions')}></i></div>
+                                <div className={styles.div}><h1>Transações:</h1><h2>{data.transactions.length}</h2>
+                                    <i class="bi bi-download" onClick={() => handleDownload('Transactions')}></i></div>
                             </div>
                             <div className={styles.centerContent}>
                                 <div className={styles.page}>

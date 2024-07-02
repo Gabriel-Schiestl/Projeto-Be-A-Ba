@@ -4,7 +4,8 @@
     height: 100vh;
 }
 
-.content {
+.content,
+.moduleContent {
     display: flex;
     height: 100vh;
     width: 80%;
@@ -18,7 +19,8 @@
 
 @media screen and (max-width: 1023px) {
 
-    .content {
+    .content,
+    .moduleContent {
         width: 100%;
         left: 0;
     }
@@ -132,79 +134,6 @@
     background-color: #b40000;
 }
 
-.deleteModal {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    right: auto;
-    bottom: auto;
-    transform: translate(-50%, -50%);
-    background: #FDFDFB;
-    width: 35%;
-    border-radius: 25px;
-    height: 20%;
-    z-index: 1000;
-    padding: 1%;
-    border: none;
-}
-
-
-.modalContent {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-    border: none;
-}
-
-.deleteModal h2 {
-    margin-bottom: 0;
-}
-
-.deleteModal p {
-    opacity: 0.7;
-    font-size: 0.9em;
-    margin-bottom: 11%;
-}
-
-.buttonsDiv {
-    width: 100%;
-    height: 100%;
-    top: 85%;
-}
-
-.deleteModal button {
-    position: relative;
-    left: 55%;
-    width: 20%;
-    height: 100%;
-    border-radius: 10px;
-    border: 0.1px solid;
-    background-color: #FDFDFB;
-    font-size: 1.1em;
-}
-
-.deleteModal button:hover {
-    cursor: pointer;
-    background-color: #dfdfe0;
-}
-
-.deleteModal .confirmBtn {
-    font-size: 1.3em;
-    background-color: #F00101;
-    color: white;
-    font-weight: bold;
-    margin-left: 2%;
-}
-
-.deleteModal .confirmBtn:hover {
-    cursor: pointer;
-    background-color: #b40000;
-}
-
 .overlay {
     position: fixed;
     top: 0;
@@ -228,7 +157,7 @@
     background: #FDFDFB;
     width: 50%;
     border-radius: 25px;
-    height: 80%;
+    height: 90%;
     z-index: 1000;
     animation: modalOpen .3s ease-out forwards;
 }
@@ -239,6 +168,7 @@
         width: 0;
         height: 0;
     }
+
     to {
         opacity: 1;
         width: 45%;
@@ -279,6 +209,10 @@
     margin-top: 2.9%;
 }
 
+.form {
+    width: 100%;
+}
+
 .form .input {
     display: flex;
     width: 100%;
@@ -314,6 +248,7 @@
     align-items: center;
     width: 23%;
     height: 7%;
+    margin-top: 5%;
     background-color: var(--default-green);
     opacity: 100%;
     color: white;
@@ -404,6 +339,14 @@
     border-radius: 14px;
 }
 
+.modulePage .moduleInformations {
+    width: 60%;
+}
+
+.modulePage .moduleTransactions {
+    width: 35%;
+}
+
 .moduleBtns {
     width: 100%;
     display: flex;
@@ -419,6 +362,68 @@
     border: none;
     width: 13%;
     font-size: 1.2em;
+}
+
+@media screen and (max-width: 767px) {
+
+    .moduleContent {
+        height: 150%;
+        justify-content: flex-start;
+    }
+
+    .container {
+        overflow-y: scroll;
+    }
+
+    .modulePage {
+        flex-direction: column;
+        height: 100%;
+        gap: 3%;
+        align-items: center;
+    }
+
+    .moduleBtns {
+        justify-content: center;
+        margin-right: 0;
+    }
+
+    .modulePage .moduleInformations {
+        width: 100%;
+    }
+
+    .modulePage .moduleTransactions {
+        width: 60%;
+    }
+
+    .moduleBtns {
+        height: 10%;
+    }
+
+    .modulePage {
+        font-size: 1em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .moduleContent {
+        margin-top: 3%;
+    }
+
+    .moduleBtns button {
+        width: 20%;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .moduleContent {
+        margin-top: 10%;
+    }
+}
+
+@media screen and (max-width: 380px) {
+    .moduleBtns button {
+        width: 30%;
+    }
 }
 
 .moduleBtns button:hover {
@@ -476,8 +481,16 @@
 
 @media screen and (max-width: 767px) {
 
+    .form .registerBtn {
+        height: 11%;
+    }
+
+    .form button {
+        margin-top: 0;
+    }
+
     .btns {
-height: 8%;
+        height: 8%;
     }
 
     .btns button {
@@ -486,19 +499,24 @@ height: 8%;
 }
 
 @media screen and (max-width: 1299px) {
-    .modulePage, .profilePage {
+
+    .modulePage,
+    .profilePage {
         font-size: 0.9em;
     }
 }
 
 @media screen and (max-width: 1150px) {
-    .modulePage, .profilePage {
+
+    .modulePage,
+    .profilePage {
         font-size: 0.8em;
     }
 }
 
 @media screen and (max-width: 850px) {
-    .modulePage, .profilePage {
+
+    .profilePage {
         font-size: 0.7em;
     }
 }
@@ -513,15 +531,21 @@ height: 8%;
     }
 }
 
-@media screen and (max-width: 450px) {
+@media screen and (max-width: 500px) {
     .page {
         font-size: 0.8em;
     }
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 400px) {
     .page {
         font-size: 0.7em;
+    }
+}
+
+@media screen and (max-width: 350px) {
+    .page {
+        font-size: 0.6em;
     }
 }
 
@@ -533,6 +557,7 @@ height: 8%;
             width: 0;
             height: 0;
         }
+
         to {
             opacity: 1;
             width: 70%;
@@ -559,6 +584,7 @@ height: 8%;
             width: 0;
             height: 0;
         }
+
         to {
             opacity: 1;
             width: 95%;
@@ -603,7 +629,7 @@ height: 8%;
 }
 
 @media screen and (max-width: 550px) {
-    
+
     .form button {
         height: 8%;
         width: 25%;
@@ -617,12 +643,208 @@ height: 8%;
 }
 
 @media screen and (max-width: 350px) {
-    
+
     .form h1 {
         font-size: 1.7em;
     }
 
 }
 
+.deleteModal {
+    display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    transform: translate(-50%, -50%);
+    background: #FDFDFB;
+    width: 45%;
+    border-radius: 25px;
+    height: 20%;
+    z-index: 1000;
+    padding: 1%;
+    border: none;
+    flex-direction: column;
+    animation: deleteModalOpen 0.3s ease-out forwards;
+}
 
+.deleteModal h2 {
+    margin-bottom: 0;
+}
 
+.deleteModal p {
+    opacity: 0.7;
+    font-size: 0.9em;
+    margin-bottom: 0%;
+}
+
+@keyframes deleteModalOpen {
+    from {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    to {
+        opacity: 1;
+        width: 45%;
+        height: 20%;
+    }
+}
+
+.modalContent {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    border: none;
+}
+
+.buttonsDiv {
+    width: 100%;
+    height: 100%;
+    top: 85%;
+}
+
+.deleteModal button {
+    position: relative;
+    left: 55%;
+    top: 50%;
+    width: 20%;
+    height: 50%;
+    border-radius: 10px;
+    border: 0.1px solid;
+    background-color: #FDFDFB;
+    font-size: 1.1em;
+}
+
+.deleteModal button:hover {
+    cursor: pointer;
+    background-color: #dfdfe0;
+}
+
+.deleteModal .confirmBtn {
+    font-size: 1.3em;
+    background-color: #F00101;
+    color: white;
+    font-weight: bold;
+    margin-left: 2%;
+}
+
+.deleteModal .confirmBtn:hover {
+    cursor: pointer;
+    background-color: #b40000;
+}
+
+@media screen and (max-width: 1023px) {
+    @keyframes deleteModalOpenTablet {
+        from {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        to {
+            opacity: 1;
+            width: 55%;
+            height: 25%;
+        }
+    }
+
+    .deleteModal {
+        animation: deleteModalOpenTablet .3s ease-out forwards;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    @keyframes deleteModalOpenCelular {
+        from {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        to {
+            opacity: 1;
+            width: 60%;
+            height: 28%;
+        }
+    }
+
+    .buttonsDiv button,
+    .buttonsDiv .confirmBtn {
+        font-size: 0.9em;
+    }
+
+    .deleteModal {
+        animation: deleteModalOpenCelular .3s ease-out forwards;
+    }
+}
+
+@media screen and (max-width: 500px) {
+
+    .buttonsDiv button,
+    .buttonsDiv .confirmBtn {
+        font-size: 0.8em;
+    }
+}
+
+@media screen and (max-width: 350px) {
+
+    .buttonsDiv button,
+    .buttonsDiv .confirmBtn {
+        font-size: 0.7em;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    @keyframes deleteModalOpenCelularSM {
+        from {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        to {
+            opacity: 1;
+            width: 80%;
+            height: 30%;
+        }
+    }
+
+    .deleteModal {
+        animation: deleteModalOpenCelularSM .3s ease-out forwards;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    @keyframes deleteModalOpenCelularXSM {
+        from {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        to {
+            opacity: 1;
+            width: 90%;
+            height: 30%;
+        }
+    }
+
+    .deleteModal {
+        animation: deleteModalOpenCelularXSM .3s ease-out forwards;
+    }
+}
+
+@media screen and (max-width: 350px) {
+
+    .moduleInformations .table {
+        font-size: 0.9em;
+    }
+}
+
+.form .modalCancel {
+    margin-bottom: 5%;
+}

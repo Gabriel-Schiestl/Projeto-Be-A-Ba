@@ -25,7 +25,7 @@ export default function Recovery() {
         if (!validator.isEmail(email)) {
             setError("Digite um e-mail válido");
         } else {
-
+            setError("");
             setLoading(true);
             try {
 
@@ -53,7 +53,7 @@ export default function Recovery() {
                             setTimeout(() => {
 
                                 router.push(`/recoveryPassword/codeVerificator?id=${userId}`);
-                            }, 2000);
+                            }, 1000);
 
                         } else {
                             toast.error(response.data.error);

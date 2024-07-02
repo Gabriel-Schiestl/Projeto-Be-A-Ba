@@ -78,11 +78,15 @@ export default function Sidebar() {
         const menuButton = menuRef.current;
 
         if (isOpen) {
+            sidebar.classList.remove(styles.closeSidebar);
             sidebar.classList.add(styles.flex);
             menuButton.classList.add(styles.none);
         } else {
-            sidebar.classList.remove(styles.flex);
+            sidebar.classList.add(styles.closeSidebar);
             menuButton.classList.remove(styles.none)
+            setTimeout(() => {
+                sidebar.classList.remove(styles.flex);
+            }, 400);
         }
 
     }, [isOpen]);
@@ -185,7 +189,7 @@ export default function Sidebar() {
                     </div>
                 </Modal>
             </div>
-            {loading && 
+            {loading &&
                 <Loading></Loading>
             }
         </>

@@ -184,6 +184,24 @@ export default function NewProfile() {
         router.back();
     }
 
+    const customStyles = {
+        multiValue: (provided) => ({
+            ...provided,
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            height: '50%',
+        }),
+        menuList: (provided) => ({
+            ...provided,
+            maxHeight: '100px',
+        }),
+        valueContainer: (provided) => ({
+            ...provided,
+            maxHeight: '100px',
+            overflowY: 'auto',
+        }),
+    }
+
     if (isLoading) {
         return <div>Carregando...</div>;
     }
@@ -284,7 +302,7 @@ export default function NewProfile() {
                             <div className={styles.profiles}>
                                 <Select
                                     className={styles.select}
-                                    styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
+                                    styles={customStyles}
                                     isMulti
                                     value={functions.filter(aFunction => data.functions.includes(aFunction.value))}
                                     onChange={(selectedOptions) => {
@@ -297,9 +315,8 @@ export default function NewProfile() {
                             </div>
                             <div className={styles.profiles}>
                                 <Select
-                                    required
                                     className={styles.select}
-                                    styles={{ menu: base => ({ ...base, maxHeight: '220px', overflowY: 'scroll' }) }}
+                                    styles={{ menu: base => ({ ...base, maxHeight: '150px', overflowY: 'scroll' }) }}
                                     value={modules.find(option => option.value === selectedModule)}
                                     onChange={(selectedOption) => {
                                         setTransactionsFiltered([]);
@@ -319,7 +336,7 @@ export default function NewProfile() {
                                 <Select
                                     className={styles.select}
                                     isMulti
-                                    styles={{ menu: base => ({ ...base, maxHeight: '200px' }) }}
+                                    styles={customStyles}
                                     value={transactionsFiltered.filter(option => selectedTransactions.includes(option.value))}
                                     onChange={(selectedOptions) => {
                                         const selectedValues = selectedOptions.map(option => option.value);
@@ -330,8 +347,9 @@ export default function NewProfile() {
                                 />
                             </div>
                             <button className={styles.registerBtn} type='button' onClick={handleSelected}>Adicionar</button>
-                            <button className={styles.registerBtn} type="submit">Salvar</button>
-                            <button type="button" onClick={() => setOpen(false)}>Cancelar</button>
+                            <button className={styles.registerBtn} style={{ marginTop: '2%' }} type="submit">Salvar</button>
+                            <button type="button" onClick={() => setOpen(false)} className={styles.modalCancel}
+                                style={{ marginTop: '2%', marginBottom: '5%' }}>Cancelar</button>
                         </form>
                     </Modal>
                 </div>

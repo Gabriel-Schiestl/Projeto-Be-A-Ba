@@ -58,6 +58,21 @@
     box-sizing: border-box;
 }
 
+.div i {
+    font-size: 1.7em;
+    margin-bottom: 5%;
+}
+
+.div i:hover {
+    cursor: pointer;
+}
+
+@media screen and (max-width: 1200px) {
+    .div i {
+        font-size: 1.5em;
+    }
+}
+
 @media screen and (max-width: 1150px) {
     .subPages div {
         flex: 1 1 auto;
@@ -75,7 +90,7 @@
         align-items: center;
     }
 
-    
+
     .container {
         overflow-y: scroll;
     }
@@ -234,9 +249,9 @@
         height: 100%;
     }
 
-.centerContent {
-    height: 100%;
-}
+    .centerContent {
+        height: 100%;
+    }
 }
 
 .page .table {
@@ -264,5 +279,11 @@
 @media screen and (max-width: 450px) {
     .btns button {
         font-size: 0.7em;
+    }
+}
+
+@media screen and (max-width: 400px) {
+    .btns button {
+        font-size: 0.6em;
     }
 }

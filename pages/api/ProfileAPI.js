@@ -92,12 +92,8 @@ export default async function handler(req, res) {
 
         const { id } = req.query;
         const { name, functions, modulesTransactions } = req.body;
-        console.log('Recebido PUT request');
-        console.log('ID:', id);
-        console.log('Dados recebidos:', { name, functions, modulesTransactions });
 
         try {
-            console.log('Iniciando atualização de perfil');
 
             const profile = await Profiles.findByPk(id);
 
@@ -113,7 +109,7 @@ export default async function handler(req, res) {
 
             await profile.setFunctions(functions);
 
-            const modules = modulesTransactions.map(mt => mt.module);
+            if (modulesTransactions.length <= 0) return res.status(200).json({ success: "Perfil atualizado" });
 
             await ProfilesModules.destroy({
                 where: { profileId: profile.id }
@@ -137,7 +133,6 @@ export default async function handler(req, res) {
                 await profileModule.setTransactions(transactions);
             }
 
-            console.log('Perfil atualizado com sucesso');
             return res.status(200).json({ success: "Perfil atualizado" });
 
         } catch (e) {

@@ -31,7 +31,7 @@
     background-color: #FBFBFD;
     border-radius: 14px;
     margin-top: 1%;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .table {
@@ -47,15 +47,17 @@
 .table th,
 .table td {
     text-align: center;
-}
-
-.table td {
-    padding: 0;
+    width: 33.33%;
 }
 
 .table tbody tr:hover {
     background-color: #f3f1f1;
     cursor: pointer;
+}
+
+.table td,
+.table th {
+    padding: 12px;
 }
 
 .button {
@@ -69,6 +71,7 @@
 .newButton {
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: row;
     width: 10%;
     border-radius: 10px;
@@ -77,6 +80,7 @@
     color: white;
     position: absolute;
     font-size: 100%;
+    text-align: center;
 }
 
 .newButton:hover {
@@ -427,10 +431,46 @@
 
 }
 
+@media screen and (max-width: 430px) {
+
+    .button button {
+        width: 35%;
+    }
+
+}
+
+@media screen and (max-width: 1120px) {
+
+    .button button {
+        height: 5%;
+        width: 15%;
+    }
+
+}
+
+@media screen and (max-width: 515px) {
+
+    .button button {
+        width: 30%;
+    }
+}
+
 @media screen and (max-width: 350px) {
 
     .form h1 {
         font-size: 1.7em;
+    }
+
+}
+
+@media screen and (max-width: 500px) {
+
+    .center {
+        width: 92%;
+    }
+
+    .table tbody {
+        font-size: 0.8em;
     }
 
 }

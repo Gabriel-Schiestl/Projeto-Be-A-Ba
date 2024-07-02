@@ -55,7 +55,8 @@
     color: #3D4450;
 }
 
-.ul i:hover, .link:hover {
+.ul i:hover,
+.link:hover {
     color: #008D53;
 }
 
@@ -139,6 +140,7 @@
         width: 0;
         height: 0;
     }
+
     to {
         opacity: 1;
         width: 45%;
@@ -153,6 +155,7 @@
             width: 0;
             height: 0;
         }
+
         to {
             opacity: 1;
             width: 55%;
@@ -172,6 +175,7 @@
             width: 0;
             height: 0;
         }
+
         to {
             opacity: 1;
             width: 60%;
@@ -191,6 +195,7 @@
             width: 0;
             height: 0;
         }
+
         to {
             opacity: 1;
             width: 70%;
@@ -210,6 +215,7 @@
             width: 0;
             height: 0;
         }
+
         to {
             opacity: 1;
             width: 90%;
@@ -253,6 +259,7 @@
     color: white;
     font-weight: bold;
     margin-left: 2%;
+    margin-right: 2%;
 }
 
 .modal .confirmBtn:hover {
@@ -338,6 +345,16 @@
 
 }
 
+@keyframes reverseSmooth {
+    0% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
 @media screen and (max-width: 1023px) {
 
     .menu {
@@ -355,6 +372,10 @@
         display: none;
         animation: smooth .4s;
         width: 40%;
+    }
+
+    .closeSidebar {
+        animation: reverseSmooth .4s forwards;
     }
 
     .flex {
@@ -378,16 +399,21 @@
     }
 
     @keyframes smooth {
-        
-        0% { transform: translateX(-100%);}
-        100% { transform: translateX(0%);}
+
+        0% {
+            transform: translateX(-100%);
+        }
+
+        100% {
+            transform: translateX(0%);
+        }
 
     }
 
 }
 
 @media screen and (max-width: 800px) {
-    
+
     .picture {
         width: 28px;
         height: 28px;
@@ -397,7 +423,7 @@
     .sidebar {
         width: 40%;
     }
-    
+
     .profile i {
         font-size: 1.5em;
         opacity: 50%;
@@ -406,7 +432,7 @@
 }
 
 @media screen and (max-width: 700px) {
-    
+
     .picture {
         width: 25px;
         height: 25px;
@@ -416,7 +442,7 @@
     .profile .informations {
         font-size: 0.8em;
     }
-    
+
     .profile i {
         font-size: 1.5em;
         opacity: 50%;
@@ -431,9 +457,9 @@
 @media screen and (max-width: 767px) {
 
     .sidebar {
-        width: 50%;
+        width: 60%;
     }
-    
+
     .picture {
         width: 28px;
         height: 28px;
@@ -443,7 +469,7 @@
     .profile .informations {
         font-size: 0.8em;
     }
-    
+
     .profile i {
         font-size: 1.7em;
         opacity: 50%;
@@ -463,6 +489,9 @@
     }
 
 }
-    
 
-
+@media screen and (max-width: 450px) {
+    .sidebar {
+        width: 70%;
+    }
+}

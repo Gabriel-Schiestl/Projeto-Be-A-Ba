@@ -120,31 +120,22 @@ export default function NewModule() {
     };
 
     const customStyles = {
-        control: (provided) => ({
+        multiValue: (provided) => ({
             ...provided,
-            minHeight: '100%',
-            boxShadow: 'none',
-            border: '1px solid rgba(0, 0, 0, 0.7)'
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            height: '50%',
+        }),
+        menuList: (provided) => ({
+            ...provided,
+            maxHeight: '100px',
         }),
         valueContainer: (provided) => ({
             ...provided,
-            height: '100%',
-            padding: '0 3%',
+            maxHeight: '100px',
+            overflowY: 'auto',
         }),
-        input: (provided) => ({
-            ...provided,
-            margin: '0px',
-            height: '100%'
-        }),
-        placeholder: (provided) => ({
-            ...provided,
-            margin: '0px',
-            fontSize: '1em',
-            fontWeight: '500',
-            opacity: '0.7',
-            padding: '0 3%'
-        }),
-    };
+    }
 
     const openEspecificModule = (id) => {
 

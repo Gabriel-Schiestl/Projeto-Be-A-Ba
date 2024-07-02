@@ -45,7 +45,7 @@ export default function Login() {
         }
 
         setLoading(true);
-
+        setErrors("");
         try {
 
             const result = await signIn('credentials', {

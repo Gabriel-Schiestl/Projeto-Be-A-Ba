@@ -185,11 +185,11 @@ export default function User() {
             <CheckAuth>
                 <div className={styles.container}>
                     <Sidebar></Sidebar>
-                    <div className={styles.content}>
+                    <div className={styles.moduleContent}>
                         <div className={styles.center}>
                             <i class="bi bi-arrow-left" onClick={handleBack}></i>
                             <div className={styles.modulePage}>
-                                <div style={{ width: '60%' }}>
+                                <div className={styles.moduleInformations}>
                                     <table className={styles.table}>
                                         <td>
                                             <tr><h2>Nome do módulo:</h2><p>{module.name}</p></tr>
@@ -199,7 +199,7 @@ export default function User() {
                                         </td>
                                     </table>
                                 </div>
-                                <div style={{ width: '35%' }}>
+                                <div className={styles.moduleTransactions}>
                                     <table>
                                         <thead>
                                             <tr><h2>Transações:</h2></tr>
@@ -273,7 +273,23 @@ export default function User() {
                                     required
                                     className={styles.select}
                                     isMulti
-                                    styles={customStyles}
+                                    styles={{
+                                        multiValue: (provided) => ({
+                                            ...provided,
+                                            textOverflow: 'ellipsis',
+                                            whiteSpace: 'nowrap',
+                                            height: '50%',
+                                        }),
+                                        menuList: (provided) => ({
+                                            ...provided,
+                                            maxHeight: '100px',
+                                        }),
+                                        valueContainer: (provided) => ({
+                                            ...provided,
+                                            maxHeight: '100px',
+                                            overflowY: 'auto',
+                                        }),
+                                    }}
                                     value={transactions.filter(transaction => data.transactions.includes(transaction.value))}
                                     onChange={(selectedOptions) => {
                                         const selectedValues = selectedOptions.map(option => option.value);
@@ -284,7 +300,6 @@ export default function User() {
                                 />
                             </div>
                             <button
-                                style={{ marginTop: '5%' }}
                                 className={styles.registerBtn}
                                 type="submit">
                                 Salvar</button>
