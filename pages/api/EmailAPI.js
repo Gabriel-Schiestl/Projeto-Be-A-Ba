@@ -2,16 +2,20 @@ import Users from "models/Users";
 
 export default async function CodeVerificator(req, res) {
 
-    if (req.method == 'GET') {
+    try {
+        if (req.method == 'GET') {
 
-        const { email } = req.query;
+            const { email } = req.query;
 
-        const result = await Users.findOne({ where: { email: email } });
+            const result = await Users.findOne({ where: { email: email } });
+            console.log(result)
 
-        if (!result) return res.status(404).json({ error: "Não há usuário cadastrado com esse e-mail" });
+            if (!result) return res.status(404).json({ error: "Não há usuário cadastrado com esse e-mail" });
 
-        return res.status(200).json(result);
-
+            return res.status(200).json(result);
+        }
+    } catch (e) {
+        return res.status(500).json({ error: "Erro interno" });
     }
 
 }

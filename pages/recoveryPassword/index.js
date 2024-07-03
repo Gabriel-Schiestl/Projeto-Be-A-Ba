@@ -29,10 +29,10 @@ export default function Recovery() {
             setLoading(true);
             try {
 
-                const emailExists = await axios.get(`/api/EmailAPI?email=${email}`);
+                const emailExists = await axios.get(`/api/EmailAPI?email=${email}`, { validateStatus: false });
 
-                if (emailExists.status == 404) {
-                    toast.error(emailExists.data.error);
+                if (emailExists.status === 404) {
+                    setError("E-mail não cadastrado");
                     setLoading(false);
                     return;
                 }

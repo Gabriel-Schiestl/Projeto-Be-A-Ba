@@ -30,9 +30,11 @@ export default function newPassword() {
 
         if (password === "" || password.length < 4 || password.length > 20) {
             setError("A senha deve conter entre 4 e 20 caracteres");
+            setLoading(false);
         } else if (confirmedPassword != password) {
             setError("");
             setdifferentPassword("As senhas não condizem");
+            setLoading(false);
         } else {
 
             const result = await axios.patch('/api/UserAPI', { password, id });
