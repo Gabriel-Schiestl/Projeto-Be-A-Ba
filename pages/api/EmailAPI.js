@@ -8,7 +8,6 @@ export default async function CodeVerificator(req, res) {
             const { email } = req.query;
 
             const result = await Users.findOne({ where: { email: email } });
-            console.log(result)
 
             if (!result) return res.status(404).json({ error: "Não há usuário cadastrado com esse e-mail" });
 

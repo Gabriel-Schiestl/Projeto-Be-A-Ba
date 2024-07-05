@@ -1,15 +1,15 @@
-let savedCode;
+let savedCode = "";
 
 export default async function CodeVerificator(req, res) {
 
     if (req.method == 'POST') {
 
-        try{
-        const { code } = req.body;
-        
-        savedCode = code;
+        try {
+            const { code } = req.body;
 
-        return res.status(200).json({ sucess: "Sucesso ao salvar código" });
+            savedCode = code;
+
+            return res.status(200).json({ sucess: "Sucesso ao salvar código" });
 
         } catch (e) {
             return res.status(500).json("Erro ao salvar código");
