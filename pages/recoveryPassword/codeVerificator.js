@@ -16,6 +16,7 @@ export default function Code() {
     const [code, setCode] = useState("");
     const [sentCode, setSentCode] = useState("");
     const [loading, setLoading] = useState(false);
+    const { id } = router.query;
 
     const [error, setError] = useState("");
 
@@ -24,7 +25,7 @@ export default function Code() {
         const getCode = async () => {
 
             try {
-                const result = await axios.get('/api/CodeVerificator');
+                const result = await axios.get(`/api/CodeVerificator?id=${id}`);
 
                 if (result.status == 200) {
                     setSentCode(result.data.code);
@@ -39,15 +40,13 @@ export default function Code() {
 
         getCode();
 
-    }, []);
+    }, [router.query]);
 
     async function handleSubmit(e) {
 
         e.preventDefault();
 
         setLoading(true);
-
-        const { id } = router.query;
 
         if (code != sentCode) {
             setError("Código inválido");
@@ -59,7 +58,7 @@ export default function Code() {
 
                 router.push(`/recoveryPassword/newPassword?id=${id}`);
 
-            }, 2000);
+            }, 1000);
         }
 
     }

@@ -31,6 +31,11 @@ const Users = sequelize.define('users', {
             model: Profiles,
             key: 'id',
         }
+    },
+
+    code: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
     }
 
 }, {

@@ -45,7 +45,7 @@ export default function Recovery() {
 
                     if (result.status == 200) {
 
-                        const response = await axios.post('/api/CodeVerificator', { code: result.data.code });
+                        const response = await axios.post('/api/CodeVerificator', { code: result.data.code, id: userId });
 
                         if (response.status == 200) {
                             toast.success("E-mail enviado com sucesso");
